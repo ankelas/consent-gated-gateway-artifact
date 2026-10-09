@@ -84,7 +84,7 @@
 
 \item 一套面向判断层的校准感知评测协议（Brier 分数、校准误差、覆盖---风险曲线、注入条件下的错误）；以及一套部署级协议，用于在真实请求上测量路由，并测量各项由环境变量控制、各带同代码对照的不变式消融。
 
-\item 一套可复现产物：模型生成的请求套件、逐条路由结果、带同代码对照的环境变量消融构建、已注册 Partner 的配置，以及可在别处重复该协议的实验装置。
+\item 一套可复现产物：模型生成的请求套件、逐条路由结果、带同代码对照的环境变量消融构建、已注册 Partner 的配置、可在别处重复该协议的实验装置，以及顾问模式下的判断日志，见 \texttt{https:/\allowbreak{}/\allowbreak{}github.com/\allowbreak{}ankelas/\allowbreak{}consent-\allowbreak{}gated-ga\allowbreak{}teway-ar\allowbreak{}tifact}。
 
 \end{enumerate}
 
@@ -388,7 +388,7 @@ Public Hotel Partner & 酒店查询与预订 \\
 
 各研究记录的字段不同：路由运行记录请求文本哈希、回复、推荐的能力名与身份码、耗时和错误；消融运行逐次记录结果，并额外保存去重臂的执行日志；判断层运行保存缓存回复、逐条预测，以及包含模型、端点与种子的运行清单。设计中提到的 span 遥测模式并未部署，因此本文不报告任何线上遥测数字。消息正文、电话号码、凭据与私钥一律不记录。
 
-已发布的产物包含请求套件、逐条路由与同意结果、顾问模式下的判断日志、已注册 Partner 的配置、带同代码对照的消融构建、各判断套件及其缓存响应与逐条预测，以及复现命令。凭据、消息正文、电话号码、证书与令牌都不会进入产物。
+已发布的产物包含请求套件、逐条路由与同意结果、顾问模式下的判断日志、已注册 Partner 的配置、带同代码对照的消融构建、各判断套件及其缓存响应与逐条预测，以及复现命令；整包地址为 \texttt{https:/\allowbreak{}/\allowbreak{}github.com/\allowbreak{}ankelas/\allowbreak{}consent-\allowbreak{}gated-ga\allowbreak{}teway-ar\allowbreak{}tifact}。凭据、消息正文、电话号码、证书与令牌都不会进入产物。
 
 \section{结果}
 

@@ -20,7 +20,7 @@ The contributions are:
 1. A seven-module gateway architecture governed by authorization, identity, isolation, and idempotency invariants. Only routing, consent, and recovery thresholds may consume model judgments; ingress authentication, endpoint identity, and protocol state remain deterministic.
 2. A catalog of seven judgment points with closed answer shapes, owning modules, and declared failure consequences.
 3. A calibration-aware protocol for the judgment layer, covering Brier score, calibration error, coverage--risk, and injection-conditioned error, together with a deployment-level protocol for routing and invariant ablations.
-4. A published artifact: the request suites, per-sample routing outcomes, ablation builds with same-code controls, the partner configuration, and the harness that repeats the protocol.
+4. A published artifact: the request suites, per-sample routing outcomes, ablation builds with same-code controls, the partner configuration, the harness that repeats the protocol, and the advisory judgment log, at `https://github.com/ankelas/consent-gated-gateway-artifact`.
 
 The reported evidence falls into three classes. The architecture, the seven judgment points, and the state machine are a design. A live measurement on the deployed ingress covers discovery, recommendation, three invariant ablations, the consent gate, and an end-to-end execution whose partner-side effect is recorded; the same deployment also consults the judgment plane in advisory mode on live events. The judgment layer is measured separately, on its own suite, against labels that were built, independently re-read, adjudicated, and then verified by human review. 
 
@@ -179,7 +179,7 @@ The consent experiment delivers each request, reads the candidate the assistant 
 
 A routing run stores the request-text hash, reply, recommended names and identity codes, duration, and error; an ablation run stores one row per trial plus an execution log; a judgment run stores the cached reply, per-item prediction, and a run manifest. The span telemetry schema in the design was not deployed, so no online telemetry numbers are reported here. Message bodies, phone numbers, credentials, and private keys are never recorded.
 
-The artifact contains the request suites, per-sample routing and consent outcomes, the advisory judgment log, the ablation builds with their controls, the judgment suites with cached responses and per-item predictions, and reproduction commands.
+The artifact contains the request suites, per-sample routing and consent outcomes, the advisory judgment log, the ablation builds with their controls, the judgment suites with cached responses and per-item predictions, and reproduction commands; the package is at `https://github.com/ankelas/consent-gated-gateway-artifact`.
 
 ## 9. Results
 

@@ -42,3 +42,10 @@ Then compile `draft_lncs.tex` with pdflatex and `draft_zh_tex.tex` with XeLaTeX;
 The simulator under `experiments/` (`gateway.py`, `core_experiment.py`, `simulator.py`, `data/core_*.csv`) is the earlier synthetic study. It is kept for provenance and is not part of the paper's evidence.
 
 No credentials, raw user messages, phone numbers, certificates, or private keys are included.
+
+## Artifact
+
+The reproduction package is published at
+**https://github.com/ankelas/consent-gated-gateway-artifact** (public).
+`ARTIFACT.md` maps every reported result to the file it comes from and the command
+that reproduces it.
