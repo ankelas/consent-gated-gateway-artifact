@@ -1,0 +1,56 @@
+{
+  "1": {
+    "n": {
+      "direct": 50,
+      "ambiguous": 40,
+      "out_of_scope": 40
+    },
+    "direct_hit": 48,
+    "direct_wrong_partner": 0,
+    "direct_no_study_partner": 2,
+    "direct_other_only": 2,
+    "amb_multi_any": 39,
+    "amb_multi_study": 27,
+    "amb_clarify": 0,
+    "amb_empty": 0,
+    "oos_no_study_partner": 40,
+    "oos_any_recommended": 40,
+    "oos_empty": 0
+  },
+  "2": {
+    "n": {
+      "direct": 50,
+      "ambiguous": 40,
+      "out_of_scope": 40
+    },
+    "direct_hit": 48,
+    "direct_wrong_partner": 0,
+    "direct_no_study_partner": 2,
+    "direct_other_only": 2,
+    "amb_multi_any": 38,
+    "amb_multi_study": 22,
+    "amb_clarify": 0,
+    "amb_empty": 0,
+    "oos_no_study_partner": 40,
+    "oos_any_recommended": 40,
+    "oos_empty": 0
+  },
+  "3": {
+    "n": {
+      "direct": 50,
+      "ambiguous": 40,
+      "out_of_scope": 40
+    },
+    "direct_hit": 50,
+    "direct_wrong_partner": 0,
+    "direct_no_study_partner": 0,
+    "direct_other_only": 0,
+    "amb_multi_any": 38,
+    "amb_multi_study": 22,
+    "amb_clarify": 0,
+    "amb_empty": 0,
+    "oos_no_study_partner": 40,
+    "oos_any_recommended": 40,
+    "oos_empty": 0
+  }
+}

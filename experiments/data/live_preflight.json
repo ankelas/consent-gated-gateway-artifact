@@ -1,0 +1,86 @@
+{
+  "stage": "0-preflight",
+  "recorded_at": "2026-10-06T20:50:24+08:00",
+  "read_only": true,
+  "agents": [
+    {
+      "container": "assistant-a",
+      "image_id": "sha256:2fe290cd58ab",
+      "running": "running",
+      "fields": {
+        "ASSISTANT_AIC": "1.2.156.3088.1.BUPT.M7JQDT.30WEXV.3RAMSN.0ZQW",
+        "ASSISTANT_TLS_PORT": "9531"
+      }
+    },
+    {
+      "container": "assistant-b",
+      "image_id": "sha256:2fe290cd58ab",
+      "running": "running",
+      "fields": {
+        "ASSISTANT_AIC": "1.2.156.3088.1.BUPT.M7JQDT.64U7A1.I4JXK1.0G65",
+        "ASSISTANT_TLS_PORT": "9532"
+      }
+    },
+    {
+      "container": "caiyizhang-acps-leader",
+      "image_id": "sha256:e15d7b251616",
+      "running": "running",
+      "fields": {
+        "LEADER_LLM_DEFAULT_MODEL": "acps-demo"
+      }
+    },
+    {
+      "container": "caiyizhang-acps-partner",
+      "image_id": "sha256:e12d3231ccea",
+      "running": "running",
+      "fields": {
+        "PARTNER_LLM_DEFAULT_MODEL": "acps-demo"
+      }
+    },
+    {
+      "container": "imessage-sender",
+      "image_id": "sha256:d07c3a8b1b14",
+      "running": "running",
+      "fields": {
+        "FORWARDER_AGENT_AIC": "1.2.156.3088.1.BUPT.M7JQDT.LVU85G.5HBXRA.06C7",
+        "FORWARDER_IDENTITY_BINDING_ENABLED": "true",
+        "AIP_SERVER_IDENTITY_BINDING_ENABLED": "false",
+        "SENDER_DRY_RUN": ""
+      }
+    }
+  ],
+  "mtls": [
+    {
+      "label": "prereg-gateway-a",
+      "host": "127.0.0.1",
+      "port": 9520,
+      "ok": true,
+      "peer_cn": [
+        "1.2.156.3088.1.BUPT.M7JQDT.TCQFIL.CCCCLM.0EM9"
+      ],
+      "protocol": "TLSv1.3"
+    },
+    {
+      "label": "prereg-gateway-b",
+      "host": "127.0.0.1",
+      "port": 9521,
+      "ok": true,
+      "peer_cn": [
+        "1.2.156.3088.1.BUPT.M7JQDT.ARKM71.XYSD57.05HO"
+      ],
+      "protocol": "TLSv1.3"
+    }
+  ],
+  "client_identity": {
+    "subject": "subject=CN = 1.2.156.3088.1.BUPT.M7JQDT.WOF5OB.O2AU7L.08TH, O = BUPT, OU = ACPs, C = CN",
+    "not_after": "notAfter=Nov 16 03:41:51 2026 GMT",
+    "sha256": "sha256 Fingerprint=9A:85:D7:59:E5:41:00:D7:53:9C:43:42:2C:BC:8E:C2:C4:75:9A:43:C2:FE:CE:7D:08:35:40:3C:83:EA:B5:F3"
+  },
+  "gates": {
+    "G1_identity_binding_target_set": false,
+    "G2_allowlist_confirmed_and_dry_run": false,
+    "G3_message_suite_frozen_and_annotators": false,
+    "G4_telemetry_sink": true,
+    "G5_kill_switch": false
+  }
+}

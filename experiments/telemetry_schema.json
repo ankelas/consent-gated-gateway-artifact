@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Inter-agent gateway experiment span",
+  "type": "object",
+  "required": [
+    "trace_id",
+    "span_id",
+    "task_id",
+    "operation",
+    "start_time",
+    "end_time",
+    "status"
+  ],
+  "properties": {
+    "trace_id": {"type": "string", "description": "Random run trace; never a phone number."},
+    "span_id": {"type": "string"},
+    "parent_span_id": {"type": ["string", "null"]},
+    "task_id": {"type": "string"},
+    "caller_hash": {"type": ["string", "null"]},
+    "chat_hash": {"type": ["string", "null"]},
+    "operation": {
+      "type": "string",
+      "enum": [
+        "webhook_verify",
+        "loopback_auth",
+        "deduplicate",
+        "session_lookup",
+        "discovery",
+        "consent_gate",
+        "endpoint_validate",
+        "mtls_handshake",
+        "aip_start",
+        "aip_get",
+        "aip_continue",
+        "aip_complete",
+        "aip_cancel",
+        "outbound_send"
+      ]
+    },
+    "start_time": {"type": "string", "format": "date-time"},
+    "end_time": {"type": "string", "format": "date-time"},
+    "duration_ms": {"type": "number", "minimum": 0},
+    "status": {"type": "string", "enum": ["ok", "rejected", "error", "timeout"]},
+    "failure_category": {"type": ["string", "null"]},
+    "candidate_count": {"type": ["integer", "null"], "minimum": 0},
+    "selected_agent_hash": {"type": ["string", "null"]},
+    "identity_check": {"type": ["string", "null"], "enum": ["pass", "fail", "skip", null]},
+    "consent_state": {"type": ["string", "null"], "enum": ["missing", "pending", "accepted", "rejected", null]},
+    "retry_count": {"type": "integer", "minimum": 0},
+    "input_bytes": {"type": "integer", "minimum": 0},
+    "output_bytes": {"type": "integer", "minimum": 0},
+    "run_outcome": {"type": ["string", "null"], "enum": ["success", "failure", "safe_rejection", null]}
+  },
+  "additionalProperties": false
+}

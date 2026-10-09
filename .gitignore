@@ -1,0 +1,25 @@
+# Byte-compiled / caches
+__pycache__/
+*.pyc
+
+# LaTeX intermediates (keep the generated .tex and the PDFs)
+*.aux
+*.log
+*.out
+*.synctex.gz
+
+# Runtime state produced while the harness runs; never part of the artifact
+state/
+*.sqlite3
+outbox/
+*-error.log
+
+# Springer's own template files are not redistributed here
+paper/springer_templates/
+
+# Local notes
+.DS_Store
+
+# Working backups and superseded files
+.backups/
+*.stale-*

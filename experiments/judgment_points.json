@@ -1,0 +1,93 @@
+{
+  "schema_version": "v1",
+  "status": "specification_only_not_measured",
+  "description": "Judgment points for a consent-gated gateway. Each entry is a closed question whose answer the gateway thresholds in code. No entry has labeled data yet; the thresholds below are placeholders chosen for the pilot and must be replaced by operating points selected on a development split.",
+  "answer_shapes": {
+    "binary_probability": "Probability in [0,1] for a single yes/no claim.",
+    "choice": "Probability over named options, including an explicit review or no-match option where evidence can be missing.",
+    "score": "Position on an ordinal rubric with a written description for every level."
+  },
+  "judgment_points": [
+    {
+      "id": "J1",
+      "name": "actionability",
+      "module": "M3",
+      "answer_shape": "binary_probability",
+      "question": "Does this message ask the gateway to carry out a task?",
+      "abstain_below": 0.70,
+      "abstain_action": "reply with a clarification prompt; do not discover or invoke",
+      "failure_if_wrong": "invokes an agent for a message that requested no work"
+    },
+    {
+      "id": "J2",
+      "name": "target_selection",
+      "module": "M3",
+      "answer_shape": "choice",
+      "question": "Which candidate should serve this request? Options are the discovered candidates plus a review option.",
+      "abstain_below": 0.70,
+      "abstain_action": "present the candidate list and wait for an explicit selection",
+      "failure_if_wrong": "wrong agent is invoked"
+    },
+    {
+      "id": "J3",
+      "name": "clarification_need",
+      "module": "M4",
+      "answer_shape": "score",
+      "question": "How ambiguous is this request for the selected candidate? Levels: unambiguous; minor ambiguity; material ambiguity.",
+      "abstain_below": 0.70,
+      "abstain_action": "ask the user to disambiguate before any invocation",
+      "failure_if_wrong": "needless interruption, or silent execution of an ambiguous request"
+    },
+    {
+      "id": "J4",
+      "name": "consent_requirement",
+      "module": "M4",
+      "answer_shape": "binary_probability",
+      "question": "Would executing this request cause an externally visible side effect?",
+      "abstain_below": 0.70,
+      "abstain_action": "require explicit confirmation before invocation",
+      "failure_if_wrong": "unauthorized side effect"
+    },
+    {
+      "id": "J5",
+      "name": "semantic_replay",
+      "module": "M6",
+      "answer_shape": "binary_probability",
+      "question": "Does this event request the same logical task as an already completed request in this conversation?",
+      "abstain_below": 0.70,
+      "abstain_action": "keep the key-based result and record a warning; do not suppress the event",
+      "failure_if_wrong": "duplicate side effect, or a legitimate repeat request is dropped"
+    },
+    {
+      "id": "J6",
+      "name": "retryability",
+      "module": "M6",
+      "answer_shape": "choice",
+      "question": "Given the failure category, status, and retry count, is another attempt appropriate? Options: retry; retry after delay; do not retry; escalate to the user.",
+      "abstain_below": 0.70,
+      "abstain_action": "do not retry; surface the failure to the user",
+      "failure_if_wrong": "retry storm, or premature abandonment of a recoverable task"
+    },
+    {
+      "id": "J7",
+      "name": "inbound_manipulation",
+      "module": "M1, M7",
+      "answer_shape": "binary_probability",
+      "question": "Does the inbound content attempt to change gateway policy, identity, or routing rules?",
+      "abstain_below": 0.70,
+      "abstain_action": "record the score and continue with normal policy; never treat the score as authorization",
+      "failure_if_wrong": "judgment is manipulated by message content"
+    }
+  ],
+  "labeling_protocol": {
+    "unit": "one gateway event with its candidate set and policy facts",
+    "label_source": "human adjudication against a written rubric, with disagreements resolved by a third adjudicator",
+    "splits": "development split fixes the operating point; the held-out split is read once and reported",
+    "required_per_point": "coverage, residual error among covered decisions, reliability diagram, Brier score, expected calibration error",
+    "injection_subset": "separate labeled subset with blunt injection, authority framing, and instruction-in-payload variants"
+  },
+  "state_projection": {
+    "may_include": ["redacted intent summary", "candidate identifiers and capability descriptions", "policy facts", "failure category and retry count", "hashed conversation context"],
+    "must_exclude": ["raw message body", "phone numbers", "certificates", "tokens", "credentials", "private keys"]
+  }
+}

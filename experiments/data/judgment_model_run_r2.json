@@ -1,0 +1,20 @@
+{
+  "model": "deepseek-flash",
+  "endpoint_host": "api.deepseek.com",
+  "temperature": 0,
+  "suite_seed": [
+    20261005
+  ],
+  "items": 280,
+  "items_by_shape": {
+    "binary": 200,
+    "choice": 80
+  },
+  "conditions": [
+    "typed",
+    "free_text",
+    "keyword"
+  ],
+  "cached_responses": 560,
+  "prompt_system_hash": "ca699a8442d6d798"
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": "v1",
+  "semantic_tasks": [
+    {
+      "id": "unique-capability",
+      "category": "unique",
+      "description": "Exactly one candidate publishes the requested capability.",
+      "requires_consent": false,
+      "expected": "invoke_ground_truth"
+    },
+    {
+      "id": "ambiguous-capability",
+      "category": "ambiguous",
+      "description": "Two candidates have overlapping descriptions; the user must choose.",
+      "requires_consent": true,
+      "expected": "await_or_invoke_after_explicit_choice"
+    },
+    {
+      "id": "sensitive-operation",
+      "category": "sensitive",
+      "description": "The task would cause an external message side effect.",
+      "requires_consent": true,
+      "expected": "require_explicit_consent"
+    },
+    {
+      "id": "no-eligible-agent",
+      "category": "no_match",
+      "description": "No published candidate satisfies the requested capability and endpoint policy.",
+      "requires_consent": false,
+      "expected": "abstain"
+    },
+    {
+      "id": "multi-hop-forward",
+      "category": "multi_hop",
+      "description": "A personal assistant resolves a recipient assistant before invoking a forwarding Partner.",
+      "requires_consent": true,
+      "expected": "one_forwarded_side_effect"
+    }
+  ],
+  "faults": [
+    {"id": "duplicate_event", "expected": "one_logical_side_effect"},
+    {"id": "reordered_event", "expected": "session_order_preserved_or_safe_rejection"},
+    {"id": "invalid_signature", "expected": "reject_before_agent_call"},
+    {"id": "forged_identity", "expected": "reject_before_protocol_execution"},
+    {"id": "bad_endpoint", "expected": "reject_non_https_or_wrong_path"},
+    {"id": "missing_consent", "expected": "reject_before_target_call"},
+    {"id": "downstream_timeout", "expected": "bounded_retry_and_classified_failure"},
+    {"id": "service_restart", "expected": "no_duplicate_side_effect"},
+    {"id": "cross_session", "expected": "no_context_leakage"}
+  ]
+}

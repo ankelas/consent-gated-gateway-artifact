@@ -1,0 +1,8 @@
+{
+  "judgment_model_eval_adj_r1.csv": "2f4017df18f21c780bbb7f0f4dcf38f1406693bc8387cc3d3978a92dc9af5345",
+  "judgment_model_eval_adj_r2.csv": "fd2ae9013f13bd9e2c77b9ede927cc60d6b65b51f166a065673c07d43c97c175",
+  "judgment_model_eval_adj_r3.csv": "b1038197d2c1565447a07260d8950b093d56d2fe04fb192bb5219f71d0ac1f15",
+  "judgment_model_predictions_adj_r1.csv": "75b42863854d2e635ecc221ec7b539c7e157295c6d8042f6a875776d132b4e8d",
+  "judgment_model_predictions_adj_r2.csv": "7817ae530b45a301a8a10b4fa96d34492a266ccac0cfe1ecc3f20c23091529e8",
+  "judgment_model_predictions_adj_r3.csv": "ab3d9bd442df883b9cecb2d0426fd39563dc2aff72eb6d8ba7f4839ae6c2a370"
+}

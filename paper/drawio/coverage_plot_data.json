@@ -1,0 +1,108 @@
+{
+  "typed": [
+    {
+      "coverage": 40.86021505376344,
+      "residual_error": 3.9473684210526314,
+      "threshold": 1.0
+    },
+    {
+      "coverage": 47.31182795698925,
+      "residual_error": 3.4090909090909087,
+      "threshold": 0.99
+    },
+    {
+      "coverage": 51.075268817204304,
+      "residual_error": 3.1578947368421053,
+      "threshold": 0.98
+    },
+    {
+      "coverage": 55.91397849462365,
+      "residual_error": 2.8846153846153846,
+      "threshold": 0.97
+    },
+    {
+      "coverage": 58.602150537634415,
+      "residual_error": 2.7522935779816518,
+      "threshold": 0.96
+    },
+    {
+      "coverage": 74.19354838709677,
+      "residual_error": 4.3478260869565215,
+      "threshold": 0.95
+    },
+    {
+      "coverage": 75.80645161290323,
+      "residual_error": 4.25531914893617,
+      "threshold": 0.93
+    },
+    {
+      "coverage": 76.34408602150538,
+      "residual_error": 4.225352112676056,
+      "threshold": 0.92
+    },
+    {
+      "coverage": 86.55913978494624,
+      "residual_error": 4.968944099378882,
+      "threshold": 0.9
+    },
+    {
+      "coverage": 87.09677419354838,
+      "residual_error": 4.938271604938271,
+      "threshold": 0.88
+    },
+    {
+      "coverage": 95.16129032258065,
+      "residual_error": 6.779661016949152,
+      "threshold": 0.85
+    },
+    {
+      "coverage": 96.7741935483871,
+      "residual_error": 7.222222222222221,
+      "threshold": 0.8
+    },
+    {
+      "coverage": 97.84946236559139,
+      "residual_error": 7.142857142857142,
+      "threshold": 0.78
+    },
+    {
+      "coverage": 98.9247311827957,
+      "residual_error": 7.608695652173914,
+      "threshold": 0.7
+    },
+    {
+      "coverage": 100.0,
+      "residual_error": 7.526881720430108,
+      "threshold": 0.6
+    }
+  ],
+  "free_text": [
+    {
+      "coverage": 84.40860215053763,
+      "residual_error": 10.191082802547772,
+      "threshold": 1.0
+    },
+    {
+      "coverage": 94.08602150537635,
+      "residual_error": 10.857142857142858,
+      "threshold": 0.55
+    },
+    {
+      "coverage": 95.6989247311828,
+      "residual_error": 12.359550561797752,
+      "threshold": 0.5
+    },
+    {
+      "coverage": 100.0,
+      "residual_error": 16.129032258064516,
+      "threshold": 0.333333
+    }
+  ],
+  "keyword": [
+    {
+      "coverage": 100.0,
+      "residual_error": 22.58064516129032,
+      "threshold": 0.8
+    }
+  ]
+}
