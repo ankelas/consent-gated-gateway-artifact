@@ -22,7 +22,7 @@ The contributions are:
 3. A calibration-aware protocol for the judgment layer, covering Brier score, calibration error, coverage--risk, and injection-conditioned error, together with a deployment-level protocol for routing and invariant ablations.
 4. A published artifact: the request suites, per-sample routing outcomes, ablation builds with same-code controls, the partner configuration, and the harness that repeats the protocol.
 
-The reported evidence falls into three classes. The architecture, the seven judgment points, and the state machine are a design. A live measurement on the deployed ingress covers discovery, recommendation, three invariant ablations, the consent gate, and an end-to-end execution whose partner-side effect is recorded. The judgment layer is measured separately, on its own suite, against labels that were built, independently re-read, adjudicated, and then verified by human review. 
+The reported evidence falls into three classes. The architecture, the seven judgment points, and the state machine are a design. A live measurement on the deployed ingress covers discovery, recommendation, three invariant ablations, the consent gate, and an end-to-end execution whose partner-side effect is recorded; the same deployment also consults the judgment plane in advisory mode on live events. The judgment layer is measured separately, on its own suite, against labels that were built, independently re-read, adjudicated, and then verified by human review. 
 
 ## 2. Related Work
 
@@ -75,35 +75,19 @@ The invariants specify what cannot happen; judgment points specify the bounded q
 
 Figure 1 shows the seven modules and the judgment plane. Each module is defined by a distinct failure it prevents. The study exercises M2, M3 and M6 and the AIP-layer checks of M5; M4 is outside the routing study but is tested in the separate consent experiment of §9.4, and M7 delivers and records results.
 
-### 4.1 Module M1: ingress authentication and normalization
+Figure 1 shows the seven modules and the judgment plane. Each module is defined by a distinct failure it prevents:
 
-M1 verifies the iMessage/Photon webhook, validates its schema, and creates a normalized event. Invalid signatures or malformed events stop before discovery.
+- **M1 (ingress).** Verifies the iMessage/Photon webhook, validates its schema, and normalizes the event; invalid signatures or malformed events stop before discovery.
+- **M2 (isolation).** Derives a caller--conversation context, partitions task state and replies by that key, and hashes or pseudonymizes telemetry identifiers.
+- **M3 (discovery).** Converts discovery output into candidates carrying identity, capability, operation, and endpoint metadata; J1 and J2 rank or reject that set.
+- **M4 (consent).** Requires an explicit selection and execution instruction; J3 and J4 may parameterize thresholds, but policy code decides when to ask and which failures are terminal.
+- **M5 (execution).** Validates transport, path, AIC metadata, mutual TLS, and the AIP v2.2 lifecycle, and consumes no model judgment.
+- **M6 (state).** Stores event, consent, task, protocol, retry, and delivery state, claims idempotency keys before effects, and classifies recoverable failures; J5 and J6 cover replay and retryability that keys or status codes cannot express.
+- **M7 (delivery).** Returns the result to the originating conversation and records trace, status, size, retry, endpoint, failure, and judgment telemetry, without message bodies, phone numbers, credentials, or private keys.
 
-### 4.2 Module M2: identity and session isolation
+The study exercises M2, M3, M6 and the AIP-layer checks of M5; M4 is tested in the consent experiment of §9.4, and M7 delivers and records results.
 
-M2 derives a caller--conversation context and partitions task state and replies by that key; telemetry identifiers are hashed or pseudonymized.
-
-### 4.3 Module M3: capability discovery and routing
-
-M3 converts discovery output into candidates containing identity, capability, operation, and endpoint metadata. J1 and J2 rank or reject that enumerated set.
-
-### 4.4 Module M4: consent and policy control
-
-M4 requires an explicit candidate selection and execution instruction. J3 and J4 may parameterize thresholds, but policy code decides when to ask and which failures are terminal.
-
-### 4.5 Module M5: identity-bound protocol execution
-
-M5 validates transport, path, AIC metadata, mutual TLS, and the AIP v2.2 lifecycle. It consumes no model judgment.
-
-### 4.6 Module M6: state, deduplication, and recovery
-
-M6 stores event, consent, task, protocol, retry, and delivery state; it claims idempotency keys before effects and classifies recoverable failures. J5 and J6 address semantic replay and retryability that keys or status codes cannot fully express.
-
-### 4.7 Module M7: delivery and observability
-
-M7 returns the result to the originating conversation and records trace, status, size, retry, endpoint, failure, and judgment telemetry without storing message bodies, phone numbers, credentials, or private keys.
-
-### 4.8 The judgment plane
+### 4.1 The judgment plane
 
 The judgment layer is a plane consulted by selected modules, not an eighth module. Table 2 states the boundary.
 
@@ -119,9 +103,9 @@ The judgment layer is a plane consulted by selected modules, not an eighth modul
 | M6 | J5, J6 | keys and status codes do not cover all semantic cases |
 | M7 | none for control; records J7 | telemetry observes decisions |
 
-A low-confidence judgment produces clarification or escalation. A judgment is an input to policy, never an authorization: it may select a threshold, clarification, or retry branch, but it cannot invoke an agent or reach a protocol endpoint, which keeps the four invariants independent of model behavior. The model receives a derived projection of candidate metadata, policy facts, and redacted intent rather than raw message bodies or identifiers.
+A low-confidence judgment produces clarification or escalation. A judgment is an input to policy, never an authorization: it may select a threshold, clarification, or retry branch, but it cannot invoke an agent or reach a protocol endpoint, so the four invariants hold independently of model behavior. The model receives a derived projection, not raw message bodies or identifiers.
 
-### 4.9 Implementation and state transitions
+### 4.2 Implementation and state transitions
 
 The inspected deployment instantiates a Photon bridge, a FastAPI Leader, ACPs discovery, and registered Partners; the Leader derives `caller_id`, stores candidates by `(caller_id, chat_guid)`, validates AIC, HTTPS, `/rpc`, and JSON-RPC requirements, and starts a Partner only after user selection and instruction. AIP v2.2 states (`Accepted`, `Working`, `AwaitingInput`, `AwaitingCompletion`, `complete`, `cancel`) are explicit, and SQLite holds the responses, conversations, choices, and task context.
 
@@ -159,11 +143,11 @@ The study runs on the deployed system: an iMessage/Photon ingress, an adapter th
 
 All five endpoints are mutual-TLS JSON-RPC services on the study host; the port is omitted here and listed in the artifact.
 
-**Test samples.** Requests are generated by a pinned hosted model (`deepseek-flash`, temperature 0.8) from each partner's advertised skills, in Simplified Chinese, and never mention testing or agent names. Two boundary classes are generated from the same model: requests that plausibly fit two advertised capabilities, and requests that no registered partner advertises. The suite contains 50 direct, 40 ambiguous, and 40 out-of-scope requests, 10 direct requests per partner. Labels come from the generation request.
+**Test samples.** Requests are generated by a pinned hosted model (`deepseek-flash`, temperature 0.8) from each partner's advertised skills, in Simplified Chinese, and never mention testing or agent names; two boundary classes come from the same model, requests that plausibly fit two capabilities and requests no partner advertises. The suite contains 50 direct (10 per partner), 40 ambiguous, and 40 out-of-scope requests, and the labels come from the generation request.
 
 **Execution.** Each sample is delivered to the adapter's inbound endpoint with the internal token, which runs the real ingress path: caller derivation, session partition, discovery, candidate selection, and reply construction. The adapter returns its reply as JSON instead of delivering it, so the study produces no outbound message. Every sample uses a fresh caller and conversation. The selection read here is the combination the assistant recommends to the user. The routing measurements in §9.1 therefore cover discovery and recommendation; §9.4 reports the consent and execution test separately.
 
-**Reading the outcome.** Selection is read from the reply (§9.5), and the same requests are ranked through the discovery service as a cross-check.
+**Reading the outcome.** Selection is read from the reply (§9.6), and the same requests are ranked through the discovery service as a cross-check.
 
 ## 7. Experimental Design
 
@@ -175,25 +159,17 @@ Each sample is delivered three times in a fresh caller and conversation. Three o
 
 ### 7.2 Ablation study
 
-**Table 4.** Ablation levers and their controls.
-
-| Arm | Change in the staging copy | Control | Expected if the mechanism is load-bearing |
-| --- | --- | --- | --- |
-| no-identity | skip the sender-to-peer assertion in the AIP server | same copy with the flag off | mismatched identity is accepted |
-| no-dedup | skip the event-level response lookup | same copy with the flag off | a redelivered event re-enters processing |
-| no-isolation | collapse the caller/conversation key to one shared key | same copy with the flag off | a second caller reads the first caller's pending state |
-
-Table 4 lists the levers. Every arm runs the same requests as its control, so the contrast is paired, and a control built from the same staging copy separates the mechanism from the staging environment.
+Three levers are ablated on staging copies of the deployed code, each with the flag off in a control built from the same copy: the sender-to-peer assertion in the AIP server (expecting mismatched identities to be accepted), the event-level response lookup (expecting a redelivered event to re-enter processing), and the caller/conversation key (expecting a second caller to read the first caller's pending state). Every arm runs the same requests as its control, so the contrast is paired.
 
 ### 7.3 Metrics and statistical analysis
 
 Routing metrics are the **hit rate** on direct requests (target recommended / direct requests), the **composition rate** on ambiguous requests (more than one agent recommended / ambiguous requests), and the **false-recommendation rate** on out-of-scope requests (a study partner recommended / out-of-scope requests). Every sample is delivered three times and each metric is reported per run.
 
-Invariant metrics are the **bypass acceptance rate** (mismatched identity accepted / mismatch attempts), the **execution count** per delivered event, and the **cross-caller read rate** (a second caller's reply carrying the first caller's request content / trials). Each is reported for an ablation arm and for a control built from the same staging copy, and the two run the same requests.
+Invariant metrics are the **bypass acceptance rate** (mismatched identity accepted / attempts), the **execution count** per delivered event, and the **cross-caller read rate** (a second caller's reply carrying the first caller's content / trials), each reported for an ablation arm and its same-copy control on the same requests.
 
 Judgment metrics are accuracy, Brier score, and expected calibration error on the mixed suite, reported on held-out data; the coverage--risk curves across thresholds are recorded in the artifact. The injection stress set reports the miss rate on injected items and the false-alarm rate on benign near-misses. Because the hosted endpoint is not deterministic, each suite is run three times and reported as a mean with its observed range, and pairwise answer agreement between runs is reported alongside it.
 
-Binary outcomes use 95% Wilson intervals. A zero count is reported with the one-sided bound $3/N$ rather than as an estimate: 0/30 bounds a rate at 10%, 0/50 at 6%, and 0/201 at 1.5%. The numbers therefore establish direction and mechanism attribution, not production rates.
+Binary outcomes use 95% Wilson intervals, and a zero count is reported with the one-sided bound $3/N$ (0/30 bounds a rate at 10%): the numbers establish direction and mechanism attribution, not production rates.
 
 ### 7.4 Consent and effect
 
@@ -203,15 +179,15 @@ The consent experiment delivers each request, reads the candidate the assistant 
 
 A routing run stores the request-text hash, reply, recommended names and identity codes, duration, and error; an ablation run stores one row per trial plus an execution log; a judgment run stores the cached reply, per-item prediction, and a run manifest. The span telemetry schema in the design was not deployed, so no online telemetry numbers are reported here. Message bodies, phone numbers, credentials, and private keys are never recorded.
 
-The artifact contains the request suites, per-sample routing and consent outcomes, the partner configuration, the ablation builds with their controls, the judgment suites with cached responses and per-item predictions, and reproduction commands.
+The artifact contains the request suites, per-sample routing and consent outcomes, the advisory judgment log, the ablation builds with their controls, the judgment suites with cached responses and per-item predictions, and reproduction commands.
 
 ## 9. Results
 
 ### 9.1 Routing on generated requests
 
-The pinned model generated 130 requests; each was delivered three times, in a fresh caller and conversation, through the deployed ingress and adapter. Selection was read from the reply with the rule of §9.5; the structured ranking was read once per request from the discovery service.
+The pinned model generated 130 requests; each was delivered three times, in a fresh caller and conversation, through the deployed ingress and adapter. Selection was read from the reply with the rule of §9.6; the structured ranking was read once per request from the discovery service.
 
-**Table 5.** Routing on model-generated requests, three independent deliveries per sample; the cells list the three run values in order. The target is the study partner whose advertised capability the sample was generated from.
+**Table 4.** Routing on model-generated requests, three independent deliveries per sample; the cells list the three run values in order. The target is the study partner whose advertised capability the sample was generated from.
 
 | Request class | n | Metric | Runs |
 | --- | --- | --- | --- |
@@ -220,11 +196,11 @@ The pinned model generated 130 requests; each was delivered three times, in a fr
 | out-of-scope | 40 | a study partner recommended | 0 / 0 / 0 |
 | out-of-scope | 40 | any agent recommended | 40 / 40 / 40 |
 
-Table 5 gives the per-class counts. The path recommended the generated target for 48, 48, and 50 of the 50 direct requests (96--100%) and never recommended a different study partner; the misses recommended only agents outside the study set. Intervals are wide at this sample size, as the declared convention implies: the 48/50 delivery carries a 95% Wilson interval of [86.5%, 98.9%] and the 39/40 delivery [87.1%, 99.6%]. For requests that fit two capabilities it recommended more than one agent in 39, 38, and 38 of 40 and never asked for clarification; whether the combination covers the request was not adjudicated. For requests no study partner advertises the path never recommended a study partner, in any run, but it did recommend a public-registry agent in all 40 and the underlying index returned at least one candidate for 36 of 40, so the deployed path does not abstain; it presents the best available agents and leaves acceptance to the user. The structured instrument was weaker: read once, discovery ranked the target first for 40 of 50 and inside the top three for 48. The instruments agreed on 42 of 50: the reply found eight targets discovery did not rank first, and discovery never ranked the target first while the reply missed it. Eighteen of the 130 samples changed outcome between deliveries, seven of them direct. The results are consistent with H1 at the level of recommendation.
+Table 4 gives the per-class counts. The path recommended the generated target for 48, 48, and 50 of the 50 direct requests (96--100%) and never recommended a different study partner; the misses recommended only agents outside the study set. Intervals are wide at this sample size, as the declared convention implies: the 48/50 delivery carries a 95% Wilson interval of [86.5%, 98.9%] and the 39/40 delivery [87.1%, 99.6%]. For requests that fit two capabilities it recommended more than one agent in 39, 38, and 38 of 40 and never asked for clarification; whether the combination covers the request was not adjudicated. For requests no study partner advertises the path never recommended a study partner, in any run, but it did recommend a public-registry agent in all 40 and the underlying index returned at least one candidate for 36 of 40, so the deployed path does not abstain; it presents the best available agents and leaves acceptance to the user. The structured instrument was weaker: read once, discovery ranked the target first for 40 of 50 and inside the top three for 48. The instruments agreed on 42 of 50: the reply found eight targets discovery did not rank first, and discovery never ranked the target first while the reply missed it. Eighteen of the 130 samples changed outcome between deliveries, seven of them direct. The results are consistent with H1 at the level of recommendation.
 
 ### 9.2 Invariant ablations
 
-**Table 6.** Ablation arms against same-code controls. Ports list the ablation instance, its same-code control, and, where the arm was also probed on the deployment, the live instance.
+**Table 5.** Ablation arms against same-code controls. Ports list the ablation instance, its same-code control, and, where the arm was also probed on the deployment, the live instance.
 
 | Arm | Port | Control | Ablation | Interpretation |
 | --- | --- | --- | --- | --- |
@@ -232,13 +208,13 @@ Table 5 gives the per-class counts. The path recommended the generated target fo
 | no-dedup | 9421 / 9420 | 30 executions for 30 pairs | 60 executions | the event store halves processing |
 | no-isolation | 9422 / 9420 | 0/30 cross-caller reads | 30/30 reads | the partition prevents the read |
 
-Table 6 contrasts each arm with its same-code control. In this set of paired staging trials the control and the live instance accepted none of the 30 mismatched identities (0/30, bounding the rate at 10%), while removing the single sender-to-peer assertion admitted every one (30/30, 95% Wilson interval [88.6%, 100%]). Partitioning by caller and conversation prevents the cross-caller read: collapsing the key to one shared namespace makes it succeed in every trial. The idempotency store prevents a redelivered event from re-entering processing, doubling executions when removed; the duplicate effect did not appear because the conversation state machine absorbed it, so the key is the first of two layers. H2 is supported on the deployed code. H3 is supported at the event level by the ablation and at the effect level on the deployed path: a replayed consent event returns the stored reply and adds no partner action.
+Table 5 contrasts each arm with its same-code control. In this set of paired staging trials the control and the live instance accepted none of the 30 mismatched identities (0/30, bounding the rate at 10%), while removing the single sender-to-peer assertion admitted every one (30/30, 95% Wilson interval [88.6%, 100%]). Partitioning by caller and conversation prevents the cross-caller read: collapsing the key to one shared namespace makes it succeed in every trial. The idempotency store prevents a redelivered event from re-entering processing, doubling executions when removed; the duplicate effect did not appear because the conversation state machine absorbed it, so the key is the first of two layers. H2 is supported on the deployed code. H3 is supported at the event level by the ablation and at the effect level on the deployed path: a replayed consent event returns the stored reply and adds no partner action.
 
 ### 9.3 Judgment-layer measurement
 
-A single hosted model (`deepseek-flash`, temperature 0, reasoning effort pinned low, 2000-token budget) answered a 280-item suite split 50/25/25 by stable task hash. At the endpoint's default effort about one reply in ten came back empty, and the same item at the same temperature received different answers under different budgets. Labels were built from a latent variable, re-read blind by the same model with only the text, question, and options, and adjudicated on the 99 disagreements or uncertain items (60 changed, 15 unresolved); the full set was then verified by human review. Every number below is scored against those adjudicated labels, and the surface text contains negation, replays, and quoted injection cues. We compared typed JSON distributions, one-sentence free text, and a transparent keyword baseline. A free-text reply that names no option is scored as wrong; 10 to 16 of the 280 replies did that, and no typed reply did. Repeating an identical request changes the answer on a small share of items, so every cell below is the mean of three runs with the observed range in parentheses. Pairwise answer agreement between runs is 94.5% for typed answers and 90.5% for free text.
+A single hosted model (`deepseek-flash`, temperature 0, reasoning effort pinned low, 2000-token budget) answered a 280-item suite split 50/25/25 by stable task hash; at the endpoint's default effort about one reply in ten came back empty. Labels were built from a latent variable, re-read blind by the same model with only the text, question, and options, and adjudicated on the 99 disagreements or uncertain items (60 changed, 15 unresolved); the full set was then verified by human review. Every number below is scored against those adjudicated labels, and the surface text contains negation, replays, and quoted injection cues. We compared typed JSON distributions, one-sentence free text, and a transparent keyword baseline; a free-text reply that names no option is scored as wrong, which 10 to 16 of the 280 did and no typed reply did. Repeating an identical request changes the answer on a small share of items, so every cell below is the mean of three runs with the observed range in parentheses. Pairwise answer agreement between runs is 94.5% for typed answers and 90.5% for free text.
 
-**Table 7.** Judgment layer on the held-out split (62 items), mean of three runs with the observed range.
+**Table 6.** Judgment layer on the held-out split (62 items), mean of three runs with the observed range.
 
 | Condition | Accuracy | Brier | ECE |
 | --- | --- | --- | --- |
@@ -246,11 +222,11 @@ A single hosted model (`deepseek-flash`, temperature 0, reasoning effort pinned 
 | Free text | 83.9% (79.0--90.3) | 0.251 (0.160--0.302) | 0.120 |
 | Keyword | 77.4% | 0.377 | 0.026 |
 
-Table 7 gives the held-out metrics. Typed answers are more accurate, with about half the free-text Brier score, and accuracy, Brier, and calibration error separate beyond the run-to-run ranges; the keyword rule is a transparent reference point rather than a competitor. The coverage--risk curves across thresholds, and the same cells scored against the built rather than the adjudicated labels, are in the artifact. This suite carries only 3 injected J7 items in its held-out split, so that question is measured on a dedicated stress set.
+Table 6 gives the held-out metrics. Typed answers are more accurate, with about half the free-text Brier score, and accuracy, Brier, and calibration error separate beyond the run-to-run ranges; the keyword rule is a transparent reference point rather than a competitor. The coverage--risk curves and the same cells scored against the built labels are in the artifact. This suite carries only 3 injected J7 items in its held-out split, so that question is measured on a dedicated stress set.
 
-The stress set varies an explicit grid rather than a short phrase list: 8 steering families × 5 carriers × 5 authority frames gives 200 injected items, and 8 families × 4 carriers × 8 report forms gives 256 benign near-misses that quote, report, deny, explain, joke about, translate, or log the same phrases. Both classes carry the same harmless outer request, so they differ only in whether a steering instruction is present. The blind re-read disagreed with 64 of these 456 built labels and the adjudication changed 51 of them; its held-out split then carries 67 injected and 47 benign items. The three runs agree on 89.0% of typed answers and 91.1% of free-text answers.
+The stress set varies an explicit grid: 8 steering families × 5 carriers × 5 authority frames gives 200 injected items, and 8 families × 4 carriers × 8 report forms gives 256 benign near-misses that quote, report, deny, explain, joke about, translate, or log the same phrases; both classes carry the same harmless outer request. The blind re-read disagreed with 64 of these 456 built labels and the adjudication changed 51, leaving a held-out split of 67 injected and 47 benign items; the three runs agree on 89.0% of typed and 91.1% of free-text answers.
 
-**Table 8.** Injection stress set, held-out split (67 injected, 47 benign after adjudication); misses and false alarms are pooled over the three runs with 95% Wilson intervals.
+**Table 7.** Injection stress set, held-out split (67 injected, 47 benign after adjudication); misses and false alarms are pooled over the three runs with 95% Wilson intervals.
 
 | Condition | Missed injected | False alarms (benign) | Accuracy |
 | --- | --- | --- | --- |
@@ -258,17 +234,23 @@ The stress set varies an explicit grid rather than a short phrase list: 8 steeri
 | Free text | 0.0% (0--1.9) | 63.1% (54.9--70.6) | 74.0% (72.8--75.4) |
 | Keyword baseline | 3.0% (1.4--6.4) | 46.8% (38.8--55.0) | 78.9% |
 
-Table 8 gives the stress-set rates. All three conditions found essentially every injected item: the two model shapes missed none of the 201 pooled injected observations and the cue rule missed 3.0%. They do not separate in the other direction, and none is safe: the typed shape flagged 56.7% of benign near-misses as attempts, free text 63.1%, and the cue rule 46.8%, with the typed and free-text intervals overlapping. The least trigger-happy condition still treats about half of the quoted mentions as an attack, which is precisely why the score cannot act on its own: it can parameterize a threshold, but policy code decides whether to ask the user, keep a keyed result, or reach an endpoint at all.
+Table 7 gives the stress-set rates. All three conditions found essentially every injected item: the two model shapes missed none of the 201 pooled injected observations and the cue rule missed 3.0%. They do not separate in the other direction, and none is safe: the typed shape flagged 56.7% of benign near-misses as attempts, free text 63.1%, and the cue rule 46.8%, with the typed and free-text intervals overlapping. The least trigger-happy condition still treats about half of the quoted mentions as an attack, which is precisely why the score cannot act on its own: it can parameterize a threshold, but policy code decides whether to ask the user, keep a keyed result, or reach an endpoint at all.
 
 ### 9.4 Consent, execution, and gateway cost
 
 The routing study never invoked a partner; the consent form is what does. The adapter requires an explicit selection, and its outbound client verified the host name while an ACPs partner certificate carries its identity as an `acps://` URI SAN, so every attempt failed with `certificate is not valid for <ip>`. Keeping chain verification and the AIC binding and dropping host-name verification on the deployed adapter makes the path work. Across the 30 consent trials and 10 redelivery trials, a study partner was the first candidate in 36; no trial reached a partner before the user consented (0/40), and each of those 36 consents produced exactly one invocation and exactly one partner action. In the remaining four the first candidate was a public-registry agent outside the study set, so no study partner was invoked. The effect log holds 39 records: those 36 actions plus three probe records from before each phase, and no task identifier repeats. Twenty replayed consent events produced no additional action and returned the identical stored reply. A URI-SAN identity model and host-name transport verification must be aligned.
 
-Figure 3 gives the gateway's own cost: the median is 0.48 ms for ingress rejection (n=100), 3.30 ms for the deduplication lookup (n=20), 5.88 ms for the identity check (n=30), and 7.36 ms for an accepted AIP round trip (n=30), against 7.2 s for a first delivery that includes generation (n=20). The numbers cover the study host and exclude wide-area transport.
+Figure 3 gives the gateway's own cost, with the observed range and n for each operation: every gateway-side operation is milliseconds, while a first delivery is dominated by generation. The numbers cover the study host and exclude wide-area transport.
 
 ![Fig. 3. Median gateway-side handling cost for each operation, with the first delivery shown for scale](figures/fig3_overhead.png)
 
-### 9.5 Limitations and scope
+### 9.5 The judgment plane on the deployed path
+
+The judgment layer is a plane that modules may consult, and the deployment now carries it in that form: the adapter asks J5 -- is this event a semantic replay of an already handled request? -- before the pipeline branches, under `JUDGMENT_MODE=advise`, where the verdict is logged and no execution decision reads it. It runs after the key-based store has answered, so an exact replay never reaches it.
+
+Twenty conversations drove the live ingress with three events each: the opening request, a paraphrase of it under a new message id (which the event store cannot answer), and a different request in the same domain. All 60 events were judged. At the declared threshold of 0.9, 20/20 paraphrases were called replays (95% Wilson interval [83.9%, 100%], median 0.98, range 0.95--1.00) and 0/40 non-replays crossed it (bounding that rate at 7.5%; the largest non-replay score was 0.12). Exactly those 20 events would have been handed to the keyed-result branch, the step the deterministic layer cannot take on its own. The advisory call cost a median of 1.07 s (range 0.53--1.74 s), and the paraphrases were written by the same pinned model, so the separation bounds what human paraphrases would give.
+
+### 9.6 Limitations and scope
 
 Every result here comes from one deployment with one registry and one capability set. Selection is read from the assistant's reply, because the adapter exposes no structured decision record: the read is line-scoped, so a name counts only when it leads a bullet in the recommendation section, which excludes names that appear only in the recall statistics or the candidate list; selection is also cross-checked against the discovery ranking. The ablation arms are staging copies of the deployed code with one environment-gated change each, paired with a control built from the same copy; the consent and effect experiment runs on the deployed adapter. The endpoint is not deterministic, so the routing samples and each judgment suite were run three times. The judgment layer is measured on one hosted model, so it supports an answer-shape comparison on this suite. The final label set was verified by human review. The injection stress set is built from templates, so its phrasing is more regular than real traffic; all inputs are synthetic or model-generated and identifiers are pseudonymized.
 
@@ -277,7 +259,7 @@ Every result here comes from one deployment with one registry and one capability
 This paper separates typed judgment from deterministic enforcement in a seven-module message-to-agent gateway and tests the boundary on a deployed iMessage/ACPs path. The deployed path recommends the generated target, composes a plan when a request fits two capabilities, and never recommends a study partner when none advertises the request. Paired ablations show that the sender-to-peer assertion, the caller--conversation partition, and the event-level idempotency store each carry their invariant. On the deployed adapter the consent gate admits exactly one partner action per accepted event and admits none before the user agrees. The judgment layer is more accurate and better calibrated in its typed form, while its injection score over-triggers on quoted text, which is why it only parameterizes policy. The measurements cover one deployment and one capability set.
 
 ## References
-1. AIP-PUB, *ACPs-community: Agent Collaboration Protocols*, spec `ACPs-spec-v02.02`, SDK `v2.2.0`, commit `896e4bc`, 2026. Repository: `https://github.com/AIP-PUB/ACPs-community/tree/896e4bc`; English homepage: `https://github.com/AIP-PUB/ACPs-community/blob/main/readme_en.md`.
+1. AIP-PUB, *ACPs-community: Agent Collaboration Protocols*, spec `ACPs-spec-v02.02`, SDK `v2.2.0`, commit `896e4bc`, 2026. `https://github.com/AIP-PUB/ACPs-community`; English homepage `readme_en.md`.
 2. A. N. Angelopoulos and S. Bates, "A gentle introduction to conformal prediction and distribution-free uncertainty quantification," arXiv:2107.07511, 2021.
 3. S. Chen et al., "StruQ: Defending against prompt injection with structured queries," arXiv:2402.06363, 2024.
 4. E. Debenedetti et al., "AgentDojo: A dynamic environment to evaluate prompt injection attacks and defenses for LLM agents," in *NeurIPS 37*, 2024, pp. 82895--82920.

@@ -7,7 +7,7 @@
 - `draft_lncs.pdf`: compiled LNCS rendering (15 pages) produced with the official class.
 - `draft.docx`: English review copy with figures embedded.
 - `draft_zh.md` and `draft_zh.docx`: Chinese review copies.
-- `draft_zh_tex.tex` and `draft_zh.pdf`: Chinese review copy typeset with XeLaTeX (17 pages, no overfull boxes); the embedded figures carry the shared English labels.
+- `draft_zh_tex.tex` and `draft_zh.pdf`: Chinese review copy typeset with XeLaTeX (16 pages, no overfull boxes); the embedded figures carry the shared English labels.
 - `figures/`: architecture, state transitions, and gateway-cost figures (the coverage--risk curve pages are supplementary). Each figure has an editable source under `drawio/`, plus SVG and high-resolution PNG exports.
 - `../experiments/`: live study harness, judgment suite and cached model responses, the retired simulator, and reproduction scripts.
 

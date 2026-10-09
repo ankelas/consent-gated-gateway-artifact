@@ -24,8 +24,8 @@ FIGURE_PLACEMENT = {
 }
 
 FIGURE_WIDTH = {
-    "fig2_state_machine.png": 0.85,
-    "fig3_overhead.png": 0.72,
+    "fig2_state_machine.png": 0.79,
+    "fig3_overhead.png": 0.68,
 }
 
 # Per-table column specification. Tables default to equal-width X columns, but
@@ -36,11 +36,10 @@ FIGURE_WIDTH = {
 TABLE_COLUMNS = {
     1: r"@{}cXp{2.6cm}cX@{}",
     2: r"@{}lXX@{}",
-    4: r"@{}lXp{2.4cm}X@{}",
-    5: r"@{}lcXp{2.6cm}@{}",
-    6: r"@{}lp{1.9cm}p{2.5cm}p{1.8cm}X@{}",
-    7: r"@{}lp{2.9cm}p{2.7cm}c@{}",
-    8: r"@{}lXXc@{}",
+    4: r"@{}lcXp{2.6cm}@{}",
+    5: r"@{}lp{1.9cm}p{2.5cm}p{1.8cm}X@{}",
+    6: r"@{}lp{2.9cm}p{2.7cm}c@{}",
+    7: r"@{}lXXc@{}",
 }
 
 
@@ -163,7 +162,7 @@ def table_block(lines: list[str], caption: str | None, number: int) -> list[str]
     if not rows:
         return []
     cols = max(len(row) for row in rows)
-    out = [r"\begin{table}[t]", r"\centering", r"\small"]
+    out = [r"\begin{table}[htbp]", r"\centering", r"\small"]
     out.append(rf"\caption{{{inline(strip_caption(caption or f'Table {number}.'))}}}\label{{tab:{number}}}")
     spec = TABLE_COLUMNS.get(number, rf"@{{}}*{{{cols}}}{{X}}@{{}}")
     out.append(rf"\begin{{tabularx}}{{\textwidth}}{{{spec}}}")
@@ -239,13 +238,13 @@ def convert() -> str:
         r"\usepackage{hyperref}",
         # Float parameters: allow a page to carry its figures and text without
         # leaving large gaps when a tall figure is deferred.
-        r"\setcounter{topnumber}{3}",
-        r"\setcounter{bottomnumber}{2}",
-        r"\setcounter{totalnumber}{4}",
-        r"\renewcommand{\topfraction}{0.92}",
-        r"\renewcommand{\bottomfraction}{0.5}",
-        r"\renewcommand{\textfraction}{0.06}",
-        r"\renewcommand{\floatpagefraction}{0.75}",
+        r"\setcounter{topnumber}{4}",
+        r"\setcounter{bottomnumber}{3}",
+        r"\setcounter{totalnumber}{6}",
+        r"\renewcommand{\topfraction}{0.95}",
+        r"\renewcommand{\bottomfraction}{0.6}",
+        r"\renewcommand{\textfraction}{0.05}",
+        r"\renewcommand{\floatpagefraction}{0.7}",
         r"\urlstyle{rm}",
         r"\begin{document}",
         rf"\title{{{inline(title)}}}",

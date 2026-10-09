@@ -6,7 +6,7 @@ Paper workspace for Yizhang Cai: *Typed Judgment, Deterministic Enforcement* (JC
 
 - `paper/draft.md`: English submission source; `paper/draft_zh.md`: Chinese reading copy.
 - `paper/draft_lncs.tex` / `paper/draft_lncs.pdf`: generated Springer LNCS source and its 15-page build.
-- `paper/draft_zh_tex.tex` / `paper/draft_zh.pdf`: generated Chinese source and its 17-page build (no page limit on the reading copy).
+- `paper/draft_zh_tex.tex` / `paper/draft_zh.pdf`: generated Chinese source and its 16-page build (no page limit on the reading copy).
 - `paper/draft.docx`, `paper/draft_zh.docx`: generated review copies.
 - `paper/figures/`, `paper/drawio/`: figure exports and editable sources.
 - `experiments/`: live study harness, judgment suite, cached model responses, and the retired simulator.
