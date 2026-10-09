@@ -273,7 +273,7 @@ This paper separates typed judgment from deterministic enforcement in a seven-mo
 12. P. Helland, "Idempotence is not a medical condition," *Commun. ACM*, 55(5):56--65, 2012.
 13. Y. Kim et al., "Towards a Science of Scaling Agent Systems," arXiv:2512.08296, 2026.
 14. C. Li et al., "ACPS: Agent Collaboration Protocols for the Internet of Agents," in *IC-NIDC*, IEEE, 2025, pp. 342--346.
-15. Y. Liu et al., "Prompt injection attacks and defenses in LLM-integrated applications," in *USENIX Security*, 2024.
+15. Y. Liu et al., "Formalizing and benchmarking prompt injection attacks and defenses," in *USENIX Security*, 2024.
 16. T. Ma et al., "MAESTRO: Multi-Agent Evaluation Suite for Testing, Reliability, and Observability," arXiv:2601.00481, 2026.
 17. Y. Ruan et al., "Identifying the risks of LM agents with an LM-emulated sandbox," arXiv:2309.15817, 2023.
 18. J. H. Saltzer and M. D. Schroeder, "The protection of information in computer systems," *Proc. IEEE*, 63(9):1278--1308, 1975.
