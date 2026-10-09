@@ -109,9 +109,9 @@ A low-confidence judgment produces clarification or escalation. A judgment is an
 
 The inspected deployment instantiates a Photon bridge, a FastAPI Leader, ACPs discovery, and registered Partners; the Leader derives `caller_id`, stores candidates by `(caller_id, chat_guid)`, validates AIC, HTTPS, `/rpc`, and JSON-RPC requirements, and starts a Partner only after user selection and instruction. AIP v2.2 states (`Accepted`, `Working`, `AwaitingInput`, `AwaitingCompletion`, `complete`, `cancel`) are explicit, and SQLite holds the responses, conversations, choices, and task context.
 
-![Fig. 2. Reference gateway processing flow with a shared handling endpoint](figures/fig2_state_machine.png)
+![Fig. 2. Reference gateway processing flow](figures/fig2_state_machine.png)
 
-Figure 2 depicts the reference gateway processing flow, rather than the AIP protocol state machine. Rejections, cancellation, cached replay, and execution outcomes converge on recording and event completion; waiting preserves context, and a new user reply re-enters authenticated ingress. Retry requires replay safety, valid consent, and a finite budget. These design branches do not imply that every branch was exercised in the deployment study.
+Figure 2 depicts the reference gateway processing flow. Waiting preserves context, and a new user reply re-enters authenticated ingress; retry requires replay safety, valid consent, and a finite budget.
 
 ## 5. Judgment Layer Design
 
@@ -169,7 +169,7 @@ Invariant metrics are the **bypass acceptance rate** (mismatched identity accept
 
 Judgment metrics are accuracy, Brier score, and expected calibration error on the mixed suite, reported on held-out data; the coverage--risk curves across thresholds are recorded in the artifact. The injection stress set reports the miss rate on injected items and the false-alarm rate on benign near-misses. Because the hosted endpoint is not deterministic, each suite is run three times and reported as a mean with its observed range, and pairwise answer agreement between runs is reported alongside it.
 
-Binary outcomes use 95% Wilson intervals, and a zero count is reported with the one-sided bound $3/N$ (0/30 bounds a rate at 10%): the numbers establish direction and mechanism attribution, not production rates.
+Binary outcomes use 95% Wilson intervals, and a zero count is reported with the one-sided bound $3/N$ (0/30 bounds a rate at 10%).
 
 ### 7.4 Consent and effect
 
@@ -196,7 +196,7 @@ The pinned model generated 130 requests; each was delivered three times, in a fr
 | out-of-scope | 40 | a study partner recommended | 0 / 0 / 0 |
 | out-of-scope | 40 | any agent recommended | 40 / 40 / 40 |
 
-Table 4 gives the per-class counts. The path recommended the generated target for 48, 48, and 50 of the 50 direct requests (96--100%) and never recommended a different study partner; the misses recommended only agents outside the study set. Intervals are wide at this sample size, as the declared convention implies: the 48/50 delivery carries a 95% Wilson interval of [86.5%, 98.9%] and the 39/40 delivery [87.1%, 99.6%]. For requests that fit two capabilities it recommended more than one agent in 39, 38, and 38 of 40 and never asked for clarification; whether the combination covers the request was not adjudicated. For requests no study partner advertises the path never recommended a study partner, in any run, but it did recommend a public-registry agent in all 40 and the underlying index returned at least one candidate for 36 of 40, so the deployed path does not abstain; it presents the best available agents and leaves acceptance to the user. The structured instrument was weaker: read once, discovery ranked the target first for 40 of 50 and inside the top three for 48. The instruments agreed on 42 of 50: the reply found eight targets discovery did not rank first, and discovery never ranked the target first while the reply missed it. Eighteen of the 130 samples changed outcome between deliveries, seven of them direct. The results are consistent with H1 at the level of recommendation.
+Table 4 gives the per-class counts. The path recommended the generated target for 48, 48, and 50 of the 50 direct requests (96--100%) and never recommended a different study partner; the misses recommended only agents outside the study set. The 48/50 delivery carries a 95% Wilson interval of [86.5%, 98.9%], and the 39/40 delivery [87.1%, 99.6%]. For requests that fit two capabilities it recommended more than one agent in 39, 38, and 38 of 40 and never asked for clarification; whether the combination covers the request was not adjudicated. For requests no study partner advertises the path never recommended a study partner, in any run, but it did recommend a public-registry agent in all 40 and the underlying index returned at least one candidate for 36 of 40, so the deployed path does not abstain; it presents the best available agents and leaves acceptance to the user. The structured instrument was weaker: read once, discovery ranked the target first for 40 of 50 and inside the top three for 48. The instruments agreed on 42 of 50: the reply found eight targets discovery did not rank first, and discovery never ranked the target first while the reply missed it. Eighteen of the 130 samples changed outcome between deliveries, seven of them direct. The results are consistent with H1 at the level of recommendation.
 
 ### 9.2 Invariant ablations
 
@@ -222,7 +222,7 @@ A single hosted model (`deepseek-flash`, temperature 0, reasoning effort pinned 
 | Free text | 83.9% (79.0--90.3) | 0.251 (0.160--0.302) | 0.120 |
 | Keyword | 77.4% | 0.377 | 0.026 |
 
-Table 6 gives the held-out metrics. Typed answers are more accurate, with about half the free-text Brier score, and accuracy, Brier, and calibration error separate beyond the run-to-run ranges; the keyword rule is a transparent reference point rather than a competitor. The coverage--risk curves and the same cells scored against the built labels are in the artifact. This suite carries only 3 injected J7 items in its held-out split, so that question is measured on a dedicated stress set.
+Table 6 gives the held-out metrics. Typed answers are more accurate, with about half the free-text Brier score, and accuracy, Brier, and calibration error separate beyond the run-to-run ranges; the keyword rule is a transparent reference point. The coverage--risk curves and the same cells scored against the built labels are in the artifact. This suite carries only 3 injected J7 items in its held-out split, so that question is measured on a dedicated stress set.
 
 The stress set varies an explicit grid: 8 steering families × 5 carriers × 5 authority frames gives 200 injected items, and 8 families × 4 carriers × 8 report forms gives 256 benign near-misses that quote, report, deny, explain, joke about, translate, or log the same phrases; both classes carry the same harmless outer request. The blind re-read disagreed with 64 of these 456 built labels and the adjudication changed 51, leaving a held-out split of 67 injected and 47 benign items; the three runs agree on 89.0% of typed and 91.1% of free-text answers.
 
@@ -248,7 +248,7 @@ Figure 3 gives the gateway's own cost, with the observed range and n for each op
 
 The judgment layer is a plane that modules may consult, and the deployment now carries it in that form: the adapter asks J5 -- is this event a semantic replay of an already handled request? -- before the pipeline branches, under `JUDGMENT_MODE=advise`, where the verdict is logged and no execution decision reads it. It runs after the key-based store has answered, so an exact replay never reaches it.
 
-Twenty conversations drove the live ingress with three events each: the opening request, a paraphrase of it under a new message id (which the event store cannot answer), and a different request in the same domain. All 60 events were judged. At the declared threshold of 0.9, 20/20 paraphrases were called replays (95% Wilson interval [83.9%, 100%], median 0.98, range 0.95--1.00) and 0/40 non-replays crossed it (bounding that rate at 7.5%; the largest non-replay score was 0.12). Exactly those 20 events would have been handed to the keyed-result branch, the step the deterministic layer cannot take on its own. The advisory call cost a median of 1.07 s (range 0.53--1.74 s), and the paraphrases were written by the same pinned model, so the separation bounds what human paraphrases would give.
+Twenty conversations drove the live ingress with three events each: the opening request, a paraphrase of it under a new message id (which the event store cannot answer), and a different request in the same domain. All 60 events were judged. At the declared threshold of 0.9, 20/20 paraphrases were called replays (95% Wilson interval [83.9%, 100%], median 0.98, range 0.95--1.00) and 0/40 non-replays crossed it (bounding that rate at 7.5%; the largest non-replay score was 0.12). Exactly those 20 events would have been handed to the keyed-result branch, the step the deterministic layer cannot take on its own. The advisory call cost a median of 1.07 s (range 0.53--1.74 s). The paraphrases were written by the same pinned model.
 
 ### 9.6 Limitations and scope
 
