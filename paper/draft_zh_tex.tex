@@ -110,7 +110,7 @@ Li 等人提出 Agent Collaboration Protocols，把它作为面向智能体互�
 
 \subsection{运行时约束及其边界}
 
-智能体安全的工作重心已经从「检测」转向「结构性约束」。InjecAgent \cite{injecagent2024} 与 ToolEmu \cite{toolemu2023} 这类基准显示，使用工具的智能体会被自己检索到的内容诱导去做有害动作；StruQ \cite{struq2024} 与 CaMeL \cite{camel2025} 的应对方式是控制「不受信任文本到动作空间」这条通路，而不是去判断文本本身是否恶意。另一条路线把约束放进运行时：Progent \cite{progent2025} 给单次工具调用附加权限约束，AgentSpec \cite{agentspec2025} 与 GuardAgent \cite{guardagent2024} 负责编译并检查运行时规则，IsolateGPT \cite{isolategpt2024} 则把每个智能体的执行隔离开。这些系统都是在智能体内部施加约束；本文的场景不同：检查落在人类消息通道与协议之间的边界上，发起方是人，第一个问题就是这条请求究竟该不该发出去。这条边界也承接了更早的机制：委托授权已有成熟原语 \cite{oauth2012}，而选择性预测给出了置信度不足时拒答的原则性做法 \cite{conformal2021}。
+智能体安全的工作重心已经从「检测」转向「结构性约束」。InjecAgent \cite{injecagent2024} 与 ToolEmu \cite{toolemu2023} 这类基准显示，使用工具的智能体会被自己检索到的内容诱导去做有害动作；StruQ \cite{struq2024} 与 CaMeL \cite{camel2025} 的应对方式是控制「不受信任文本到动作空间」这条通路，而不是去判断文本本身是否恶意。另一条路线把约束放进运行时：Progent \cite{progent2025} 给单次工具调用附加权限约束，AgentSpec \cite{agentspec2025} 与 GuardAgent \cite{guardagent2024} 负责编译并检查运行时规则，IsolateGPT \cite{isolategpt2024} 则把每个智能体的执行隔离开。这些系统都是在智能体内部施加约束；本文的场景不同：检查落在人类消息通道与协议之间的边界上，发起方是人，第一个问题就是这条请求究竟该不该发出去。这条边界也承接了更早的机制：委托授权已有成熟原语 \cite{oauth2012}，而选择性预测给出了置信度不足时拒答的原则性做法 \cite{conformal2021,geifman2017selective}。
 
 \section{问题定义与设计目标}
 
@@ -292,7 +292,7 @@ received -> verified -> isolated -> discovered -> judged -> consented
 
 \subsection{答案形态}
 
-三种答案形态覆盖全部七个判断点。二元概率回答单个是非命题，用于 J1、J4、J5、J7；命名选项上的分布回答封闭式多选问题，用于 J2 与 J6；有序评分回答评分标尺上的问题，用于 J3 与 J4 的严重度分量。多个问题可以在一次请求中共享同一份状态，这有利于成本与时延，但每个答案都独立评估、独立设阈。证据可能缺失时，必须提供复核或不匹配选项；有序评分不跨不同标尺比较 \cite{geifman2017selective}。
+三种答案形态覆盖全部七个判断点。二元概率回答单个是非命题，用于 J1、J4、J5、J7；命名选项上的分布回答封闭式多选问题，用于 J2 与 J6；有序评分回答评分标尺上的问题，用于 J3 与 J4 的严重度分量。多个问题可以在一次请求中共享同一份状态，这有利于成本与时延，但每个答案都独立评估、独立设阈。证据可能缺失时，必须提供复核或不匹配选项 \cite{geifman2017selective}；有序评分不跨不同标尺比较。
 
 \subsection{阈值、弃答与升级}
 
@@ -582,7 +582,7 @@ no-isolation & 9422 / 9420 & 0/30 跨调用者读取 & 30/30 读取 & 分区阻�
 
 \bibitem{helland2012idempotence} P. Helland，Idempotence is not a medical condition，\emph{Communications of the ACM}，第 55 卷第 5 期，56-65 页，2012。
 
-\bibitem{kim2026scaling} Y. Kim 等，Towards a Science of Scaling Agent Systems，arXiv:2512.08296，2026。
+\bibitem{kim2026scaling} Y. Kim 等，Towards a Science of Scaling Agent Systems，arXiv:2512.08296，2025。
 
 \bibitem{li2025acps} C. Li、J. Wu、Q. Du、S. Yu、R. Zou、K. Yu，ACPS: Agent Collaboration Protocols for the Internet of Agents，2025 年第 9 届 IEEE 网络智能与数字内容国际会议（IC-NIDC），IEEE，2025，342-346 页。doi:10.1109/IC-NIDC67200.2025.11390349。
 

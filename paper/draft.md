@@ -38,7 +38,7 @@ Two literatures explain why the surrounding policy needs abstention and calibrat
 
 ### 2.3 Runtime enforcement and its limits
 
-Agent security has largely moved from detection to structural constraint. Benchmarks such as InjecAgent [24] and ToolEmu [17] show that tool-using agents can be steered into harmful actions by the content they retrieve, and StruQ [3] and CaMeL [5] answer this by controlling the path from untrusted text to the action space rather than by classifying the text itself. A parallel line places enforcement inside the runtime: Progent [19] attaches privilege constraints to individual tool calls, AgentSpec [21] and GuardAgent [23] compile and check runtime rules, and IsolateGPT [22] isolates each agent's execution. These systems constrain the agent from the inside; our setting instead puts the check at the boundary between a human messaging channel and the protocol, where the caller is a person and the first question is whether the request may be sent at all. That boundary also inherits older machinery: delegated authorization has established primitives [11], and selective prediction gives a principled way to decline when confidence is low [2].
+Agent security has largely moved from detection to structural constraint. Benchmarks such as InjecAgent [24] and ToolEmu [17] show that tool-using agents can be steered into harmful actions by the content they retrieve, and StruQ [3] and CaMeL [5] answer this by controlling the path from untrusted text to the action space rather than by classifying the text itself. A parallel line places enforcement inside the runtime: Progent [19] attaches privilege constraints to individual tool calls, AgentSpec [21] and GuardAgent [23] compile and check runtime rules, and IsolateGPT [22] isolates each agent's execution. These systems constrain the agent from the inside; our setting instead puts the check at the boundary between a human messaging channel and the protocol, where the caller is a person and the first question is whether the request may be sent at all. That boundary also inherits older machinery: delegated authorization has established primitives [11], and selective prediction gives a principled way to decline when confidence is low [2, 7].
 
 ## 3. Problem Definition and Design Goals
 
@@ -115,7 +115,7 @@ Figure 2 depicts the reference gateway processing flow. Waiting preserves contex
 
 ### 5.1 Answer shapes
 
-A binary probability covers J1, J4, J5, and J7; named-option distributions cover J2 and J6; ordinal scores cover the severity components of J3 and J4. Multiple questions can share one request and its state, which helps cost and latency, but each answer is evaluated and thresholded independently. A review or no-match option is required where evidence can be missing, and ordinal scores are not compared across different rubrics [7].
+A binary probability covers J1, J4, J5, and J7; named-option distributions cover J2 and J6; ordinal scores cover the severity components of J3 and J4. Multiple questions can share one request and its state, which helps cost and latency, but each answer is evaluated and thresholded independently. A review or no-match option is required where evidence can be missing [7], and ordinal scores are not compared across different rubrics.
 
 ### 5.2 Thresholds, abstention, and escalation
 
@@ -269,7 +269,7 @@ This paper separates typed judgment from deterministic enforcement in a seven-mo
 10. C. Guo et al., "On calibration of modern neural networks," in *ICML*, PMLR 70, 2017, pp. 1321--1330.
 11. D. Hardt, "The OAuth 2.0 authorization framework," RFC 6749, IETF, 2012.
 12. P. Helland, "Idempotence is not a medical condition," *Commun. ACM*, 55(5):56--65, 2012.
-13. Y. Kim et al., "Towards a Science of Scaling Agent Systems," arXiv:2512.08296, 2026.
+13. Y. Kim et al., "Towards a Science of Scaling Agent Systems," arXiv:2512.08296, 2025.
 14. C. Li et al., "ACPS: Agent Collaboration Protocols for the Internet of Agents," in *IC-NIDC*, IEEE, 2025, pp. 342--346.
 15. Y. Liu et al., "Formalizing and benchmarking prompt injection attacks and defenses," in *USENIX Security*, 2024.
 16. T. Ma et al., "MAESTRO: Multi-Agent Evaluation Suite for Testing, Reliability, and Observability," arXiv:2601.00481, 2026.

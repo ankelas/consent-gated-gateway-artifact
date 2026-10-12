@@ -46,7 +46,7 @@ Li 等人提出 Agent Collaboration Protocols，把它作为面向智能体互�
 
 ### 2.3 运行时约束及其边界
 
-智能体安全的工作重心已经从「检测」转向「结构性约束」。InjecAgent [24] 与 ToolEmu [17] 这类基准显示，使用工具的智能体会被自己检索到的内容诱导去做有害动作；StruQ [3] 与 CaMeL [5] 的应对方式是控制「不受信任文本到动作空间」这条通路，而不是去判断文本本身是否恶意。另一条路线把约束放进运行时：Progent [19] 给单次工具调用附加权限约束，AgentSpec [21] 与 GuardAgent [23] 负责编译并检查运行时规则，IsolateGPT [22] 则把每个智能体的执行隔离开。这些系统都是在智能体内部施加约束；本文的场景不同：检查落在人类消息通道与协议之间的边界上，发起方是人，第一个问题就是这条请求究竟该不该发出去。这条边界也承接了更早的机制：委托授权已有成熟原语 [11]，而选择性预测给出了置信度不足时拒答的原则性做法 [2]。
+智能体安全的工作重心已经从「检测」转向「结构性约束」。InjecAgent [24] 与 ToolEmu [17] 这类基准显示，使用工具的智能体会被自己检索到的内容诱导去做有害动作；StruQ [3] 与 CaMeL [5] 的应对方式是控制「不受信任文本到动作空间」这条通路，而不是去判断文本本身是否恶意。另一条路线把约束放进运行时：Progent [19] 给单次工具调用附加权限约束，AgentSpec [21] 与 GuardAgent [23] 负责编译并检查运行时规则，IsolateGPT [22] 则把每个智能体的执行隔离开。这些系统都是在智能体内部施加约束；本文的场景不同：检查落在人类消息通道与协议之间的边界上，发起方是人，第一个问题就是这条请求究竟该不该发出去。这条边界也承接了更早的机制：委托授权已有成熟原语 [11]，而选择性预测给出了置信度不足时拒答的原则性做法 [2, 7]。
 
 ## 3. 问题定义与设计目标
 
@@ -141,7 +141,7 @@ received → verified → isolated → discovered → judged → consented
 
 ### 5.1 答案形态
 
-三种答案形态覆盖全部七个判断点。二元概率回答单个是非命题，用于 J1、J4、J5、J7；命名选项上的分布回答封闭式多选问题，用于 J2 与 J6；有序评分回答评分标尺上的问题，用于 J3 与 J4 的严重度分量。多个问题可以在一次请求中共享同一份状态，这有利于成本与时延，但每个答案都独立评估、独立设阈。证据可能缺失时，必须提供复核或不匹配选项；有序评分不跨不同标尺比较 [7]。
+三种答案形态覆盖全部七个判断点。二元概率回答单个是非命题，用于 J1、J4、J5、J7；命名选项上的分布回答封闭式多选问题，用于 J2 与 J6；有序评分回答评分标尺上的问题，用于 J3 与 J4 的严重度分量。多个问题可以在一次请求中共享同一份状态，这有利于成本与时延，但每个答案都独立评估、独立设阈。证据可能缺失时，必须提供复核或不匹配选项 [7]；有序评分不跨不同标尺比较。
 
 ### 5.2 阈值、弃答与升级
 
@@ -307,7 +307,7 @@ received → verified → isolated → discovered → judged → consented
 10. C. Guo、G. Pleiss、Y. Sun、K. Q. Weinberger，On calibration of modern neural networks，第 34 届国际机器学习会议（ICML），PMLR 70，2017，1321-1330 页。
 11. D. Hardt，The OAuth 2.0 authorization framework，RFC 6749，IETF，2012。
 12. P. Helland，Idempotence is not a medical condition，*Communications of the ACM*，第 55 卷第 5 期，56-65 页，2012。
-13. Y. Kim 等，Towards a Science of Scaling Agent Systems，arXiv:2512.08296，2026。
+13. Y. Kim 等，Towards a Science of Scaling Agent Systems，arXiv:2512.08296，2025。
 14. C. Li、J. Wu、Q. Du、S. Yu、R. Zou、K. Yu，ACPS: Agent Collaboration Protocols for the Internet of Agents，2025 年第 9 届 IEEE 网络智能与数字内容国际会议（IC-NIDC），IEEE，2025，342-346 页。doi:10.1109/IC-NIDC67200.2025.11390349。
 15. Y. Liu 等，Formalizing and benchmarking prompt injection attacks and defenses，第 33 届 USENIX 安全研讨会（USENIX Security 24），2024。
 16. T. Ma 等，MAESTRO: Multi-Agent Evaluation Suite for Testing, Reliability, and Observability，arXiv:2601.00481，2026。

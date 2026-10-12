@@ -90,7 +90,7 @@ Two literatures explain why the surrounding policy needs abstention and calibrat
 
 \subsection{Runtime enforcement and its limits}
 
-Agent security has largely moved from detection to structural constraint. Benchmarks such as InjecAgent \cite{injecagent2024} and ToolEmu \cite{toolemu2023} show that tool-using agents can be steered into harmful actions by the content they retrieve, and StruQ \cite{struq2024} and CaMeL \cite{camel2025} answer this by controlling the path from untrusted text to the action space rather than by classifying the text itself. A parallel line places enforcement inside the runtime: Progent \cite{progent2025} attaches privilege constraints to individual tool calls, AgentSpec \cite{agentspec2025} and GuardAgent \cite{guardagent2024} compile and check runtime rules, and IsolateGPT \cite{isolategpt2024} isolates each agent's execution. These systems constrain the agent from the inside; our setting instead puts the check at the boundary between a human messaging channel and the protocol, where the caller is a person and the first question is whether the request may be sent at all. That boundary also inherits older machinery: delegated authorization has established primitives \cite{oauth2012}, and selective prediction gives a principled way to decline when confidence is low \cite{conformal2021}.
+Agent security has largely moved from detection to structural constraint. Benchmarks such as InjecAgent \cite{injecagent2024} and ToolEmu \cite{toolemu2023} show that tool-using agents can be steered into harmful actions by the content they retrieve, and StruQ \cite{struq2024} and CaMeL \cite{camel2025} answer this by controlling the path from untrusted text to the action space rather than by classifying the text itself. A parallel line places enforcement inside the runtime: Progent \cite{progent2025} attaches privilege constraints to individual tool calls, AgentSpec \cite{agentspec2025} and GuardAgent \cite{guardagent2024} compile and check runtime rules, and IsolateGPT \cite{isolategpt2024} isolates each agent's execution. These systems constrain the agent from the inside; our setting instead puts the check at the boundary between a human messaging channel and the protocol, where the caller is a person and the first question is whether the request may be sent at all. That boundary also inherits older machinery: delegated authorization has established primitives \cite{oauth2012}, and selective prediction gives a principled way to decline when confidence is low \cite{conformal2021,geifman2017selective}.
 
 \section{Problem Definition and Design Goals}
 
@@ -248,7 +248,7 @@ Figure 2 depicts the reference gateway processing flow. Waiting preserves contex
 
 \subsection{Answer shapes}
 
-A binary probability covers J1, J4, J5, and J7; named-option distributions cover J2 and J6; ordinal scores cover the severity components of J3 and J4. Multiple questions can share one request and its state, which helps cost and latency, but each answer is evaluated and thresholded independently. A review or no-match option is required where evidence can be missing, and ordinal scores are not compared across different rubrics \cite{geifman2017selective}.
+A binary probability covers J1, J4, J5, and J7; named-option distributions cover J2 and J6; ordinal scores cover the severity components of J3 and J4. Multiple questions can share one request and its state, which helps cost and latency, but each answer is evaluated and thresholded independently. A review or no-match option is required where evidence can be missing \cite{geifman2017selective}, and ordinal scores are not compared across different rubrics.
 
 \subsection{Thresholds, abstention, and escalation}
 
@@ -532,7 +532,7 @@ This paper separates typed judgment from deterministic enforcement in a seven-mo
 
 \bibitem{helland2012idempotence} P. Helland, "Idempotence is not a medical condition," \emph{Commun. ACM}, 55(5):56--65, 2012.
 
-\bibitem{kim2026scaling} Y. Kim et al., "Towards a Science of Scaling Agent Systems," arXiv:2512.08296, 2026.
+\bibitem{kim2026scaling} Y. Kim et al., "Towards a Science of Scaling Agent Systems," arXiv:2512.08296, 2025.
 
 \bibitem{li2025acps} C. Li et al., "ACPS: Agent Collaboration Protocols for the Internet of Agents," in \emph{IC-NIDC}, IEEE, 2025, pp. 342--346.
 
