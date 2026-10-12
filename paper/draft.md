@@ -115,11 +115,11 @@ Figure 2 depicts the reference gateway processing flow. Waiting preserves contex
 
 ### 5.1 Answer shapes
 
-A binary probability covers J1, J4, J5, and J7; named-option distributions cover J2 and J6; ordinal scores cover the severity components of J3 and J4. Each answer is evaluated and thresholded independently. A review or no-match option is required where evidence can be missing, and ordinal scores are not compared across different rubrics [7].
+A binary probability covers J1, J4, J5, and J7; named-option distributions cover J2 and J6; ordinal scores cover the severity components of J3 and J4. Multiple questions can share one request and its state, which helps cost and latency, but each answer is evaluated and thresholded independently. A review or no-match option is required where evidence can be missing, and ordinal scores are not compared across different rubrics [7].
 
 ### 5.2 Thresholds, abstention, and escalation
 
-The threshold is a policy setting that lives in code, not in the model: the model can neither choose it nor bypass it. Below threshold, it asks the user, keeps a key-based result with a warning, or surfaces a terminal failure according to the point. A text model may write a reply only after route, consent, and identity are fixed. Forced choice, distribution shift, and authority-framed injection are the failure modes this design carries: they motivate the review option, coverage--risk reporting, re-certification, and the advisory-only J7 path [7, 9].
+The threshold is a policy setting that lives in code, not in the model: the model can neither choose it nor bypass it. Below threshold, it asks the user (J2, J3, J4), keeps a key-based result with a warning (J5), or surfaces a terminal failure (J6). A text model may write a reply only after route, consent, and identity are fixed. Forced choice, distribution shift, and authority-framed injection are the failure modes this design carries: they motivate the review option, coverage--risk reporting, re-certification, and the advisory-only J7 path [7, 9].
 
 ### 5.3 Placement and data minimization
 
