@@ -1,0 +1,70 @@
+{
+  "aic": "",
+  "active": false,
+  "lastModifiedTime": "2026-10-06T22:30:00+08:00",
+  "protocolVersion": "02.02",
+  "documentationUrl": "https://wt.ioa.pub/docs.html",
+  "version": "1.0.0",
+  "provider": {
+    "countryCode": "CN",
+    "organization": "ACPs 实验roster",
+    "department": "caiyizhang 实机实验"
+  },
+  "securitySchemes": {
+    "mtls": {
+      "type": "mutualTLS",
+      "description": "CA 签发的 serverAuth 证书；调用方需持有 clientAuth 证书"
+    }
+  },
+  "capabilities": {
+    "streaming": false,
+    "notification": false,
+    "messageQueue": [
+      "rabbitmq:>=4.2"
+    ]
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain",
+    "application/json"
+  ],
+  "name": "通用任务助手智能体",
+  "description": "面向多类日常任务的通用型助手，覆盖会议安排、报告撰写、消息转发、工单处理、资料检索与文件整理等；不限定单一领域，可作为兜底候选。",
+  "endPoints": [
+    {
+      "url": "https://49.232.42.120:9545/rpc",
+      "transport": "JSONRPC",
+      "security": [
+        {
+          "mtls": []
+        }
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "id": "general.task-assistant",
+      "name": "通用任务协助",
+      "description": "处理会议、报告、消息、工单、检索、文件等多类任务。",
+      "tags": [
+        "general",
+        "meeting",
+        "report",
+        "message",
+        "ticket",
+        "search",
+        "file"
+      ],
+      "version": "1.0.0",
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain",
+        "application/json"
+      ]
+    }
+  ]
+}

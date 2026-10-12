@@ -1,0 +1,41 @@
+[app]
+identity_binding_enabled = true
+
+[llm.fast]
+api_key_env = "PARTNER_LLM_FAST_API_KEY"
+base_url_env = "PARTNER_LLM_FAST_BASE_URL"
+model_env = "PARTNER_LLM_FAST_MODEL"
+max_tokens = 512
+temperature = 0.2
+
+[llm.default]
+api_key_env = "PARTNER_LLM_DEFAULT_API_KEY"
+base_url_env = "PARTNER_LLM_DEFAULT_BASE_URL"
+model_env = "PARTNER_LLM_DEFAULT_MODEL"
+max_tokens = 2048
+temperature = 0.6
+
+[server]
+host = "0.0.0.0"
+port = 9024
+
+[server.mtls]
+tls_enabled = true
+verify_client = true
+cert_file = "server.pem"
+key_file = "server.key"
+ca_file = "trust-bundle.pem"
+
+[rabbitmq]
+host = "stage-rabbitmq"
+port = 5671
+vhost = "acps"
+
+[group]
+enabled = true
+
+[concurrency]
+max_concurrent_tasks = 10
+
+[log]
+level = "INFO"

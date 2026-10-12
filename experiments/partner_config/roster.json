@@ -1,0 +1,63 @@
+[
+  {
+    "file": "beijing_urban",
+    "name": "北京城区旅游智能体",
+    "agent_id": "01a11199-43a3-7790-a9ba-e4bca00385c3",
+    "aic": "1.2.156.3088.1.BUPT.M7JQDT.N6SEON.68AJ2Y.077B",
+    "endpoint": "https://49.232.42.120:9540/rpc",
+    "skills": [
+      "beijing_urban.cultural-attraction-recommendation",
+      "beijing_urban.family-friendly-itinerary",
+      "beijing_urban.urban-route-optimization",
+      "beijing_urban.budget-conscious-planning"
+    ]
+  },
+  {
+    "file": "beijing_rural",
+    "name": "北京郊区旅游智能体",
+    "agent_id": "01a1119c-a4a6-7067-a366-bdce3c97281e",
+    "aic": "1.2.156.3088.1.BUPT.M7JQDT.GIC4WM.GQM1IG.0KHO",
+    "endpoint": "https://49.232.42.120:9541/rpc",
+    "skills": [
+      "beijing_rural.natural-scenery-recommendation",
+      "beijing_rural.rural-itinerary-planning",
+      "beijing_rural.hidden-gems-discovery",
+      "beijing_rural.outdoor-activity-arrangement"
+    ]
+  },
+  {
+    "file": "beijing_food",
+    "name": "北京美食推荐智能体",
+    "agent_id": "01a1119c-c3e5-7185-a095-57b4209c8c42",
+    "aic": "1.2.156.3088.1.BUPT.M7JQDT.Q09ZHZ.VA5BJV.0I73",
+    "endpoint": "https://49.232.42.120:9542/rpc",
+    "skills": [
+      "beijing_catering.traditional-food-recommendation",
+      "beijing_catering.location-based-restaurant-recommendation",
+      "beijing_catering.dietary-preference-matching",
+      "beijing_catering.food-culture-experience"
+    ]
+  },
+  {
+    "file": "china_transport",
+    "name": "全国交通规划智能体",
+    "agent_id": "01a111a2-b95d-75b4-9d30-757810f861e2",
+    "aic": "1.2.156.3088.1.BUPT.M7JQDT.TNFCQN.XN8AZ2.005W",
+    "endpoint": "https://49.232.42.120:9546/rpc",
+    "skills": [
+      "china_transport.intercity-transportation-planning",
+      "china_transport.route-optimization",
+      "china_transport.special-needs-transportation"
+    ]
+  },
+  {
+    "file": "china_hotel",
+    "name": "ACPs 公网酒店 Partner（caiyizhang）",
+    "agent_id": "01a1119c-fef7-706e-ac66-36baad5ee2ef",
+    "aic": "1.2.156.3088.1.BUPT.M7JQDT.CKPZ1B.DF2G2B.14UF",
+    "endpoint": "https://49.232.42.120:9544/rpc",
+    "skills": [
+      "public-china-hotel.hotel-recommendation"
+    ]
+  }
+]

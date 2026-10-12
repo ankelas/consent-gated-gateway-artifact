@@ -15,7 +15,7 @@ This directory is the source of truth for the paper's empirical claims. The pape
 - `live/consent_redelivery.py` repeats each consent event twice after the consented call lands, and shows that a replayed event produces no further partner action and returns the stored reply (`data/live_consent_redelivery.jsonl`).
 - The partners record one line per accepted task to `EFFECT_OUTBOX=/outbox/effects.jsonl` (wired in `acps-public-demo/roster/compose.yml`), so an invocation that starts work is observable without a side-effecting partner. `live/verify_effect_log.py` partitions that append-only log by phase and caller number, writes `data/live_effect_reconciliation.json` and the 36 trial-associated records in `data/live_effects_trials.jsonl`, and asserts that no task id repeats (the log's other records are the probe calls that preceded each phase).
 - `live/gateway_overhead.py` times the gateway operations on their own (ingress reject, deduplication cache hit, AIP identity reject, AIP accept round trip) plus the first delivery for scale, and writes `data/live_gateway_overhead.json`.
-- The ablation arms are staging copies of the deployed code with one environment-gated change each; the sources are under `/data/caiyizhang/ablation/`.
+- The ablation arms are staging copies of the deployed code with one environment-gated change each; the sources are in `ablation/`, copied from `/data/caiyizhang/ablation/` on the study host with the runtime state, the partner logs and all certificate material left out.
 - Recorded outcomes: `live_results.md` and `live_ablation_results.md`; raw records under `data/live_*.jsonl`.
 
 ## Telemetry

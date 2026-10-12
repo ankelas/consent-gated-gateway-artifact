@@ -1,0 +1,48 @@
+services:
+  ctrl:
+    image: imessage-agent:latest
+    command: ["uvicorn","imessage_adapter.app:app","--host","0.0.0.0","--port","9420"]
+    working_dir: /data/imessage
+    env_file: /data/imessage/.env
+    environment:
+      PYTHONPATH: /data/imessage/src
+      ADAPTER_PORT: "9420"
+      ABLATION_EXEC_LOG: /data/imessage/state/exec.jsonl
+    volumes:
+      - /data/caiyizhang/ablation/state/ctrl:/data/imessage/state
+      - /data/caiyizhang/ablation/assistant:/data/imessage/src:ro
+      - /data/imessage/.acps-cli:/certificates:ro
+    ports: ["127.0.0.1:9420:9420"]
+    restart: unless-stopped
+  nodedup:
+    image: imessage-agent:latest
+    command: ["uvicorn","imessage_adapter.app:app","--host","0.0.0.0","--port","9421"]
+    working_dir: /data/imessage
+    env_file: /data/imessage/.env
+    environment:
+      PYTHONPATH: /data/imessage/src
+      ADAPTER_PORT: "9421"
+      ABLATION_SKIP_DEDUP: "1"
+      ABLATION_EXEC_LOG: /data/imessage/state/exec.jsonl
+    volumes:
+      - /data/caiyizhang/ablation/state/nodedup:/data/imessage/state
+      - /data/caiyizhang/ablation/assistant:/data/imessage/src:ro
+      - /data/imessage/.acps-cli:/certificates:ro
+    ports: ["127.0.0.1:9421:9421"]
+    restart: unless-stopped
+  shared:
+    image: imessage-agent:latest
+    command: ["uvicorn","imessage_adapter.app:app","--host","0.0.0.0","--port","9422"]
+    working_dir: /data/imessage
+    env_file: /data/imessage/.env
+    environment:
+      PYTHONPATH: /data/imessage/src
+      ADAPTER_PORT: "9422"
+      ABLATION_SHARED_SESSION: "1"
+      ABLATION_EXEC_LOG: /data/imessage/state/exec.jsonl
+    volumes:
+      - /data/caiyizhang/ablation/state/shared:/data/imessage/state
+      - /data/caiyizhang/ablation/assistant:/data/imessage/src:ro
+      - /data/imessage/.acps-cli:/certificates:ro
+    ports: ["127.0.0.1:9422:9422"]
+    restart: unless-stopped

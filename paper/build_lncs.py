@@ -34,11 +34,11 @@ FIGURE_WIDTH = {
 # widths, otherwise the label column is as wide as the sentence column and the
 # text wraps mid-word. Keys are table numbers in document order.
 TABLE_COLUMNS = {
-    1: r"@{}cXp{2.6cm}cX@{}",
-    2: r"@{}lXX@{}",
+    1: r"@{}cXp{2.6cm}c>{\raggedright\arraybackslash}X@{}",
+    2: r"@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}",
     4: r"@{}lcXp{2.6cm}@{}",
-    5: r"@{}lp{1.9cm}p{2.5cm}p{1.8cm}X@{}",
-    6: r"@{}lp{2.9cm}p{2.7cm}c@{}",
+    5: r"@{}l>{\raggedright\arraybackslash}p{1.9cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}X@{}",
+    6: r"@{}l>{\raggedright\arraybackslash}p{3.8cm}>{\raggedright\arraybackslash}p{3.6cm}c@{}",
     7: r"@{}lXXc@{}",
 }
 

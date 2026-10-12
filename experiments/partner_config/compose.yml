@@ -1,0 +1,117 @@
+services:
+  partner-beijing_urban:
+    image: acps-demo-partners:latest
+    user: "1004:1004"
+    working_dir: /work/demo-partner
+    command: ["python","-m","partners.main","beijing_urban"]
+    env_file: ./llm.env
+    environment:
+      PYTHONPATH: /work/demo-partner:/work/acps-sdk
+      AMP_LOG_DIR: /work/amp-logs/roster_partner
+      EFFECT_OUTBOX: /outbox/effects.jsonl
+    volumes:
+      - /data/caiyizhang/acps-public-demo/src/demo-partner:/work/demo-partner:ro
+      - /data/caiyizhang/acps-public-demo/src/acps-sdk:/work/acps-sdk:ro
+      - /data/caiyizhang/ACPs-community/monitor/logs:/work/amp-logs
+      - /data/caiyizhang/acps-public-demo/outbox:/outbox
+      - /data/caiyizhang/acps-public-demo/roster/runtime/beijing_urban/config.toml:/work/demo-partner/partners/online/beijing_urban/config.toml:ro
+      - /data/caiyizhang/acps-public-demo/roster/runtime/beijing_urban/acs.json:/work/demo-partner/partners/online/beijing_urban/acs.json:ro
+      - /data/caiyizhang/acps-public-demo/roster/certs/beijing_urban-server.pem:/certs/server.pem:ro
+      - /data/caiyizhang/acps-public-demo/roster/keyfiles/beijing_urban-server.key:/certs/server.key:ro
+      - /data/caiyizhang/acps-public-demo/keyfiles/trust-bundle.pem:/certs/trust-bundle.pem:ro
+    ports:
+      - "0.0.0.0:9540:9540"
+    restart: unless-stopped
+  partner-beijing_rural:
+    image: acps-demo-partners:latest
+    user: "1004:1004"
+    working_dir: /work/demo-partner
+    command: ["python","-m","partners.main","beijing_rural"]
+    env_file: ./llm.env
+    environment:
+      PYTHONPATH: /work/demo-partner:/work/acps-sdk
+      AMP_LOG_DIR: /work/amp-logs/roster_partner
+      EFFECT_OUTBOX: /outbox/effects.jsonl
+    volumes:
+      - /data/caiyizhang/acps-public-demo/src/demo-partner:/work/demo-partner:ro
+      - /data/caiyizhang/acps-public-demo/src/acps-sdk:/work/acps-sdk:ro
+      - /data/caiyizhang/ACPs-community/monitor/logs:/work/amp-logs
+      - /data/caiyizhang/acps-public-demo/outbox:/outbox
+      - /data/caiyizhang/acps-public-demo/roster/runtime/beijing_rural/config.toml:/work/demo-partner/partners/online/beijing_rural/config.toml:ro
+      - /data/caiyizhang/acps-public-demo/roster/runtime/beijing_rural/acs.json:/work/demo-partner/partners/online/beijing_rural/acs.json:ro
+      - /data/caiyizhang/acps-public-demo/roster/certs/beijing_rural-server.pem:/certs/server.pem:ro
+      - /data/caiyizhang/acps-public-demo/roster/keyfiles/beijing_rural-server.key:/certs/server.key:ro
+      - /data/caiyizhang/acps-public-demo/keyfiles/trust-bundle.pem:/certs/trust-bundle.pem:ro
+    ports:
+      - "0.0.0.0:9541:9541"
+    restart: unless-stopped
+  partner-beijing_food:
+    image: acps-demo-partners:latest
+    user: "1004:1004"
+    working_dir: /work/demo-partner
+    command: ["python","-m","partners.main","beijing_food"]
+    env_file: ./llm.env
+    environment:
+      PYTHONPATH: /work/demo-partner:/work/acps-sdk
+      AMP_LOG_DIR: /work/amp-logs/roster_partner
+      EFFECT_OUTBOX: /outbox/effects.jsonl
+    volumes:
+      - /data/caiyizhang/acps-public-demo/src/demo-partner:/work/demo-partner:ro
+      - /data/caiyizhang/acps-public-demo/src/acps-sdk:/work/acps-sdk:ro
+      - /data/caiyizhang/ACPs-community/monitor/logs:/work/amp-logs
+      - /data/caiyizhang/acps-public-demo/outbox:/outbox
+      - /data/caiyizhang/acps-public-demo/roster/runtime/beijing_food/config.toml:/work/demo-partner/partners/online/beijing_food/config.toml:ro
+      - /data/caiyizhang/acps-public-demo/roster/runtime/beijing_food/acs.json:/work/demo-partner/partners/online/beijing_food/acs.json:ro
+      - /data/caiyizhang/acps-public-demo/roster/certs/beijing_food-server.pem:/certs/server.pem:ro
+      - /data/caiyizhang/acps-public-demo/roster/keyfiles/beijing_food-server.key:/certs/server.key:ro
+      - /data/caiyizhang/acps-public-demo/keyfiles/trust-bundle.pem:/certs/trust-bundle.pem:ro
+    ports:
+      - "0.0.0.0:9542:9542"
+    restart: unless-stopped
+  partner-china_transport:
+    image: acps-demo-partners:latest
+    user: "1004:1004"
+    working_dir: /work/demo-partner
+    command: ["python","-m","partners.main","china_transport"]
+    env_file: ./llm.env
+    environment:
+      PYTHONPATH: /work/demo-partner:/work/acps-sdk
+      AMP_LOG_DIR: /work/amp-logs/roster_partner
+      EFFECT_OUTBOX: /outbox/effects.jsonl
+    volumes:
+      - /data/caiyizhang/acps-public-demo/src/demo-partner:/work/demo-partner:ro
+      - /data/caiyizhang/acps-public-demo/src/acps-sdk:/work/acps-sdk:ro
+      - /data/caiyizhang/ACPs-community/monitor/logs:/work/amp-logs
+      - /data/caiyizhang/acps-public-demo/outbox:/outbox
+      - /data/caiyizhang/acps-public-demo/roster/runtime/china_transport/config.toml:/work/demo-partner/partners/online/china_transport/config.toml:ro
+      - /data/caiyizhang/acps-public-demo/roster/runtime/china_transport/acs.json:/work/demo-partner/partners/online/china_transport/acs.json:ro
+      - /data/caiyizhang/acps-public-demo/roster/certs/china_transport-server.pem:/certs/server.pem:ro
+      - /data/caiyizhang/acps-public-demo/roster/keyfiles/china_transport-server.key:/certs/server.key:ro
+      - /data/caiyizhang/acps-public-demo/keyfiles/trust-bundle.pem:/certs/trust-bundle.pem:ro
+    ports:
+      - "0.0.0.0:9546:9546"
+    restart: unless-stopped
+  partner-china_hotel:
+    image: acps-demo-partners:latest
+    user: "1004:1004"
+    working_dir: /work/demo-partner
+    command: ["python","-m","partners.main","china_hotel"]
+    env_file: ./llm.env
+    environment:
+      PYTHONPATH: /work/demo-partner:/work/acps-sdk
+      AMP_LOG_DIR: /work/amp-logs/roster_partner
+      EFFECT_OUTBOX: /outbox/effects.jsonl
+    volumes:
+      - /data/caiyizhang/acps-public-demo/src/demo-partner:/work/demo-partner:ro
+      - /data/caiyizhang/acps-public-demo/src/acps-sdk:/work/acps-sdk:ro
+      - /data/caiyizhang/ACPs-community/monitor/logs:/work/amp-logs
+      - /data/caiyizhang/acps-public-demo/outbox:/outbox
+      - /data/caiyizhang/acps-public-demo/roster/runtime/china_hotel/config.toml:/work/demo-partner/partners/online/china_hotel/config.toml:ro
+      - /data/caiyizhang/acps-public-demo/roster/runtime/china_hotel/acs.json:/work/demo-partner/partners/online/china_hotel/acs.json:ro
+      - /data/caiyizhang/acps-public-demo/roster/certs/china_hotel-server.pem:/certs/server.pem:ro
+      - /data/caiyizhang/acps-public-demo/roster/keyfiles/china_hotel-server.key:/certs/server.key:ro
+      - /data/caiyizhang/acps-public-demo/keyfiles/trust-bundle.pem:/certs/trust-bundle.pem:ro
+    ports:
+      - "0.0.0.0:9544:9544"
+    restart: unless-stopped
+

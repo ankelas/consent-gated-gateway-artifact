@@ -1,0 +1,77 @@
+{
+  "aic": "1.2.156.3088.1.BUPT.M7JQDT.ARKM71.XYSD57.05HO",
+  "active": true,
+  "lastModifiedTime": "2026-09-09T01:08:51.923795+08:00",
+  "protocolVersion": "02.02",
+  "name": "ACPs 公网酒店 Partner（caiyizhang）",
+  "description": "基于 ACPs 2.2.0 demo-partner/china_hotel 的公网演示实例。面向中国境内住宿场景，根据城市、日期、人数、预算、活动区域与交通偏好提供酒店筛选和预订建议。该端点将在 CA 发证后强制执行 mTLS 和 AIC 身份绑定。",
+  "version": "2.2.0-public.1",
+  "documentationUrl": "https://wt.ioa.pub/docs.html",
+  "provider": {
+    "countryCode": "CN",
+    "organization": "ACPs 社区公网联调",
+    "department": "caiyizhang demo-partner"
+  },
+  "securitySchemes": {
+    "mtls": {
+      "type": "mutualTLS",
+      "description": "AIP JSON-RPC 端点要求 CA 签发的客户端证书并绑定 payload senderId"
+    }
+  },
+  "endPoints": [
+    {
+      "url": "https://49.232.42.120:9521/rpc",
+      "transport": "JSONRPC",
+      "security": [
+        {
+          "mtls": []
+        }
+      ]
+    }
+  ],
+  "certificate": {
+    "altNames": {
+      "ip": [
+        "49.232.42.120"
+      ]
+    },
+    "requestedValidity": 365
+  },
+  "capabilities": {
+    "streaming": false,
+    "notification": false,
+    "messageQueue": []
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain",
+    "application/json"
+  ],
+  "skills": [
+    {
+      "id": "public-china-hotel.hotel-recommendation",
+      "name": "中国境内酒店推荐",
+      "description": "根据城市、入住日期或晚数、人数、预算、活动区域和交通偏好推荐酒店；缺少城市或住宿时长时返回 awaiting-input。",
+      "version": "2.2.0",
+      "tags": [
+        "Partner",
+        "酒店推荐",
+        "位置匹配",
+        "价格区间",
+        "中国境内"
+      ],
+      "examples": [
+        "2026 年 10 月 2 日在北京住 3 晚，2 位成人，每晚 600 到 1000 元，希望靠近王府井和地铁"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain",
+        "application/json"
+      ]
+    }
+  ]
+}

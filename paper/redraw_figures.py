@@ -171,31 +171,6 @@ def states():
     s.rect(455,973,180,25,MINT,TEAL,12);s.text(460,973,170,25,'End this event',16,True,color=TEAL)
     return s.save()
 
-def faults():
-    """Retired page: it summarises the offline simulator, which the manuscript
-    no longer reports. The exported files live in legacy_figures/."""
-    rows=list(csv.DictReader((DATA/'core_results.csv').open(encoding='utf-8')))
-    arms=['B1_auto_discovery','B2_no_identity','B3_no_consent','B4_no_isolation_dedup','Full']
-    columns=[('Forged\nidentity','forged_identity','identity_bypass'),('Bad\nendpoint','bad_endpoint','identity_bypass'),('Missing\nconsent','missing_consent','unauthorized_call'),('Duplicate\nevent','duplicate_event','duplicate_side_effect'),('Cross-\nsession','cross_session','cross_session_leak')]
-    s=Scene('fig4_fault_outcomes',1000,650,'3 Fault outcomes')
-    s.text(24,14,952,36,'FAULT-SPECIFIC EXPOSURE',25,True)
-    s.text(24,53,952,32,'All task classes; 400 paired trials per fault and configuration',21,color=GRAY)
-    x0,y0,cw,ch=245,176,144,70
-    for j,(label,_,_) in enumerate(columns):s.text(x0+j*cw,100,cw,67,label,21,True)
-    labels=['B1  Auto discovery','B2  No identity','B3  No consent','B4  No isolation / dedup','Full architecture']
-    source=[]
-    for i,(arm,label) in enumerate(zip(arms,labels)):
-        s.text(20,y0+i*ch,220,ch,label,20,True,align='left')
-        for j,(_,fault,metric) in enumerate(columns):
-            a=[r for r in rows if r['variant']==arm and r['fault']==fault]; k=sum(r[metric]=='true' for r in a);n=len(a); assert n==400
-            pct=k/n*100;fill=MINT if k==0 else ('#F7DFD5' if pct<60 else '#EBAE98')
-            s.rect(x0+j*cw+4,y0+i*ch+4,cw-8,ch-8,fill,'white',5)
-            s.text(x0+j*cw,y0+i*ch+8,cw,ch-16,f'{pct:.1f}%',24,True,color=TEAL if k==0 else INK)
-            source.append(dict(arm=arm,fault=fault,metric=metric,n=n,events=k,percent=pct))
-    s.text(30,550,940,70,'Cells show unconditional exposure rates, not production risk.\nA zero includes tasks stopped by earlier gates; it is not a universal safety guarantee.',20,color=GRAY)
-    (SRC/'fault_plot_data.json').write_text(json.dumps(source,indent=2),encoding='utf-8')
-    return s.save()
-
 def coverage():
     # Pool the three sampled runs of the deployed model, scored against the
     # adjudicated labels that Table 7 reports. Earlier versions of this figure

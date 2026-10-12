@@ -1,0 +1,66 @@
+{
+  "aic": "",
+  "active": false,
+  "lastModifiedTime": "2026-10-06T22:30:00+08:00",
+  "protocolVersion": "02.02",
+  "documentationUrl": "https://wt.ioa.pub/docs.html",
+  "version": "1.0.0",
+  "provider": {
+    "countryCode": "CN",
+    "organization": "ACPs 实验roster",
+    "department": "caiyizhang 实机实验"
+  },
+  "securitySchemes": {
+    "mtls": {
+      "type": "mutualTLS",
+      "description": "CA 签发的 serverAuth 证书；调用方需持有 clientAuth 证书"
+    }
+  },
+  "capabilities": {
+    "streaming": false,
+    "notification": false,
+    "messageQueue": [
+      "rabbitmq:>=4.2"
+    ]
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "application/json"
+  ],
+  "name": "梧桐消息转发智能体",
+  "description": "单用途消息转发 Partner：接收目标号码与内容，按部署白名单校验后，通过已授权的 iMessage 发送方投递内容并返回结构化投递产物。",
+  "endPoints": [
+    {
+      "url": "https://49.232.42.120:9530/rpc",
+      "transport": "JSONRPC",
+      "security": [
+        {
+          "mtls": []
+        }
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "id": "message-forward.to-phone",
+      "name": "消息转发到手机号",
+      "description": "把指定文本通过 iMessage 转发到白名单内的目标号码。",
+      "tags": [
+        "imessage",
+        "forward",
+        "message",
+        "phone"
+      ],
+      "version": "1.0.0",
+      "inputModes": [
+        "text/plain",
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ]
+    }
+  ]
+}

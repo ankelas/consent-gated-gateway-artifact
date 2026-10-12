@@ -9,7 +9,7 @@
 - `draft_zh.md` and `draft_zh.docx`: Chinese review copies.
 - `draft_zh_tex.tex` and `draft_zh.pdf`: Chinese review copy typeset with XeLaTeX (16 pages, no overfull boxes); the embedded figures carry the shared English labels.
 - `figures/`: architecture, state transitions, and gateway-cost figures (the coverage--risk curve pages are supplementary). Each figure has an editable source under `drawio/`, plus SVG and high-resolution PNG exports.
-- `../experiments/`: live study harness, judgment suite and cached model responses, the retired simulator, and reproduction scripts.
+- `../experiments/`: live study harness, judgment suite and cached model responses, the ablation staging builds (`ablation/`), the registered partners' capability documents (`partner_config/`), the retired simulator, and reproduction scripts.
 
 ## Required before CMT upload
 
@@ -36,7 +36,7 @@ python3 judgment_stability.py --eval data/judgment_model_eval_r{1,2,3}.csv \
 python3 j7_stress_report.py --predictions data/j7_stress_predictions_r1.csv
 ```
 
-The recorded runs reuse cached responses and issue no new model calls. Routing and ablation records are replayed from `experiments/data/live_*.jsonl`; their collection required the deployed ingress and the staging ablation builds described in `experiments/live_runbook.md`. The retired simulator under `experiments/` is not part of the paper's evidence.
+The recorded runs reuse cached responses and issue no new model calls. Routing and ablation records are replayed from `experiments/data/live_*.jsonl`; their collection required the deployed ingress and the staging ablation builds now shipped in `experiments/ablation/` (described in `experiments/live_runbook.md`). The retired simulator under `experiments/` is not part of the paper's evidence.
 
 ## LNCS compile
 

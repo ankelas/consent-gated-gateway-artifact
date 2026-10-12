@@ -1,0 +1,42 @@
+services:
+  ablate-ctrl:
+    image: acps-demo-partners:latest
+    user: "1004:1004"
+    working_dir: /work/demo-partner
+    command: ["python","-m","partners.main","beijing_urban"]
+    env_file: /data/caiyizhang/acps-public-demo/roster/llm.env
+    environment:
+      PYTHONPATH: /work/demo-partner:/work/acps-sdk
+      AMP_LOG_DIR: /work/amp-logs/ablation_ctrl
+    volumes:
+      - /data/caiyizhang/ablation/partner:/work/demo-partner:ro
+      - /data/caiyizhang/ablation/sdk:/work/acps-sdk:ro
+      - /data/caiyizhang/ablation/runtime/ctrl/config.toml:/work/demo-partner/partners/online/beijing_urban/config.toml:ro
+      - /data/caiyizhang/ablation/runtime/ctrl/acs.json:/work/demo-partner/partners/online/beijing_urban/acs.json:ro
+      - /data/caiyizhang/acps-public-demo/roster/certs/beijing_urban-server.pem:/certs/server.pem:ro
+      - /data/caiyizhang/acps-public-demo/roster/keyfiles/beijing_urban-server.key:/certs/server.key:ro
+      - /data/caiyizhang/acps-public-demo/keyfiles/trust-bundle.pem:/certs/trust-bundle.pem:ro
+      - /data/caiyizhang/ACPs-community/monitor/logs:/work/amp-logs
+    ports: ["0.0.0.0:9550:9550"]
+    restart: unless-stopped
+  ablate-no-identity:
+    image: acps-demo-partners:latest
+    user: "1004:1004"
+    working_dir: /work/demo-partner
+    command: ["python","-m","partners.main","beijing_urban"]
+    env_file: /data/caiyizhang/acps-public-demo/roster/llm.env
+    environment:
+      PYTHONPATH: /work/demo-partner:/work/acps-sdk
+      AMP_LOG_DIR: /work/amp-logs/ablation_noident
+      ABLATION_SKIP_IDENTITY: "1"
+    volumes:
+      - /data/caiyizhang/ablation/partner:/work/demo-partner:ro
+      - /data/caiyizhang/ablation/sdk:/work/acps-sdk:ro
+      - /data/caiyizhang/ablation/runtime/abl/config.toml:/work/demo-partner/partners/online/beijing_urban/config.toml:ro
+      - /data/caiyizhang/ablation/runtime/abl/acs.json:/work/demo-partner/partners/online/beijing_urban/acs.json:ro
+      - /data/caiyizhang/acps-public-demo/roster/certs/beijing_urban-server.pem:/certs/server.pem:ro
+      - /data/caiyizhang/acps-public-demo/roster/keyfiles/beijing_urban-server.key:/certs/server.key:ro
+      - /data/caiyizhang/acps-public-demo/keyfiles/trust-bundle.pem:/certs/trust-bundle.pem:ro
+      - /data/caiyizhang/ACPs-community/monitor/logs:/work/amp-logs
+    ports: ["0.0.0.0:9551:9551"]
+    restart: unless-stopped

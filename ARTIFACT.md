@@ -24,6 +24,8 @@ experiments/               live harness and recorded data
   live/                    ingress drivers, consent/effect test, judgment drivers
   data/                    recorded runs (see the map below)
   judgment_*.py            off-line judgment suite, adjudication, stress set
+  ablation/                staging builds for the three invariant ablation arms
+  partner_config/          the registered partners' capability documents
 references.bib             the 24 cited entries, keys matching the manuscript
 ```
 
@@ -31,12 +33,13 @@ references.bib             the 24 cited entries, keys matching the manuscript
 
 | Paper element | Recorded data | Command |
 | --- | --- | --- |
-| Table 5, direct/ambiguous/out-of-scope routing | `experiments/data/live_samples_v2.jsonl`, `live_runs_v2_r{1,2,3}.jsonl` | `python3 live/analyze_routing.py --runs 1 2 3` |
+| Table 3, the registered partners | `experiments/partner_config/*.acs.json`, `roster.json` | — |
+| Table 4, direct/ambiguous/out-of-scope routing | `experiments/data/live_samples_v2.jsonl`, `live_runs_v2_r{1,2,3}.jsonl` | `python3 live/analyze_routing.py --runs 1 2 3` |
 | Structured discovery cross-check | `experiments/data/live_discovery_check_v2.jsonl` | `python3 live/discovery_check.py` |
-| Table 6, invariant ablations | `experiments/data/live_ablation_{identity,dedup,isolation}.jsonl` | staging harness, see `experiments/live_runbook.md` |
+| Table 5, invariant ablations | `experiments/data/live_ablation_{identity,dedup,isolation}.jsonl`, staging builds in `experiments/ablation/` | `docker compose -f experiments/ablation/compose.yml` and `-f experiments/ablation/compose-adapter.yml`, see `experiments/live_runbook.md` |
 | Section 9.4, consent gate and partner effect | `live_consent_execution_live.jsonl`, `live_consent_redelivery.jsonl` | `python3 live/consent_execution.py --effect-log <outbox>` and `python3 live/verify_effect_log.py` |
 | Section 9.5, J5 semantic-replay judgment on the deployed adapter | `live/judgment_advise.py`, `live/judgment_advise_gen.py`, `data/judgment_advise_{samples,runs,log}.jsonl`, `live/adapter_patch/` | `python3 live/judgment_advise_gen.py` then `python3 live/judgment_advise.py`; the adapter patch that consults the judgment plane is in `live/adapter_patch/` |
-| Table 7, Table 8, judgment layer and stress set | `judgment_model_eval_adj_r{1,2,3}.csv`, `j7_stress_eval_adj_r{1,2,3}.csv`, `judgment_*_responses_*.jsonl` | `python3 judgment_model_eval.py` and `python3 j7_stress_report.py` |
+| Tables 6 and 7, judgment layer and stress set | `judgment_model_eval_adj_r{1,2,3}.csv`, `j7_stress_eval_adj_r{1,2,3}.csv`, `judgment_*_responses_*.jsonl` | `python3 judgment_model_eval.py` and `python3 j7_stress_report.py` |
 | Figure 3, gateway-side cost | `experiments/data/live_gateway_overhead.json` | `python3 live/gateway_overhead.py` |
 | Figures 1--3 | `paper/figures/*.png`, `paper/drawio/*.drawio` | `python3 paper/redraw_figures.py` |
 

@@ -15,7 +15,7 @@ Paper workspace for Yizhang Cai: *Typed Judgment, Deterministic Enforcement* (JC
 
 ## Live study
 
-The routing, consent, and ablation results come from a deployed iMessage/Photon + ACPs path, not from a simulator. Design and prerequisites are in `experiments/live_experiment_plan.md` and `experiments/live_runbook.md`; recorded outcomes are in `experiments/live_results.md` and `experiments/live_ablation_results.md`. The ablation staging source lives in `/data/caiyizhang/ablation/`. Raw records are under `experiments/data/` (`live_samples_v2.jsonl`, `live_runs_v2_r{1,2,3}.jsonl`, `live_discovery_check_v2.jsonl`, `live_consent_execution_live.jsonl`, `live_consent_redelivery.jsonl`, `live_ablation_identity.jsonl`, `live_ablation_dedup.jsonl`, `live_ablation_isolation.jsonl`).
+The routing, consent, and ablation results come from a deployed iMessage/Photon + ACPs path, not from a simulator. Design and prerequisites are in `experiments/live_experiment_plan.md` and `experiments/live_runbook.md`; recorded outcomes are in `experiments/live_results.md` and `experiments/live_ablation_results.md`. The ablation staging source is in `experiments/ablation/`, copied from `/data/caiyizhang/ablation/` on the study host without the runtime state, the partner logs or any certificate material; the registered partners' capability documents are in `experiments/partner_config/`. Raw records are under `experiments/data/` (`live_samples_v2.jsonl`, `live_runs_v2_r{1,2,3}.jsonl`, `live_discovery_check_v2.jsonl`, `live_consent_execution_live.jsonl`, `live_consent_redelivery.jsonl`, `live_ablation_identity.jsonl`, `live_ablation_dedup.jsonl`, `live_ablation_isolation.jsonl`).
 
 ## Judgment layer
 

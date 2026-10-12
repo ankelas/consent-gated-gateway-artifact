@@ -73,8 +73,6 @@ The invariants specify what cannot happen; judgment points specify the bounded q
 
 ![Fig. 1. Seven-module consent-gated gateway and the judgment plane](figures/fig1_architecture.png)
 
-Figure 1 shows the seven modules and the judgment plane. Each module is defined by a distinct failure it prevents. The study exercises M2, M3 and M6 and the AIP-layer checks of M5; M4 is outside the routing study but is tested in the separate consent experiment of §9.4, and M7 delivers and records results.
-
 Figure 1 shows the seven modules and the judgment plane. Each module is defined by a distinct failure it prevents:
 
 - **M1 (ingress).** Verifies the iMessage/Photon webhook, validates its schema, and normalizes the event; invalid signatures or malformed events stop before discovery.
@@ -212,7 +210,7 @@ Table 5 contrasts each arm with its same-code control. In this set of paired sta
 
 ### 9.3 Judgment-layer measurement
 
-A single hosted model (`deepseek-flash`, temperature 0, reasoning effort pinned low, 2000-token budget) answered a 280-item suite split 50/25/25 by stable task hash; at the endpoint's default effort about one reply in ten came back empty. Labels were built from a latent variable, re-read blind by the same model with only the text, question, and options, and adjudicated on the 99 disagreements or uncertain items (60 changed, 15 unresolved); the full set was then verified by human review. Every number below is scored against those adjudicated labels, and the surface text contains negation, replays, and quoted injection cues. We compared typed JSON distributions, one-sentence free text, and a transparent keyword baseline; a free-text reply that names no option is scored as wrong, which 10 to 16 of the 280 did and no typed reply did. Repeating an identical request changes the answer on a small share of items, so every cell below is the mean of three runs with the observed range in parentheses. Pairwise answer agreement between runs is 94.5% for typed answers and 90.5% for free text.
+A single hosted model (`deepseek-flash`, temperature 0, reasoning effort pinned low, 2000-token budget) answered a 280-item suite split into 141 training, 77 development, and 62 held-out items by stable task hash; at the endpoint's default effort about one reply in ten came back empty. Labels were built from a latent variable, re-read blind by the same model with only the text, question, and options, and adjudicated on the 99 disagreements or uncertain items (60 changed, 15 unresolved); the full set was then verified by human review. Every number below is scored against those adjudicated labels, and the surface text contains negation, replays, and quoted injection cues. We compared typed JSON distributions, one-sentence free text, and a transparent keyword baseline; a free-text reply that names no option is scored as wrong, which 10 to 16 of the 280 did and no typed reply did. Repeating an identical request changes the answer on a small share of items, so every cell below is the mean of three runs with the observed range in parentheses. Pairwise answer agreement between runs is 94.5% for typed answers and 90.5% for free text.
 
 **Table 6.** Judgment layer on the held-out split (62 items), mean of three runs with the observed range.
 
