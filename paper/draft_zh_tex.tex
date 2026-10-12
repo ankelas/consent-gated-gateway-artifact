@@ -100,7 +100,7 @@
 
 本文原型沿用受检部署所用的 Agent Collaboration Protocols（ACPs）协议栈：Agent Interaction Protocol（AIP）v2.2 通过 \texttt{/\allowbreak{}rpc} 定义任务生命周期，Agent Identity Code（AIC）标识智能体，Agent Capability Specification（ACS）描述所声明的能力。已核对的仓库把规范标记为 \texttt{ACPs-spe\allowbreak{}c-v02.02}，实现使用 SDK \texttt{v2.2.0}，固定提交为 \texttt{896e4bc7\allowbreak{}9b95f115\allowbreak{}89e92eab\allowbreak{}06322430\allowbreak{}e5c64505} \cite{acps2026repo}。架构层面的问题不依赖这些细节：面向用户的消息传输并不是智能体间协议的调用方，因此网关必须完成两者之间的转换，而判断点就落在这道转换上。智能体互操作目前仍在标准化进程中，而不是已经定型：一项近期综述比较了 Model Context Protocol、Agent Communication Protocol、Agent-to-Agent 与 Agent Network Protocol，指出它们范围重叠，但身份与发现模型互不兼容 \cite{interop2025}。因此本文把协议层视为若干可替换的后端之一。
 
-ACPs 并不只是一套给原型协议栈起的名字。Li 等人提出 Agent Collaboration Protocols，把它作为面向智能体互联网（Internet of Agents）的体系化框架，给出智能体接入（onboarding）、探查（reconnaissance）、协作执行（engagement）与可观测（instrumentation）的方法，并指出现有 MCP、A2A、ANP 等智能体通信协议彼此割裂、只面向窄域应用 \cite{li2025acps}。该框架以开源项目的形式落地，由北京邮电大学牵头、中国电子技术标准化研究院支持，参考实现包括协议规范、SDK、命令行工具、CA 认证服务、注册服务、发现服务、消息队列鉴权服务，以及 Leader 与 Partner 示例 \cite{acps2026repo}。本文的网关实现就建立在这套开源代码上：受检的 Leader 与 Partner 进程运行在 ACPs SDK 与相应基础设施之上，本文考察的身份码、能力描述、发现、任务生命周期与双向 TLS 等行为，都是 ACPs 本身的行为，而不是某种私有替代方案。该仓库的英文版首页公开记录了本文所用的版本与模块划分 \cite{acps2026repo}。
+Li 等人提出 Agent Collaboration Protocols，把它作为面向智能体互联网（Internet of Agents）的体系化框架，给出智能体接入（onboarding）、探查（reconnaissance）、协作执行（engagement）与可观测（instrumentation）的方法，并指出现有 MCP、A2A、ANP 等智能体通信协议彼此割裂、只面向窄域应用 \cite{li2025acps}。该框架以开源项目的形式落地，由北京邮电大学牵头、中国电子技术标准化研究院支持，参考实现包括协议规范、SDK、命令行工具、CA 认证服务、注册服务、发现服务、消息队列鉴权服务，以及 Leader 与 Partner 示例 \cite{acps2026repo}。本文的网关实现就建立在这套开源代码上：受检的 Leader 与 Partner 进程运行在 ACPs SDK 与相应基础设施之上，本文考察的身份码、能力描述、发现、任务生命周期与双向 TLS 等行为，都是 ACPs 本身的行为。
 
 \subsection{受限输出空间}
 

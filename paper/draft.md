@@ -265,7 +265,7 @@ This paper separates typed judgment from deterministic enforcement in a seven-mo
 6. A. Ehtesham et al., "A survey of agent interoperability protocols: MCP, ACP, A2A, and ANP," arXiv:2505.02279, 2025.
 7. Y. Geifman and R. El-Yaniv, "Selective classification for deep neural networks," in *NeurIPS 30*, 2017, pp. 4878--4887.
 8. S. Geng et al., "Grammar-constrained decoding for structured NLP tasks without finetuning," in *EMNLP*, 2023, pp. 10932--10952.
-9. K. Greshake et al., "Not what you've signed up for: Indirect prompt injection in LLM-integrated applications," in *ACM AISec*, 2023, pp. 79--90.
+9. K. Greshake et al., "Not what you've signed up for: Compromising real-world LLM-integrated applications with indirect prompt injection," in *ACM AISec*, 2023, pp. 79--90.
 10. C. Guo et al., "On calibration of modern neural networks," in *ICML*, PMLR 70, 2017, pp. 1321--1330.
 11. D. Hardt, "The OAuth 2.0 authorization framework," RFC 6749, IETF, 2012.
 12. P. Helland, "Idempotence is not a medical condition," *Commun. ACM*, 55(5):56--65, 2012.
