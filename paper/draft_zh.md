@@ -300,7 +300,7 @@ received → verified → isolated → discovered → judged → consented
 3. S. Chen 等，StruQ: Defending against prompt injection with structured queries，arXiv:2402.06363，2024。
 4. E. Debenedetti 等，AgentDojo: A dynamic environment to evaluate prompt injection attacks and defenses for LLM agents，神经信息处理系统进展 37（NeurIPS），2024，82895-82920 页。
 5. E. Debenedetti 等，Defeating prompt injections by design，arXiv:2503.18813，2025。
-6. A. Ehtesham 等，A survey of agent interoperability protocols: MCP, ACP, A2A, and ANP，arXiv:2505.02279，2025。
+6. A. Ehtesham 等，A survey of agent interoperability protocols: Model Context Protocol (MCP), Agent Communication Protocol (ACP), Agent-to-Agent Protocol (A2A), and Agent Network Protocol (ANP)，arXiv:2505.02279，2025。
 7. Y. Geifman 与 R. El-Yaniv，Selective classification for deep neural networks，神经信息处理系统进展 30（NeurIPS），2017，4878-4887 页。
 8. S. Geng、M. Josifoski、M. Peyrard、R. West，Grammar-constrained decoding for structured NLP tasks without finetuning，2023 年自然语言处理实证方法会议（EMNLP），2023，10932-10952 页。
 9. K. Greshake 等，Not what you've signed up for: Compromising real-world LLM-integrated applications with indirect prompt injection，第 16 届 ACM 人工智能与安全研讨会（AISec），2023，79-90 页。

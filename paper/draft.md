@@ -262,7 +262,7 @@ This paper separates typed judgment from deterministic enforcement in a seven-mo
 3. S. Chen et al., "StruQ: Defending against prompt injection with structured queries," arXiv:2402.06363, 2024.
 4. E. Debenedetti et al., "AgentDojo: A dynamic environment to evaluate prompt injection attacks and defenses for LLM agents," in *NeurIPS 37*, 2024, pp. 82895--82920.
 5. E. Debenedetti et al., "Defeating prompt injections by design," arXiv:2503.18813, 2025.
-6. A. Ehtesham et al., "A survey of agent interoperability protocols: MCP, ACP, A2A, and ANP," arXiv:2505.02279, 2025.
+6. A. Ehtesham et al., "A survey of agent interoperability protocols: Model Context Protocol (MCP), Agent Communication Protocol (ACP), Agent-to-Agent Protocol (A2A), and Agent Network Protocol (ANP)," arXiv:2505.02279, 2025.
 7. Y. Geifman and R. El-Yaniv, "Selective classification for deep neural networks," in *NeurIPS 30*, 2017, pp. 4878--4887.
 8. S. Geng et al., "Grammar-constrained decoding for structured NLP tasks without finetuning," in *EMNLP*, 2023, pp. 10932--10952.
 9. K. Greshake et al., "Not what you've signed up for: Compromising real-world LLM-integrated applications with indirect prompt injection," in *ACM AISec*, 2023, pp. 79--90.
@@ -276,7 +276,7 @@ This paper separates typed judgment from deterministic enforcement in a seven-mo
 17. Y. Ruan et al., "Identifying the risks of LM agents with an LM-emulated sandbox," arXiv:2309.15817, 2023.
 18. J. H. Saltzer and M. D. Schroeder, "The protection of information in computer systems," *Proc. IEEE*, 63(9):1278--1308, 1975.
 19. T. Shi et al., "Progent: Securing AI agents with privilege control," arXiv:2504.11703, 2025.
-20. Z. R. Tam et al., "Let me speak freely? Format restrictions and LLM performance," in *EMNLP: Industry Track*, 2024, pp. 1218--1236.
+20. Z. R. Tam et al., "Let me speak freely? A study on the impact of format restrictions on performance of large language models," in *EMNLP: Industry Track*, 2024, pp. 1218--1236.
 21. H. Wang et al., "AgentSpec: Customizable runtime enforcement for safe and reliable LLM agents," arXiv:2503.18666, 2025.
 22. Y. Wu et al., "IsolateGPT: An execution isolation architecture for LLM-based agentic systems," arXiv:2403.04960, 2024.
 23. Z. Xiang et al., "GuardAgent: Safeguard LLM agents by a guard agent via knowledge-enabled reasoning," arXiv:2406.09187, 2024.
