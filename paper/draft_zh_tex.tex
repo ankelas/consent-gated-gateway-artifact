@@ -100,7 +100,7 @@
 
 本文原型沿用受检部署所用的 Agent Collaboration Protocols（ACPs）协议栈：Agent Interaction Protocol（AIP）v2.2 通过 \texttt{/\allowbreak{}rpc} 定义任务生命周期，Agent Identity Code（AIC）标识智能体，Agent Capability Specification（ACS）描述所声明的能力。已核对的仓库把规范标记为 \texttt{ACPs-spe\allowbreak{}c-v02.02}，实现使用 SDK \texttt{v2.2.0}，固定提交为 \texttt{896e4bc7\allowbreak{}9b95f115\allowbreak{}89e92eab\allowbreak{}06322430\allowbreak{}e5c64505} \cite{acps2026repo}。架构层面的问题不依赖这些细节：面向用户的消息传输并不是智能体间协议的调用方，因此网关必须完成两者之间的转换，而判断点就落在这道转换上。智能体互操作目前仍在标准化进程中，而不是已经定型：一项近期综述比较了 Model Context Protocol、Agent Communication Protocol、Agent-to-Agent 与 Agent Network Protocol，指出它们范围重叠，但身份与发现模型互不兼容 \cite{interop2025}。因此本文把协议层视为若干可替换的后端之一。
 
-Li 等人提出 Agent Collaboration Protocols，把它作为面向智能体互联网（Internet of Agents）的体系化框架，给出智能体接入（onboarding）、探查（reconnaissance）、协作执行（engagement）与可观测（instrumentation）的方法，并指出现有 MCP、A2A、ANP 等智能体通信协议彼此割裂、只面向窄域应用 \cite{li2025acps}。该框架以开源项目的形式落地，由北京邮电大学牵头、中国电子技术标准化研究院支持，参考实现包括协议规范、SDK、命令行工具、CA 认证服务、注册服务、发现服务、消息队列鉴权服务，以及 Leader 与 Partner 示例 \cite{acps2026repo}。本文的网关实现就建立在这套开源代码上：受检的 Leader 与 Partner 进程运行在 ACPs SDK 与相应基础设施之上，本文考察的身份码、能力描述、发现、任务生命周期与双向 TLS 等行为，都是 ACPs 本身的行为。
+Li 等人把 Agent Collaboration Protocols 描述为面向智能体互联网（Internet of Agents）的一套协议族：注册（ARP）、发现（ADP）、交互（AIP）与工具（ATP），并辅以面向可信接入与计费的扩展协议以及智能体管理协议；其定位针对的是以工具调用为中心的 MCP、面向企业互通的 A2A，以及缺少接入认证与管理的 ANP \cite{li2025acps,liu2025acps}。该协议族自身的路线图把安全机制与多厂商验证留给后续工作 \cite{liu2025acps}。该框架以开源项目的形式落地，由北京邮电大学牵头、中国电子技术标准化研究院支持，参考实现包括协议规范、SDK、命令行工具、CA 认证服务、注册服务、发现服务、消息队列鉴权服务，以及 Leader 与 Partner 示例 \cite{acps2026repo}。本文的网关实现就建立在这套开源代码上：受检的 Leader 与 Partner 进程运行在 ACPs SDK 与相应基础设施之上，本文考察的身份码、能力描述、发现、任务生命周期与双向 TLS 等行为，都是 ACPs 本身的行为。
 
 \subsection{受限输出空间}
 
@@ -556,7 +556,7 @@ no-isolation & 9422 / 9420 & 0/30 跨调用者读取 & 30/30 读取 & 分区阻�
 
 本文把消息驱动的智能体协作表述为「类型化判断与确定性执行分离」，并在一条已部署的 iMessage/ACPs 路径上检验由此划出的边界。已部署的发现与选择路径能够推荐请求所依据的受测 Partner；当请求同时符合两项能力时，它推荐多于一个智能体；当没有任何受测 Partner 宣传相应能力时，它不推荐受测 Partner。配对消融显示，sender-to-peer 断言、调用者/会话分区与事件级幂等存储，各自支撑着对应的不变式。在已部署适配器上，同意门控对每个被接受的事件恰好放行一次 Partner 动作，用户同意之前一次也不放行。判断层在类型化形态下更准确、校准也更好，但它的注入分数对引用型文本过度触发，这正是它只能为策略提供参数的原因。以上结果来自一个部署与一套能力集。
 
-\begin{thebibliography}{24}
+\begin{thebibliography}{25}
 
 \bibitem{acps2026repo} AIP-PUB，\emph{ACPs-community：Agent Collaboration Protocols}，规范 \texttt{ACPs-spe\allowbreak{}c-v02.02}、SDK \texttt{v2.2.0}、提交 \texttt{896e4bc}，2026。仓库：\texttt{https:/\allowbreak{}/\allowbreak{}github.com/\allowbreak{}AIP-PUB/\allowbreak{}ACPs-community/\allowbreak{}tree/\allowbreak{}896e4bc}；英文首页：\texttt{https:/\allowbreak{}/\allowbreak{}github.com/\allowbreak{}AIP-PUB/\allowbreak{}ACPs-community/\allowbreak{}blob/\allowbreak{}main/\allowbreak{}readme\_\allowbreak{}en.md}。
 
@@ -585,6 +585,8 @@ no-isolation & 9422 / 9420 & 0/30 跨调用者读取 & 30/30 读取 & 分区阻�
 \bibitem{kim2026scaling} Y. Kim 等，Towards a Science of Scaling Agent Systems，arXiv:2512.08296，2025。
 
 \bibitem{li2025acps} C. Li、J. Wu、Q. Du、S. Yu、R. Zou、K. Yu，ACPS: Agent Collaboration Protocols for the Internet of Agents，2025 年第 9 届 IEEE 网络智能与数字内容国际会议（IC-NIDC），IEEE，2025，342-346 页。doi:10.1109/IC-NIDC67200.2025.11390349。
+
+\bibitem{liu2025acps} J. Liu 等，ACPs: Agent collaboration protocols for the Internet of Agents，arXiv:2505.13523，2025。
 
 \bibitem{liu2024promptinjection} Y. Liu 等，Formalizing and benchmarking prompt injection attacks and defenses，第 33 届 USENIX 安全研讨会（USENIX Security 24），2024。
 

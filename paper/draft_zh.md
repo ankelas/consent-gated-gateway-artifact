@@ -30,23 +30,23 @@
 
 ### 2.1 评测与消息入口协议
 
-现有多智能体评测往往只强调最终任务准确率或单一应用流程，这可以衡量能力，却无法分离发现、授权、身份、传输、状态与投递各自的作用。评测套件 MAESTRO [16] 针对这一缺口，把异构多智能体系统接入统一运行时，可重复地执行任务、采集与框架无关的追踪，并比较时延、词元消耗、资源占用、消息体积、失败模式与调用图稳定性。另一项工作《Towards a Science of Scaling Agent Systems》[13] 在固定提示、工具与算力预算的前提下，比较单智能体、独立、集中式、去中心化与混合式协同结构，并把成功率与通信量、串行深度、冗余度、错误传播和任务结构联系起来。
+现有多智能体评测往往只强调最终任务准确率或单一应用流程，这可以衡量能力，却无法分离发现、授权、身份、传输、状态与投递各自的作用。评测套件 MAESTRO [17] 针对这一缺口，把异构多智能体系统接入统一运行时，可重复地执行任务、采集与框架无关的追踪，并比较时延、词元消耗、资源占用、消息体积、失败模式与调用图稳定性。另一项工作《Towards a Science of Scaling Agent Systems》[13] 在固定提示、工具与算力预算的前提下，比较单智能体、独立、集中式、去中心化与混合式协同结构，并把成功率与通信量、串行深度、冗余度、错误传播和任务结构联系起来。
 
 本文沿用同样的受控对照原则，但改变了分析单位。研究对象是消息与智能体之间的网关：它用若干模块实现同意、身份绑定、会话隔离与幂等，而其中的判断点可以逐点测量。
 
 本文原型沿用受检部署所用的 Agent Collaboration Protocols（ACPs）协议栈：Agent Interaction Protocol（AIP）v2.2 通过 `/rpc` 定义任务生命周期，Agent Identity Code（AIC）标识智能体，Agent Capability Specification（ACS）描述所声明的能力。已核对的仓库把规范标记为 `ACPs-spec-v02.02`，实现使用 SDK `v2.2.0`，固定提交为 `896e4bc79b95f11589e92eab06322430e5c64505` [1]。架构层面的问题不依赖这些细节：面向用户的消息传输并不是智能体间协议的调用方，因此网关必须完成两者之间的转换，而判断点就落在这道转换上。智能体互操作目前仍在标准化进程中，而不是已经定型：一项近期综述比较了 Model Context Protocol、Agent Communication Protocol、Agent-to-Agent 与 Agent Network Protocol，指出它们范围重叠，但身份与发现模型互不兼容 [6]。因此本文把协议层视为若干可替换的后端之一。
 
-Li 等人提出 Agent Collaboration Protocols，把它作为面向智能体互联网（Internet of Agents）的体系化框架，给出智能体接入（onboarding）、探查（reconnaissance）、协作执行（engagement）与可观测（instrumentation）的方法，并指出现有 MCP、A2A、ANP 等智能体通信协议彼此割裂、只面向窄域应用 [14]。该框架以开源项目的形式落地，由北京邮电大学牵头、中国电子技术标准化研究院支持，参考实现包括协议规范、SDK、命令行工具、CA 认证服务、注册服务、发现服务、消息队列鉴权服务，以及 Leader 与 Partner 示例 [1]。本文的网关实现就建立在这套开源代码上：受检的 Leader 与 Partner 进程运行在 ACPs SDK 与相应基础设施之上，本文考察的身份码、能力描述、发现、任务生命周期与双向 TLS 等行为，都是 ACPs 本身的行为。
+Li 等人把 Agent Collaboration Protocols 描述为面向智能体互联网（Internet of Agents）的一套协议族：注册（ARP）、发现（ADP）、交互（AIP）与工具（ATP），并辅以面向可信接入与计费的扩展协议以及智能体管理协议；其定位针对的是以工具调用为中心的 MCP、面向企业互通的 A2A，以及缺少接入认证与管理的 ANP [14, 15]。该协议族自身的路线图把安全机制与多厂商验证留给后续工作 [15]。该框架以开源项目的形式落地，由北京邮电大学牵头、中国电子技术标准化研究院支持，参考实现包括协议规范、SDK、命令行工具、CA 认证服务、注册服务、发现服务、消息队列鉴权服务，以及 Leader 与 Partner 示例 [1]。本文的网关实现就建立在这套开源代码上：受检的 Leader 与 Partner 进程运行在 ACPs SDK 与相应基础设施之上，本文考察的身份码、能力描述、发现、任务生命周期与双向 TLS 等行为，都是 ACPs 本身的行为。
 
 ### 2.2 受限输出空间
 
-约束模型的输出空间，可以让它的答案变得可检查。语法约束解码把生成限制在形式语言之内，无需微调即可改进结构化任务 [8]；而限制输出格式的提示，相对自由文本也会改变准确率 [20]。只返回封闭标签、命名选项上的分布或有序评分的决策模型，输出空间更小：一次回答不可能变成一次工具调用，阈值、回退与副作用都留在应用代码之中。
+约束模型的输出空间，可以让它的答案变得可检查。语法约束解码把生成限制在形式语言之内，无需微调即可改进结构化任务 [8]；而限制输出格式的提示，相对自由文本也会改变准确率 [21]。只返回封闭标签、命名选项上的分布或有序评分的决策模型，输出空间更小：一次回答不可能变成一次工具调用，阈值、回退与副作用都留在应用代码之中。
 
-两类文献解释了策略层为什么需要拒答与校准。选择性分类的工作形式化了覆盖率与风险之间的权衡，并说明预测器在置信度低时应当能够拒绝作答 [7]；现代神经网络即便准确率很高，也常常校准不良，因此置信度必须被测量而不能被假定 [10]。对抗情形同样重要：提示注入可以改变 LLM 集成应用的工具调用 [9]，间接注入把指令藏在应用检索到的内容里 [15]，而智能体基准显示现有防御仍留有可观的残余风险 [4]。这些结果共同支持一种做法：网关测量选择性风险，同时把授权留在模型之外。
+两类文献解释了策略层为什么需要拒答与校准。选择性分类的工作形式化了覆盖率与风险之间的权衡，并说明预测器在置信度低时应当能够拒绝作答 [7]；现代神经网络即便准确率很高，也常常校准不良，因此置信度必须被测量而不能被假定 [10]。对抗情形同样重要：提示注入可以改变 LLM 集成应用的工具调用 [9]，间接注入把指令藏在应用检索到的内容里 [16]，而智能体基准显示现有防御仍留有可观的残余风险 [4]。这些结果共同支持一种做法：网关测量选择性风险，同时把授权留在模型之外。
 
 ### 2.3 运行时约束及其边界
 
-智能体安全的工作重心已经从「检测」转向「结构性约束」。InjecAgent [24] 与 ToolEmu [17] 这类基准显示，使用工具的智能体会被自己检索到的内容诱导去做有害动作；StruQ [3] 与 CaMeL [5] 的应对方式是控制「不受信任文本到动作空间」这条通路，而不是去判断文本本身是否恶意。另一条路线把约束放进运行时：Progent [19] 给单次工具调用附加权限约束，AgentSpec [21] 与 GuardAgent [23] 负责编译并检查运行时规则，IsolateGPT [22] 则把每个智能体的执行隔离开。这些系统都是在智能体内部施加约束；本文的场景不同：检查落在人类消息通道与协议之间的边界上，发起方是人，第一个问题就是这条请求究竟该不该发出去。这条边界也承接了更早的机制：委托授权已有成熟原语 [11]，而选择性预测给出了置信度不足时拒答的原则性做法 [2, 7]。
+智能体安全的工作重心已经从「检测」转向「结构性约束」。InjecAgent [25] 与 ToolEmu [18] 这类基准显示，使用工具的智能体会被自己检索到的内容诱导去做有害动作；StruQ [3] 与 CaMeL [5] 的应对方式是控制「不受信任文本到动作空间」这条通路，而不是去判断文本本身是否恶意。另一条路线把约束放进运行时：Progent [20] 给单次工具调用附加权限约束，AgentSpec [22] 与 GuardAgent [24] 负责编译并检查运行时规则，IsolateGPT [23] 则把每个智能体的执行隔离开。这些系统都是在智能体内部施加约束；本文的场景不同：检查落在人类消息通道与协议之间的边界上，发起方是人，第一个问题就是这条请求究竟该不该发出去。这条边界也承接了更早的机制：委托授权已有成熟原语 [11]，而选择性预测给出了置信度不足时拒答的原则性做法 [2, 7]。
 
 ## 3. 问题定义与设计目标
 
@@ -61,7 +61,7 @@ $G(e) \rightarrow (a, q, r)$
 - **授权不变式：** 除非入站认证通过、且所有策略要求的用户确认都已满足，否则不得发起任何外部智能体调用。确认适用于歧义路由，以及对外可见或被策略归类的副作用；纯读取操作不必一律确认。
 - **身份不变式：** 被选端点的密码学身份必须符合所声明的智能体身份与能力策略。
 - **隔离不变式：** 由 $(u,c)$ 派生的状态不得被其他调用者或会话读写。
-- **幂等不变式：** 对给定幂等键，一个逻辑任务最多产生一次外部副作用，即使入站事件被重放。前两条来自经典的完全中介（complete mediation）与最小权限原则 [18]；最后一条是分布式请求处理中的幂等要求 [12]。
+- **幂等不变式：** 对给定幂等键，一个逻辑任务最多产生一次外部副作用，即使入站事件被重放。前两条来自经典的完全中介（complete mediation）与最小权限原则 [19]；最后一条是分布式请求处理中的幂等要求 [12]。
 
 设计目标是：委派正确、失效关闭（fail-closed）、可恢复、协议开销有界，以及足以支持因果归因的遥测。
 
@@ -309,13 +309,14 @@ received → verified → isolated → discovered → judged → consented
 12. P. Helland，Idempotence is not a medical condition，*Communications of the ACM*，第 55 卷第 5 期，56-65 页，2012。
 13. Y. Kim 等，Towards a Science of Scaling Agent Systems，arXiv:2512.08296，2025。
 14. C. Li、J. Wu、Q. Du、S. Yu、R. Zou、K. Yu，ACPS: Agent Collaboration Protocols for the Internet of Agents，2025 年第 9 届 IEEE 网络智能与数字内容国际会议（IC-NIDC），IEEE，2025，342-346 页。doi:10.1109/IC-NIDC67200.2025.11390349。
-15. Y. Liu 等，Formalizing and benchmarking prompt injection attacks and defenses，第 33 届 USENIX 安全研讨会（USENIX Security 24），2024。
-16. T. Ma 等，MAESTRO: Multi-Agent Evaluation Suite for Testing, Reliability, and Observability，arXiv:2601.00481，2026。
-17. Y. Ruan 等，Identifying the risks of LM agents with an LM-emulated sandbox，arXiv:2309.15817，2023。
-18. J. H. Saltzer 与 M. D. Schroeder，The protection of information in computer systems，*Proceedings of the IEEE*，第 63 卷第 9 期，1278-1308 页，1975。
-19. T. Shi 等，Progent: Securing AI agents with privilege control，arXiv:2504.11703，2025。
-20. Z. R. Tam 等，Let me speak freely? A study on the impact of format restrictions on large language model performance，2024 年自然语言处理实证方法会议：工业轨道（EMNLP），2024，1218-1236 页。
-21. H. Wang 等，AgentSpec: Customizable runtime enforcement for safe and reliable LLM agents，arXiv:2503.18666，2025。
-22. Y. Wu 等，IsolateGPT: An execution isolation architecture for LLM-based agentic systems，arXiv:2403.04960，2024。
-23. Z. Xiang 等，GuardAgent: Safeguard LLM agents by a guard agent via knowledge-enabled reasoning，arXiv:2406.09187，2024。
-24. Q. Zhan 等，InjecAgent: Benchmarking indirect prompt injections in tool-integrated large language model agents，arXiv:2403.02691，2024。
+15. J. Liu 等，ACPs: Agent collaboration protocols for the Internet of Agents，arXiv:2505.13523，2025。
+16. Y. Liu 等，Formalizing and benchmarking prompt injection attacks and defenses，第 33 届 USENIX 安全研讨会（USENIX Security 24），2024。
+17. T. Ma 等，MAESTRO: Multi-Agent Evaluation Suite for Testing, Reliability, and Observability，arXiv:2601.00481，2026。
+18. Y. Ruan 等，Identifying the risks of LM agents with an LM-emulated sandbox，arXiv:2309.15817，2023。
+19. J. H. Saltzer 与 M. D. Schroeder，The protection of information in computer systems，*Proceedings of the IEEE*，第 63 卷第 9 期，1278-1308 页，1975。
+20. T. Shi 等，Progent: Securing AI agents with privilege control，arXiv:2504.11703，2025。
+21. Z. R. Tam 等，Let me speak freely? A study on the impact of format restrictions on large language model performance，2024 年自然语言处理实证方法会议：工业轨道（EMNLP），2024，1218-1236 页。
+22. H. Wang 等，AgentSpec: Customizable runtime enforcement for safe and reliable LLM agents，arXiv:2503.18666，2025。
+23. Y. Wu 等，IsolateGPT: An execution isolation architecture for LLM-based agentic systems，arXiv:2403.04960，2024。
+24. Z. Xiang 等，GuardAgent: Safeguard LLM agents by a guard agent via knowledge-enabled reasoning，arXiv:2406.09187，2024。
+25. Q. Zhan 等，InjecAgent: Benchmarking indirect prompt injections in tool-integrated large language model agents，arXiv:2403.02691，2024。

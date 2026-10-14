@@ -80,7 +80,7 @@ The reported evidence falls into three classes. The architecture, the seven judg
 
 \subsection{Evaluation and messaging protocols}
 
-Multi-agent evaluations often report final task accuracy without isolating discovery, authorization, identity, transport, state, and delivery: MAESTRO \cite{maestro2026} provides a common runtime and framework-independent traces, and a companion study varies coordination patterns under fixed prompts, tools, and compute \cite{kim2026scaling}. The prototype inspected here uses the Agent Collaboration Protocols (ACPs) stack, in which Agent Interaction Protocol (AIP) v2.2 defines the \texttt{/\allowbreak{}rpc} task lifecycle, Agent Identity Code (AIC) identifies an agent, and Agent Capability Specification (ACS) describes advertised capabilities (\texttt{ACPs-spe\allowbreak{}c-v02.02}, SDK \texttt{v2.2.0}) \cite{acps2026repo}. Li et al. describe ACPs as a framework for onboarding, discovery, collaboration, and instrumentation in an Internet of Agents \cite{li2025acps}, and the open-source Leader and Partner processes used here implement those behaviors \cite{acps2026repo}. A user-facing transport is not an AIP caller, so the gateway is the translation boundary, and we take it as the unit of analysis. Interoperability is still being standardized rather than settled: a recent survey compares the Model Context Protocol, the Agent Communication Protocol, the Agent-to-Agent protocol, and the Agent Network Protocol, and finds overlapping scope with incompatible identity and discovery models \cite{interop2025}. The gateway therefore treats the protocol layer as one of several interchangeable back ends.
+Multi-agent evaluations often report final task accuracy without isolating discovery, authorization, identity, transport, state, and delivery: MAESTRO \cite{maestro2026} provides a common runtime and framework-independent traces, and a companion study varies coordination patterns under fixed prompts, tools, and compute \cite{kim2026scaling}. The prototype inspected here uses the Agent Collaboration Protocols (ACPs) stack, in which Agent Interaction Protocol (AIP) v2.2 defines the \texttt{/\allowbreak{}rpc} task lifecycle, Agent Identity Code (AIC) identifies an agent, and Agent Capability Specification (ACS) describes advertised capabilities (\texttt{ACPs-spe\allowbreak{}c-v02.02}, SDK \texttt{v2.2.0}) \cite{acps2026repo}. Li et al. describe ACPs as a protocol suite for the Internet of Agents: registration (ARP), discovery (ADP), interaction (AIP), and tooling (ATP), extended by protocols for authenticated access and accounting and for agent management, and positioned against MCP's focus on tool invocation, A2A's on enterprise connectivity, and ANP's lack of access authentication and management \cite{li2025acps,liu2025acps}. The open-source Leader and Partner processes used here implement those behaviors \cite{acps2026repo}, and the suite's own roadmap leaves security mechanisms and multi-vendor validation to future work \cite{liu2025acps}. A user-facing transport is not an AIP caller, so the gateway is the translation boundary, and we take it as the unit of analysis. Interoperability is still being standardized rather than settled: a recent survey compares the Model Context Protocol, the Agent Communication Protocol, the Agent-to-Agent protocol, and the Agent Network Protocol, and finds overlapping scope with incompatible identity and discovery models \cite{interop2025}. The gateway therefore treats the protocol layer as one of several interchangeable back ends.
 
 \subsection{Bounded decision outputs}
 
@@ -500,7 +500,7 @@ Every result here comes from one deployment with one registry and one capability
 
 This paper separates typed judgment from deterministic enforcement in a seven-module message-to-agent gateway and tests the boundary on a deployed iMessage/ACPs path. The deployed path recommends the generated target, composes a plan when a request fits two capabilities, and never recommends a study partner when none advertises the request. Paired ablations show that the sender-to-peer assertion, the caller--conversation partition, and the event-level idempotency store each carry their invariant. On the deployed adapter the consent gate admits exactly one partner action per accepted event and admits none before the user agrees. The judgment layer is more accurate and better calibrated in its typed form, while its injection score over-triggers on quoted text, which is why it only parameterizes policy. The measurements cover one deployment and one capability set.
 
-\begin{thebibliography}{24}
+\begin{thebibliography}{25}
 
 \small
 
@@ -535,6 +535,8 @@ This paper separates typed judgment from deterministic enforcement in a seven-mo
 \bibitem{kim2026scaling} Y. Kim et al., "Towards a Science of Scaling Agent Systems," arXiv:2512.08296, 2025.
 
 \bibitem{li2025acps} C. Li et al., "ACPS: Agent Collaboration Protocols for the Internet of Agents," in \emph{IC-NIDC}, IEEE, 2025, pp. 342--346.
+
+\bibitem{liu2025acps} J. Liu et al., "ACPs: Agent collaboration protocols for the Internet of Agents," arXiv:2505.13523, 2025.
 
 \bibitem{liu2024promptinjection} Y. Liu et al., "Formalizing and benchmarking prompt injection attacks and defenses," in \emph{USENIX Security}, 2024.
 
