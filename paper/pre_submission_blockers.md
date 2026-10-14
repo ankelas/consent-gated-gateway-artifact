@@ -1,7 +1,7 @@
 # Pre-submission blockers
 
 - **LNCS compilation.** `paper/draft_lncs.tex` builds in two passes with 0 errors and 0 undefined citations and is 15 pages, inside the 8--15 page range. Do the final page-by-page visual review before upload.
-- **Author metadata.** The block now carries all five authors, both affiliations, and the corresponding author's email. Still to add: email for Yizhang Cai, ORCIDs, and the funding, conflict-of-interest, and data/code availability statements.
+- **Author metadata.** The block now carries all five authors, both affiliations, and the corresponding author's email. All five author emails are in place. Still to add: ORCIDs and the funding, conflict-of-interest, and data/code availability statements.
 - **Labels.** Labels are built by construction and re-read blind by an independent model annotator (neither the built label nor any model prediction is shown). The re-read covers all 736 built labels, the 280-item judgment suite plus the 456-item stress set: it gives a different definite label on 80 items (10.9%) and is uncertain on 19 (2.6%). Those 99 contested items go to a third adjudication pass, which keeps 24 built labels, changes 60, and leaves 15 unresolved. Every reported number is scored against those adjudicated labels, and the final set has been checked by human review.
 - **Similarity and format.** Run iThenticate (total below 25%, each source below 5%) and confirm the venue page limit against the final camera-ready.
 

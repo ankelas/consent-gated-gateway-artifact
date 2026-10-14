@@ -252,7 +252,7 @@ def convert() -> str:
         r"\titlerunning{Typed Judgment, Deterministic Enforcement}",
         r"\author{Yizhang Cai\inst{1} \and Jun Liu\inst{1} \and Di Ma\inst{2} \and Ke Yu\inst{1} \and Ke Li\inst{1}}",
         r"\authorrunning{Y. Cai et al.}",
-        r"\institute{School of Artificial Intelligence, Beijing University of Posts and Telecommunications, Beijing, China \\ \email{liujun@bupt.edu.cn}, \email{yuke@bupt.edu.cn}, \email{like1990@bupt.edu.cn} (corresponding author) \and Beijing Guoshu Zhilian Technology Co., Ltd., Beijing, China \\ \email{madi@guoshuzhilian.com.cn}}",
+        r"\institute{School of Artificial Intelligence, Beijing University of Posts and Telecommunications, Beijing, China \\ \email{1187800909@qq.com}, \email{liujun@bupt.edu.cn}, \email{yuke@bupt.edu.cn}, \email{like1990@bupt.edu.cn} (corresponding author) \and Beijing Guoshu Zhilian Technology Co., Ltd., Beijing, China \\ \email{madi@guoshuzhilian.com.cn}}",
         r"\maketitle",
         r"\begin{abstract}",
         inline(abstract),
