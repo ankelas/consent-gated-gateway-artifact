@@ -74,10 +74,10 @@ def free_prompt(item: Dict[str, Any]) -> str:
 
 # --------------------------------------------------------------- model client
 
-# The endpoint's default reasoning effort spends thousands of tokens before
-# emitting content, and with a small budget it returns an empty message
-# (finish_reason=length). Pinning the low effort keeps every reply within the
-# budget and makes the configuration explicit in the artifact.
+# Reasoning effort is pinned so the configuration is explicit in the artifact,
+# and the request carries no output-token cap: the endpoint is left free to
+# spend whatever budget it needs, so a reply is never truncated into an empty
+# message by our own limit.
 EFFORT = "low"
 
 
@@ -88,17 +88,18 @@ class ModelClient:
         self.model = model
         self.timeout = timeout
 
-    def complete(self, system: str, user: str, max_tokens: int = 2000) -> str:
+    def complete(self, system: str, user: str, max_tokens: Optional[int] = None) -> str:
         payload = {
             "model": self.model,
             "temperature": 0,
-            "max_tokens": max_tokens,
             "effort": EFFORT,
             "messages": [
                 {"role": "system", "content": system},
                 {"role": "user", "content": user},
             ],
         }
+        if max_tokens is not None:
+            payload["max_tokens"] = max_tokens
         request = urllib.request.Request(
             self.base_url + "/chat/completions",
             data=json.dumps(payload).encode("utf-8"),
@@ -110,11 +111,6 @@ class ModelClient:
         last_error: Optional[Exception] = None
         for attempt in range(6):
             try:
-                if attempt:
-                    # An empty reply means the budget went to internal
-                    # reasoning; raise it rather than failing the run.
-                    payload["max_tokens"] = min(8000, payload.get("max_tokens", max_tokens) * 2)
-                    request.data = json.dumps(payload).encode("utf-8")
                 with urllib.request.urlopen(request, timeout=self.timeout) as response:
                     body = json.load(response)
                 content = body["choices"][0]["message"]["content"] or ""
