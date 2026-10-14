@@ -5,6 +5,7 @@
 - `draft.md`: complete English manuscript with three figures, the live routing, consent/effect, and ablation results, and the judgment-layer results for one deployed model sampled three times, including the injection stress set.
 - `draft_lncs.tex`: Springer LNCS source with author block, ACPs references, seven tables, three figures, and a bibliography generated from the Markdown reference list.
 - `draft_lncs.pdf`: compiled LNCS rendering (15 pages) produced with the official class.
+- `draft_lncs_anon.tex` / `draft_lncs_anon.pdf`: double-blind variant of the same build (15 pages), produced by `python3 build_lncs.py --anon`. The author block is replaced by "Anonymous Submission" plus a pointer to the title page, and the two artifact addresses read "(address withheld for double-blind review)".
 - `draft.docx`: English review copy with figures embedded.
 - `draft_zh.md` and `draft_zh.docx`: Chinese review copies.
 - `draft_zh_tex.tex` and `draft_zh.pdf`: Chinese review copy typeset with XeLaTeX (16 pages, no overfull boxes); the embedded figures carry the shared English labels.
@@ -14,6 +15,9 @@
 ## Required before CMT upload
 
 - **Page limit:** the latest two-pass LNCS build is 15 pages, inside the 8–15 page target; the last page carries one reference, so the author email and statements fit in the remaining space. Perform the final page-by-page visual review before upload.
+- **Track and deadline:** the paper goes to Special Session XII, *Agent Interconnection and Collaboration Intelligence*, whose posted deadline is October 15, 2026; the main track closed on October 5. Submit through CMT3 and keep the author details on a separate title page, which is what the conference strips before double-blind review.
+- **Title page:** fill in the conference's Title Page template (name, affiliation, contact, and a short biography per author) in addition to the manuscript.
+- **Generative AI use:** the conference asks for a disclosure of generative-AI use (tool, version, date, provider) in the methods, the acknowledgements, or a dedicated section; by the author's decision this draft carries no such statement.
 - `draft_lncs.tex` compiles cleanly with `llncs.cls` v2.25 (0 errors, 0 undefined citations). Recompile with a stock TeX Live full installation; on this host the missing `newtx` fonts and support macros were added under `/data/caiyizhang/texmf` with the font map in `/data/caiyizhang/texmf-var` (see the command below).
 - Author block is in place (five authors, two affiliations, corresponding author Ke Li with like1990@bupt.edu.cn). All five author emails are in place (corresponding author Ke Li). Still to add: ORCID(s), acknowledgements/funding, conflict-of-interest statement, and data/code availability statement.
 - The manuscript now records the verified ACPs names and versions: Agent Collaboration Protocols, Agent Interaction Protocol, Agent Identity Code, Agent Capability Specification, `ACPs-spec-v02.02`, SDK `v2.2.0`, and commit `896e4bc79b95f11589e92eab06322430e5c64505`. Recheck normative quotations against this pinned source before upload.
