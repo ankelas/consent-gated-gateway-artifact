@@ -3,13 +3,13 @@
 **Yizhang Cai, Jun Liu, Di Ma, Ke Yu, Ke Li**  
 Yizhang Cai, Jun Liu, Ke Yu, Ke Li: School of Artificial Intelligence, Beijing University of Posts and Telecommunications, Beijing, China  
 Di Ma: Beijing Guoshu Zhilian Technology Co., Ltd., Beijing, China  
-Emails: 1187800909@qq.com (Yizhang Cai); liujun@bupt.edu.cn (Jun Liu); yuke@bupt.edu.cn (Ke Yu); like1990@bupt.edu.cn (Ke Li, corresponding author); madi@guoshuzhilian.com.cn (Di Ma)
+Emails: 2025111259@bupt.cn (Yizhang Cai); liujun@bupt.edu.cn (Jun Liu); yuke@bupt.edu.cn (Ke Yu); like1990@bupt.edu.cn (Ke Li, corresponding author); madi@guoshuzhilian.com.cn (Di Ma)
 
 ## Abstract
 
 Messaging channels connect users to agent networks but expose a boundary between replayable events and authenticated protocol calls. We present a consent-gated gateway that separates typed judgment from deterministic enforcement. Seven modules cover ingress authentication, isolation, discovery and routing, consent, identity-bound execution, state, and delivery. Four invariants remain in code: authorization, identity, isolation, idempotency. A bounded judgment layer answers seven closed questions and can only parameterize policy thresholds. We map the design to an iMessage/Photon ingress and an ACPs/AIP v2.2 Leader--Partner path, measure discovery and recommendation live, record a consent-gated invocation and its partner-side effect, and consult the judgment plane in advisory mode. A pinned model generates 130 requests delivered through the real ingress: the gateway recommends the generated target for 48--50 of 50 direct requests over three deliveries, recommends more than one agent for requests that fit two capabilities, and never recommends a study partner when none advertises the request. Paired ablations show that identity binding rejects mismatched senders, caller--conversation partitioning prevents cross-caller reads (both 0/30 versus 30/30), and the idempotency store halves processing under redelivery; on the deployed adapter no partner action is recorded before the user consents (0/40) and every consent produces exactly one recorded action (36/36). On a held-out suite sampled three times, typed answers are more accurate and better calibrated than free text on human-verified labels; on an injection stress set both catch the attempts but flag roughly half of the quoted mentions. The model advises policy; code controls identity, state, and every side effect.
 
-**Keywords:** multi-agent systems; agent interconnection; messaging gateway; consent; identity binding; typed decision models; calibration; AIP; ACPs; reliability; security evaluation
+**Keywords:** multi-agent systems; agent interconnection; messaging gateway; consent; typed decision models; calibration
 
 ## 1. Introduction
 
