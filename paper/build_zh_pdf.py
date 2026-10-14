@@ -18,6 +18,7 @@ from pathlib import Path
 
 from build_lncs import (  # reuse the shared Markdown helpers
     CITATION_KEYS,
+    UNNUMBERED_SECTIONS,
     figure_block,
     inline,
     table_block,
@@ -87,7 +88,12 @@ def convert() -> str:
 
     out = list(PREAMBLE)
     out.append(rf"\title{{{inline(title)}}}")
-    out.append(rf"\author{{{inline(author)}\\[0.4em]\small {inline(affiliation)}}}")
+    # ``\author`` is typeset inside a single-cell tabular, which cannot wrap a
+    # long affiliation line; a centred \parbox restores paragraph mode so the
+    # CJK and the e-mail list can break across lines.
+    out.append(
+        rf"\author{{\parbox{{\dimexpr\textwidth-2\tabcolsep\relax}}{{\centering {inline(author)}\\[0.4em]\small {inline(affiliation)}}}}}"
+    )
     out.append(r"\date{}")
     out.append(r"\maketitle")
     out.append(r"\begin{abstract}")
@@ -169,7 +175,10 @@ def convert() -> str:
             close_list()
             level, heading_text = len(heading.group(1)), heading.group(2)
             heading_text = re.sub(r"^\d+(?:\.\d+)*\.?\s+", "", heading_text)
-            command = "section" if level == 2 else "subsection"
+            if heading_text in UNNUMBERED_SECTIONS:
+                command = "section*"
+            else:
+                command = "section" if level == 2 else "subsection"
             out.append(rf"\{command}{{{inline(heading_text)}}}")
             i += 1
             continue

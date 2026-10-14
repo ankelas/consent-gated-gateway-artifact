@@ -9,12 +9,22 @@ Pandoc.  It is not intended to be a general Markdown converter.
 from __future__ import annotations
 
 import re
+import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent
 SOURCE = ROOT / "draft.md"
 OUTPUT = ROOT / "draft_lncs.tex"
+ANON_OUTPUT = ROOT / "draft_lncs_anon.tex"
+
+# Sections that carry statements rather than numbered content.
+UNNUMBERED_SECTIONS = {"Acknowledgements"}
+
+# The artifact URL identifies the authors under double-blind review; the
+# anonymized build withholds it and points at the title page instead.
+ARTIFACT_URL = "https://github.com/ankelas/consent-gated-gateway-artifact"
+ARTIFACT_WITHHELD = "(address withheld for double-blind review)"
 
 # Figures whose natural width leaves too much vertical space are scaled down
 # so the proceedings layout keeps a usable page budget.
@@ -217,8 +227,11 @@ def bibliography() -> list[str]:
     return out
 
 
-def convert() -> str:
-    lines = SOURCE.read_text(encoding="utf-8").splitlines()
+def convert(anon: bool = False) -> str:
+    text = SOURCE.read_text(encoding="utf-8")
+    if anon:
+        text = text.replace(ARTIFACT_URL, ARTIFACT_WITHHELD)
+    lines = text.splitlines()
     title = lines[0].removeprefix("# ").strip()
     abstract_start = lines.index("## Abstract") + 1
     abstract_end = lines.index("## 1. Introduction")
@@ -250,9 +263,10 @@ def convert() -> str:
         r"\begin{document}",
         rf"\title{{{inline(title)}}}",
         r"\titlerunning{Typed Judgment, Deterministic Enforcement}",
-        r"\author{Yizhang Cai\inst{1} \and Jun Liu\inst{1} \and Di Ma\inst{2} \and Ke Yu\inst{1} \and Ke Li\inst{1}}",
-        r"\authorrunning{Y. Cai et al.}",
-        r"\institute{School of Artificial Intelligence, Beijing University of Posts and Telecommunications, Beijing, China \\ \email{2025111259@bupt.cn}, \email{liujun@bupt.edu.cn}, \email{yuke@bupt.edu.cn}, \email{like1990@bupt.edu.cn} (corresponding author) \and Beijing Guoshu Zhilian Technology Co., Ltd., Beijing, China \\ \email{madi@guoshuzhilian.com.cn}}",
+        r"\author{Anonymous Submission}" if anon
+        else r"\author{Yizhang Cai\inst{1} \and Jun Liu\inst{1} \and Di Ma\inst{2} \and Ke Yu\inst{1} \and Ke Li\inst{1}}",
+        r"\authorrunning{Anonymous Submission}" if anon else r"\authorrunning{Y. Cai et al.}",
+        r"\institute{Author names, affiliations, and contact details are on the title page.}",
         r"\maketitle",
         r"\begin{abstract}",
         inline(abstract),
@@ -334,7 +348,10 @@ def convert() -> str:
             close_list()
             level, heading_text = len(heading.group(1)), heading.group(2)
             heading_text = re.sub(r"^\d+(?:\.\d+)*\.?\s+", "", heading_text)
-            command = "section" if level == 2 else "subsection"
+            if heading_text in UNNUMBERED_SECTIONS:
+                command = "section*"
+            else:
+                command = "section" if level == 2 else "subsection"
             out.append(rf"\{command}{{{inline(heading_text)}}}")
             i += 1
             continue
@@ -377,5 +394,7 @@ def convert() -> str:
 
 
 if __name__ == "__main__":
-    OUTPUT.write_text(convert(), encoding="utf-8")
-    print(OUTPUT)
+    anon = "--anon" in sys.argv[1:]
+    target = ANON_OUTPUT if anon else OUTPUT
+    target.write_text(convert(anon=anon), encoding="utf-8")
+    print(target)
