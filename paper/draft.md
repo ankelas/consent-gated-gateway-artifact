@@ -1,7 +1,9 @@
 # Typed Judgment, Deterministic Enforcement: A Consent-Gated Gateway Architecture for Inter-Agent Collaboration over Messaging Channels
 
-**Yizhang Cai**  
-School of Artificial Intelligence, Beijing University of Posts and Telecommunications, Beijing, China
+**Yizhang Cai, Jun Liu, Di Ma, Ke Yu, Ke Li**  
+Yizhang Cai, Jun Liu, Ke Yu, Ke Li: School of Artificial Intelligence, Beijing University of Posts and Telecommunications, Beijing, China  
+Di Ma: Beijing Guoshu Zhilian Technology Co., Ltd., Beijing, China  
+Emails: liujun@bupt.edu.cn; like1990@bupt.edu.cn (corresponding author); madi@guoshuzhilian.com.cn
 
 ## Abstract
 

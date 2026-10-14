@@ -1,6 +1,6 @@
 # Thesis workspace
 
-Paper workspace for Yizhang Cai: *Typed Judgment, Deterministic Enforcement* (JCRAI 2026).
+Paper workspace for Yizhang Cai, Jun Liu, Di Ma, Ke Yu, and Ke Li (corresponding author Ke Li): *Typed Judgment, Deterministic Enforcement* (JCRAI 2026).
 
 ## Layout
 
