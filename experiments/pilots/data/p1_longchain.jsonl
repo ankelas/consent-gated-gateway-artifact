@@ -1,0 +1,16 @@
+{"arm": "single", "id": "long-1", "answer": -20852.89, "expected": -20852.89, "calls": 1, "seconds": 14.4}
+{"arm": "single", "id": "long-2", "answer": 1755.56, "expected": 1755.56, "calls": 1, "seconds": 3.88}
+{"arm": "single", "id": "long-3", "answer": 28.17, "expected": 28.17, "calls": 1, "seconds": 4.98}
+{"arm": "single", "id": "long-4", "answer": 89.68, "expected": 89.68, "calls": 1, "seconds": 11.58}
+{"arm": "single", "id": "long-5", "answer": 0.53, "expected": 0.53, "calls": 1, "seconds": 7.08}
+{"arm": "single", "id": "long-6", "answer": 451805.81, "expected": 451805.81, "calls": 1, "seconds": 21.57}
+{"arm": "single", "id": "long-7", "answer": 54.48, "expected": 54.48, "calls": 1, "seconds": 4.24}
+{"arm": "single", "id": "long-8", "answer": 2947.94, "expected": 2947.94, "calls": 1, "seconds": 6.91}
+{"arm": "multi", "id": "long-1", "subtasks": 1, "routed_to_specialist": 1, "answer": -20852.89, "expected": -20852.89, "calls": 4, "seconds": 75.39}
+{"arm": "multi", "id": "long-2", "subtasks": 3, "routed_to_specialist": 3, "answer": 1755.56, "expected": 1755.56, "calls": 6, "seconds": 157.22}
+{"arm": "multi", "id": "long-3", "subtasks": 2, "routed_to_specialist": 1, "answer": 28.17, "expected": 28.17, "calls": 5, "seconds": 35.25}
+{"arm": "multi", "id": "long-4", "subtasks": 1, "routed_to_specialist": 1, "answer": 89.68, "expected": 89.68, "calls": 4, "seconds": 32.65}
+{"arm": "multi", "id": "long-5", "subtasks": 3, "routed_to_specialist": 2, "answer": 0.53, "expected": 0.53, "calls": 6, "seconds": 89.68}
+{"arm": "multi", "id": "long-6", "subtasks": 2, "routed_to_specialist": 1, "answer": 451805.81, "expected": 451805.81, "calls": 5, "seconds": 68.6}
+{"arm": "multi", "id": "long-7", "subtasks": 3, "routed_to_specialist": 1, "answer": 54.48, "expected": 54.48, "calls": 6, "seconds": 59.03}
+{"arm": "multi", "id": "long-8", "subtasks": 2, "routed_to_specialist": 1, "answer": 2947.94, "expected": 2947.94, "calls": 5, "seconds": 75.96}

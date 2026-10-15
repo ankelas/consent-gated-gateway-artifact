@@ -1,0 +1,48 @@
+{"arm": "single", "id": 1, "answer": 1130.5, "expected": 1130.5, "calls": 1, "seconds": 1.24}
+{"arm": "single", "id": 2, "answer": 1134.0, "expected": 1134, "calls": 1, "seconds": 1.38}
+{"arm": "single", "id": 3, "answer": 900.27, "expected": 900.27, "calls": 1, "seconds": 1.58}
+{"arm": "single", "id": 4, "answer": 847.67, "expected": 847.67, "calls": 1, "seconds": 1.5}
+{"arm": "single", "id": 5, "answer": 1304.0, "expected": 1304, "calls": 1, "seconds": 1.45}
+{"arm": "single", "id": 6, "answer": 1227.49, "expected": 1227.49, "calls": 1, "seconds": 1.93}
+{"arm": "single", "id": 7, "answer": 389.38, "expected": 389.38, "calls": 1, "seconds": 1.75}
+{"arm": "single", "id": 8, "answer": 1580.0, "expected": 1580, "calls": 1, "seconds": 1.57}
+{"arm": "single", "id": 9, "answer": 737.77, "expected": 737.77, "calls": 1, "seconds": 1.14}
+{"arm": "single", "id": 10, "answer": 489.11, "expected": 489.11, "calls": 1, "seconds": 1.2}
+{"arm": "single", "id": 11, "answer": 444.0, "expected": 444, "calls": 1, "seconds": 1.45}
+{"arm": "single", "id": 12, "answer": 507.39, "expected": 507.39, "calls": 1, "seconds": 1.46}
+{"arm": "single", "id": 13, "answer": 354.89, "expected": 354.89, "calls": 1, "seconds": 1.47}
+{"arm": "single", "id": 14, "answer": 1976.0, "expected": 1976, "calls": 1, "seconds": 1.25}
+{"arm": "single", "id": 15, "answer": 676.73, "expected": 676.73, "calls": 1, "seconds": 1.2}
+{"arm": "single", "id": 16, "answer": 2253.5, "expected": 2253.5, "calls": 1, "seconds": 1.3}
+{"arm": "single", "id": 17, "answer": 1488.0, "expected": 1488, "calls": 1, "seconds": 0.99}
+{"arm": "single", "id": 18, "answer": 1023.24, "expected": 1023.24, "calls": 1, "seconds": 1.61}
+{"arm": "single", "id": 19, "answer": 1215.4, "expected": 1215.4, "calls": 1, "seconds": 1.28}
+{"arm": "single", "id": 20, "answer": 1384.0, "expected": 1384, "calls": 1, "seconds": 1.27}
+{"arm": "single", "id": 21, "answer": 547.0, "expected": 547.0, "calls": 1, "seconds": 1.41}
+{"arm": "single", "id": 22, "answer": 1371.83, "expected": 1371.83, "calls": 1, "seconds": 1.65}
+{"arm": "single", "id": 23, "answer": 2056.0, "expected": 2056, "calls": 1, "seconds": 1.59}
+{"arm": "single", "id": 24, "answer": 2264.27, "expected": 2264.27, "calls": 1, "seconds": 1.76}
+{"arm": "multi", "id": 1, "subtasks": 1, "routed_to_specialist": 1, "answer": 1130.5, "expected": 1130.5, "calls": 4, "seconds": 11.56}
+{"arm": "multi", "id": 2, "subtasks": 3, "routed_to_specialist": 2, "answer": 1134.0, "expected": 1134, "calls": 6, "seconds": 23.74}
+{"arm": "multi", "id": 3, "subtasks": 2, "routed_to_specialist": 1, "answer": 900.27, "expected": 900.27, "calls": 5, "seconds": 18.33}
+{"arm": "multi", "id": 4, "subtasks": 1, "routed_to_specialist": 1, "answer": 847.67, "expected": 847.67, "calls": 4, "seconds": 15.64}
+{"arm": "multi", "id": 5, "subtasks": 3, "routed_to_specialist": 2, "answer": 1304.0, "expected": 1304, "calls": 6, "seconds": 13.75}
+{"arm": "multi", "id": 6, "subtasks": 3, "routed_to_specialist": 3, "answer": 1227.49, "expected": 1227.49, "calls": 6, "seconds": 20.28}
+{"arm": "multi", "id": 7, "subtasks": 1, "routed_to_specialist": 1, "answer": 389.38, "expected": 389.38, "calls": 4, "seconds": 10.86}
+{"arm": "multi", "id": 8, "subtasks": 3, "routed_to_specialist": 2, "answer": 1580.0, "expected": 1580, "calls": 6, "seconds": 12.67}
+{"arm": "multi", "id": 9, "subtasks": 1, "routed_to_specialist": 1, "answer": 737.77, "expected": 737.77, "calls": 4, "seconds": 8.6}
+{"arm": "multi", "id": 10, "subtasks": 1, "routed_to_specialist": 1, "answer": 489.11, "expected": 489.11, "calls": 4, "seconds": 7.5}
+{"arm": "multi", "id": 11, "subtasks": 3, "routed_to_specialist": 2, "answer": 444.0, "expected": 444, "calls": 6, "seconds": 12.21}
+{"arm": "multi", "id": 12, "subtasks": 3, "routed_to_specialist": 3, "answer": 507.39, "expected": 507.39, "calls": 6, "seconds": 46.48}
+{"arm": "multi", "id": 13, "subtasks": 3, "routed_to_specialist": 3, "answer": 354.89, "expected": 354.89, "calls": 6, "seconds": 22.66}
+{"arm": "multi", "id": 14, "subtasks": 3, "routed_to_specialist": 2, "answer": 1976.0, "expected": 1976, "calls": 6, "seconds": 8.83}
+{"arm": "multi", "id": 15, "subtasks": 1, "routed_to_specialist": 1, "answer": 676.73, "expected": 676.73, "calls": 4, "seconds": 16.98}
+{"arm": "multi", "id": 16, "subtasks": 2, "routed_to_specialist": 1, "answer": 2253.5, "expected": 2253.5, "calls": 5, "seconds": 29.54}
+{"arm": "multi", "id": 17, "subtasks": 3, "routed_to_specialist": 2, "answer": 1488.0, "expected": 1488, "calls": 6, "seconds": 12.95}
+{"arm": "multi", "id": 18, "subtasks": 3, "routed_to_specialist": 3, "answer": 1023.24, "expected": 1023.24, "calls": 6, "seconds": 14.19}
+{"arm": "multi", "id": 19, "subtasks": 2, "routed_to_specialist": 1, "answer": 1215.4, "expected": 1215.4, "calls": 5, "seconds": 17.5}
+{"arm": "multi", "id": 20, "subtasks": 3, "routed_to_specialist": 2, "answer": 1384.0, "expected": 1384, "calls": 6, "seconds": 11.98}
+{"arm": "multi", "id": 21, "subtasks": 3, "routed_to_specialist": 3, "answer": 547.0, "expected": 547.0, "calls": 6, "seconds": 56.91}
+{"arm": "multi", "id": 22, "subtasks": 1, "routed_to_specialist": 1, "answer": 1371.83, "expected": 1371.83, "calls": 4, "seconds": 12.1}
+{"arm": "multi", "id": 23, "subtasks": 3, "routed_to_specialist": 2, "answer": 2056.0, "expected": 2056, "calls": 6, "seconds": 15.0}
+{"arm": "multi", "id": 24, "subtasks": 3, "routed_to_specialist": 3, "answer": 2264.27, "expected": 2264.27, "calls": 6, "seconds": 22.7}
