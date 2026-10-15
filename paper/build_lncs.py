@@ -204,14 +204,14 @@ def figure_block(alt: str, path: str, number: int) -> list[str]:
     ]
 
 
-def bibliography() -> list[str]:
+def bibliography(source: Path | None = None) -> list[str]:
     """Render the Markdown reference list so citations and entries cannot drift.
 
     The previous implementation hard-coded nine entries; that silently broke
     when the manuscript added sources.  The Markdown reference list is now the
     single source of truth for both the numbering and the entry text.
     """
-    lines = SOURCE.read_text(encoding="utf-8").splitlines()
+    lines = (source or SOURCE).read_text(encoding="utf-8").splitlines()
     start = lines.index("## References")
     pattern = re.compile(r"^(\d+)\.\s+(.*\S)\s*$")
     entries: list[tuple[int, str]] = []
@@ -227,8 +227,11 @@ def bibliography() -> list[str]:
     return out
 
 
-def convert(anon: bool = False) -> str:
-    text = SOURCE.read_text(encoding="utf-8")
+def convert(anon: bool = False, source: Path | None = None,
+            meta: dict[str, str] | None = None) -> str:
+    meta = meta or {}
+    source = source or SOURCE
+    text = source.read_text(encoding="utf-8")
     if anon:
         text = text.replace(ARTIFACT_URL, ARTIFACT_WITHHELD)
     lines = text.splitlines()
@@ -262,11 +265,13 @@ def convert(anon: bool = False) -> str:
         r"\urlstyle{rm}",
         r"\begin{document}",
         rf"\title{{{inline(title)}}}",
-        r"\titlerunning{Typed Judgment, Deterministic Enforcement}",
+        r"\titlerunning{" + (meta.get("title_running") or "Typed Judgment, Deterministic Enforcement") + "}",
         r"\author{Anonymous Submission}" if anon
-        else r"\author{Yizhang Cai\inst{1} \and Jun Liu\inst{1} \and Di Ma\inst{2} \and Ke Yu\inst{1} \and Ke Li\inst{1}}",
-        r"\authorrunning{Anonymous Submission}" if anon else r"\authorrunning{Y. Cai et al.}",
-        r"\institute{Author names, affiliations, and contact details are on the title page.}",
+        else (r"\author{" + meta["authors"] + "}" if meta.get("authors")
+              else r"\author{Yizhang Cai\inst{1} \and Jun Liu\inst{1} \and Di Ma\inst{2} \and Ke Yu\inst{1} \and Ke Li\inst{1}}"),
+        r"\authorrunning{Anonymous Submission}" if anon
+        else r"\authorrunning{" + (meta.get("author_running") or "Y. Cai et al.") + "}",
+        r"\institute{" + (meta.get("institute") or "Author names, affiliations, and contact details are on the title page.") + "}",
         r"\maketitle",
         r"\begin{abstract}",
         inline(abstract),
@@ -298,7 +303,7 @@ def convert(anon: bool = False) -> str:
         if stripped == "## References":
             flush_paragraph()
             close_list()
-            out.extend(bibliography())
+            out.extend(bibliography(source))
             break
         if not stripped:
             flush_paragraph()
@@ -394,7 +399,20 @@ def convert(anon: bool = False) -> str:
 
 
 if __name__ == "__main__":
-    anon = "--anon" in sys.argv[1:]
-    target = ANON_OUTPUT if anon else OUTPUT
-    target.write_text(convert(anon=anon), encoding="utf-8")
+    args = sys.argv[1:]
+    source = SOURCE
+    target = OUTPUT
+    meta: dict[str, str] = {}
+    if "--source" in args:
+        source = Path(args[args.index("--source") + 1])
+    if "--output" in args:
+        target = Path(args[args.index("--output") + 1])
+    for flag, key in (("--author", "authors"), ("--author-running", "author_running"),
+                      ("--institute", "institute"), ("--title-running", "title_running")):
+        if flag in args:
+            meta[key] = args[args.index(flag) + 1]
+    anon = "--anon" in args
+    if anon:
+        target = ANON_OUTPUT
+    target.write_text(convert(anon=anon, source=source, meta=meta), encoding="utf-8")
     print(target)

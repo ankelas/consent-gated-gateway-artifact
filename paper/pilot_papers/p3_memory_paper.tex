@@ -1,0 +1,155 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage[T1]{fontenc}
+
+\usepackage{newtxtext}
+
+\usepackage[varvw]{newtxmath}
+
+\usepackage{graphicx}
+
+\usepackage{booktabs}
+
+\usepackage{tabularx}
+
+\usepackage{array}
+
+\usepackage{hyperref}
+
+\setcounter{topnumber}{4}
+
+\setcounter{bottomnumber}{3}
+
+\setcounter{totalnumber}{6}
+
+\renewcommand{\topfraction}{0.95}
+
+\renewcommand{\bottomfraction}{0.6}
+
+\renewcommand{\textfraction}{0.05}
+
+\renewcommand{\floatpagefraction}{0.7}
+
+\urlstyle{rm}
+
+\begin{document}
+
+\title{Three-Layer Memory with Consistency Checking in Long-Horizon Dialogue: A Pilot on Scripted Personas}
+
+\titlerunning{Typed Judgment, Deterministic Enforcement}
+
+\author{Yizhang Cai\inst{1}}
+
+\authorrunning{Y. Cai}
+
+\institute{School of Artificial Intelligence, Beijing University of Posts and Telecommunications, Beijing, China \\ \email{2025111259@bupt.cn}}
+
+\maketitle
+
+\begin{abstract}
+
+A conversational agent that spans several sessions has to keep facts, constraints, and preferences that were stated once and never repeated. This paper reports a small controlled pilot on five scripted personas, each talking to the agent across four sessions with a planted distractor that attributes a third party's property to the user. We compare a session-only baseline with a memory layer that keeps working turns, an end-of-session episode summary and semantic fact triples, retrieves by relevance, recency and importance, and checks each draft reply against the retrieved facts before sending it. Probes after the last session measure fact retention and whether the persona's constraints survive. The baseline recalls 0 of 30 facts, which is a floor by construction rather than a finding, while the memory condition recalls 20 of 30 and keeps 5 of 5 constraints against 4 of 5. The memory condition also spends 145 model calls against 70. Retention is the informative measurement: a third of the facts are lost even though the store contains them, which locates the remaining error in retrieval and consolidation rather than in storage.
+
+\keywords{long-term memory; conversational agents; consistency; pilot study}
+
+\end{abstract}
+
+\section{Introduction}
+
+Long-horizon dialogue breaks the assumption that the context window carries everything the agent needs. Work on memory-augmented agents therefore separates a short working context from a longer store, whether the store is an operating-system-style hierarchy \cite{debenedetti2024agentdojo}, a natural-language record of experience \cite{struq2024}, or a production memory service that extracts and consolidates facts \cite{conformal2021}. Benchmarks in the same line measure how well such systems keep long-term information \cite{acps2026repo,interop2025}. Our pilot asks a narrower question that the benchmark results do not separate: when a memory layer exists and its store is correct, how much of the loss remains at retrieval and consolidation?
+
+We answer it with five personas, four sessions each, and a deliberate interference pattern: the second session contains a distractor that assigns a property to a third party (a sister who is vegetarian, a colleague who runs marathons) so that an agent relying on surface similarity can attribute it to the user.
+
+\section{Related Work}
+
+Hierarchical memory for dialogue agents is introduced by MemGPT \cite{debenedetti2024agentdojo}, which pages information between a working context and external storage; Generative Agents \cite{struq2024} keep a stream of observations with retrieval by relevance, recency and importance; Mem0 \cite{conformal2021} extracts and consolidates facts in a production setting. Evaluation suites include LoCoMo \cite{acps2026repo}, which measures very long-term conversational memory over many sessions, and LongMemEval \cite{interop2025}, which targets long-term interactive memory in chat assistants. Context-window behaviour itself is measured by the lost-in-the-middle study \cite{camel2025}, which shows that information's position inside a long context changes how well it is used. Our pilot reuses the retrieval score from \cite{struq2024} in a simplified form, adds a pre-send consistency check, and reports where the residual loss sits rather than how a system ranks on a benchmark.
+
+\section{Method}
+
+\emph{Memory layers.} Working memory holds the current session's turns. Episodic memory holds a two-sentence summary written at the end of each session. Semantic memory holds fact triples with a key, a value, and an importance weight; constraints such as an allergy are marked important.
+
+\emph{Consolidation.} At the end of a session, the model is asked for a summary and, separately, for a JSON list of durable facts. Extracted facts update existing keys or are appended with a session index. Nothing is deleted, so consolidation errors are additive rather than destructive.
+
+\emph{Retrieval.} Each turn retrieves at most six items. The score is the token overlap between the query and the stored value, plus half of the normalised recency, plus the importance weight. Only facts recorded in an earlier session are eligible, so a turn cannot retrieve what it just said.
+
+\emph{Consistency check.} The draft reply, the retrieved facts and the user message go to a checker that returns JSON with a conflict flag and, if set, a revised reply. When the flag is set, the revised reply replaces the draft before it is sent.
+
+The baseline receives the same assistant prompt and the same user turns but no memory block and no check.
+
+\section{Setup}
+
+Five personas each state six facts across four sessions: city, job and pet in the first, allergy and usual drink in the second, main hobby in the third, and nothing new in the fourth. The second session also carries the distractor. Each persona's constraint is an allergy, and the trap probe asks for advice on an activity that conflicts with it.
+
+After the fourth session, seven probes are issued per persona: six recall questions, one per fact, and one constraint trap. Recall is counted correct when the expected value appears in the reply, case-insensitively; the trap is counted correct when the reply names the constraint. Both conditions run \texttt{deepseek\allowbreak{}-v4-flas\allowbreak{}h}, temperature 0.3 for the dialogue turns and 0 for consolidation and probing, one client per persona per condition, and the pilot runs once.
+
+\section{Results}
+
+\begin{table}[htbp]
+
+\centering
+
+\small
+
+\caption{Probes after four sessions, five personas per condition.}\label{tab:1}
+
+\begin{tabularx}{\textwidth}{@{}cXp{2.6cm}c>{\raggedright\arraybackslash}X@{}}
+
+\toprule
+
+\textbf{Measure} & \textbf{Session only} & \textbf{Three-layer memory} \\
+
+\midrule
+
+Fact retention over 30 recall probes & 0/30 (0\%) & 20/30 (66.7\%) \\
+
+Constraint kept, 5 trap probes & 4/5 & 5/5 \\
+
+Model calls for the whole condition & 70 & 145 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+The baseline's zero is what the design guarantees: with no path to an earlier session, a recall question cannot be answered, so the number is a sanity check on the harness rather than evidence about memory. Two measurements carry information. The memory condition recalls 20 of 30 facts, so a third of the facts are unavailable at probe time even though consolidation stored them; and it keeps all five constraints, where the baseline keeps four by accident - the session-only agent answered the allergy trap from the user's own wording in the same session often enough to score one below the ceiling, which shows how weak a single-session baseline is as a comparison.
+
+Within the memory condition, the losses are not uniformly distributed across fact types. Facts stated in the first session are recalled less often than facts stated later, which is the expected consequence of scoring relevance first and recency second; the distractor did not produce a visible misattribution in the final probes, but we did not instrument the intermediate sessions to test whether it was absorbed and later corrected by an explicit statement.
+
+\section{Discussion}
+
+The pilot separates three questions that a single retention number merges. Storage is not the bottleneck here: the extraction step wrote a fact for every statement the persona made, since the statements are canonical. Retrieval is one bottleneck: with relevance weighted first, a probe phrased differently from the stored value ("what pet do I have" against "a corgi named Pixel") competes with unrelated items on token overlap, and six slots are few when the store holds more than twenty items. Consolidation is the other: a summary that drops a detail removes the only trace of it, since nothing else in the pipeline re-reads the raw turns.
+
+Two design implications follow from the numbers rather than from the framework. First, retrieved slots and relevance scoring should be tuned against the number of stored items, because the same six slots that suffice for twenty facts do not survive forty. Second, the check is worth measuring separately from retrieval: the consistency check rewrote a reply in 10 of the 35 dialogue turns, which is a high rate for a mechanism that only has to catch contradictions and indicates that the check was reacting to tone and detail as much as to factual conflict.
+
+\section{Limitations}
+
+This is a pilot with five personas, scripted turns, one model, and one run, so the per-type rates rest on a handful of items and the distractor's effect is not isolated by a matched control without it. The baseline is a floor rather than a reasonable alternative; the informative comparison, which we have not run, is against a naive full-history context that carries every earlier turn. Retention is checked by string presence, which is generous to paraphrase and blind to a correct answer stated with a different word. The persona facts are canonical and repeated once, so consolidation is easier than in natural dialogue, where the same fact appears in several forms.
+
+\section{Conclusion}
+
+Across five scripted personas and four sessions, a three-layer memory with relevance, recency and importance retrieval plus a pre-send consistency check recalled 20 of 30 facts and kept 5 of 5 constraints, at 145 model calls against 70 for a session-only baseline whose recall is zero by construction. Because the store was lossless in this setting, the residual loss of a third of the facts is attributable to retrieval and consolidation, not to storage; that is the quantity a follow-up study should attack, and the natural comparison is a full-history context rather than a memory-free baseline.
+
+\begin{thebibliography}{6}
+
+\small
+
+\setlength{\itemsep}{0pt}
+
+\setlength{\parskip}{0pt}
+
+\bibitem{acps2026repo} A. Maharana et al., "Evaluating very long-term conversational memory of LLM agents," arXiv:2402.17753, 2024.
+
+\bibitem{conformal2021} P. Chhikara et al., "Mem0: building production-ready AI agents with scalable long-term memory," arXiv:2504.19413, 2025.
+
+\bibitem{struq2024} J. S. Park et al., "Generative agents: interactive simulacra of human behavior," in UIST, 2023, arXiv:2304.03442.
+
+\bibitem{debenedetti2024agentdojo} C. Packer et al., "MemGPT: towards LLMs as operating systems," arXiv:2310.08560, 2023.
+
+\bibitem{camel2025} N. F. Liu et al., "Lost in the middle: how language models use long contexts," TACL, 2024, arXiv:2307.03172.
+
+\bibitem{interop2025} D. Wu et al., "LongMemEval: benchmarking chat assistants on long-term interactive memory," arXiv:2410.10813, 2024.
+
+\end{thebibliography}
+
+\end{document}
