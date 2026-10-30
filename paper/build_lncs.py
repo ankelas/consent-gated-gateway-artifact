@@ -34,7 +34,7 @@ FIGURE_PLACEMENT = {
 }
 
 FIGURE_WIDTH = {
-    "fig2_state_machine.png": 0.79,
+    "fig2_state_machine.png": 0.72,
     "fig3_overhead.png": 0.68,
 }
 

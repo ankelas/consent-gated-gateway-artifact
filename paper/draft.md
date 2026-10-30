@@ -73,7 +73,7 @@ The invariants specify what cannot happen; judgment points specify the bounded q
 
 ## 4. Modular Architecture
 
-![Fig. 1. Seven-module consent-gated gateway and the judgment plane](figures/fig1_architecture.png)
+![Fig. 1. Seven-module consent-gated gateway and the judgment plane. A message enters on the iMessage/Photon ingress (M1), is authenticated and normalised, and is partitioned by caller and conversation (M2); discovery returns eligible candidates for the capability query (M3). The judgment plane supplies J1/J2 routing labels and J3/J4 consent labels while thresholds and branches stay in code. An accepted event passes consent (M4), binds the candidate AIC to its endpoint in execution (M5), keeps keys and context in state (M6), and replies from delivery (M7).](figures/fig1_architecture.png)
 
 Figure 1 shows the seven modules and the judgment plane. Each module is defined by a distinct failure it prevents:
 
@@ -109,7 +109,7 @@ A low-confidence judgment produces clarification or escalation. A judgment is an
 
 The inspected deployment instantiates a Photon bridge, a FastAPI Leader, ACPs discovery, and registered Partners; the Leader derives `caller_id`, stores candidates by `(caller_id, chat_guid)`, validates AIC, HTTPS, `/rpc`, and JSON-RPC requirements, and starts a Partner only after user selection and instruction. AIP v2.2 states (`Accepted`, `Working`, `AwaitingInput`, `AwaitingCompletion`, `complete`, `cancel`) are explicit, and SQLite holds the responses, conversations, choices, and task context.
 
-![Fig. 2. Reference gateway processing flow](figures/fig2_state_machine.png)
+![Fig. 2. Reference gateway processing flow. Context resolution binds caller and conversation, deduplicates the event, and queries discovery, so a cached event returns its stored reply without a new call. Policy checks the route, consent, and cancellation, and a pending decision returns to the caller and re-enters at authentication when the user answers. Endpoint validation binds the AIC to the endpoint and mTLS identity before execution; a failure reaches the retry classifier, which re-enters only when the failure is retryable, replay-safe, and within budget.](figures/fig2_state_machine.png)
 
 Figure 2 depicts the reference gateway processing flow. Waiting preserves context, and a new user reply re-enters authenticated ingress; retry requires replay safety, valid consent, and a finite budget.
 
@@ -179,7 +179,7 @@ The consent experiment delivers each request, reads the candidate the assistant 
 
 A routing run stores the request-text hash, reply, recommended names and identity codes, duration, and error; an ablation run stores one row per trial plus an execution log; a judgment run stores the cached reply, per-item prediction, and a run manifest. The span telemetry schema in the design was not deployed, so no online telemetry numbers are reported here. Message bodies, phone numbers, credentials, and private keys are never recorded.
 
-The artifact contains the request suites, per-sample routing and consent outcomes, the advisory judgment log, the ablation builds with their controls, the judgment suites with cached responses and per-item predictions, and reproduction commands; the package is at `https://github.com/ankelas/consent-gated-gateway-artifact`.
+The artifact contains the request suites, per-sample routing and consent outcomes, the advisory judgment log, the ablation builds with their controls, and the judgment suites with cached predictions; the package is at `https://github.com/ankelas/consent-gated-gateway-artifact`.
 
 ## 9. Results
 
@@ -196,13 +196,13 @@ The pinned model generated 130 requests; each was delivered three times, in a fr
 | out-of-scope | 40 | a study partner recommended | 0 / 0 / 0 |
 | out-of-scope | 40 | any agent recommended | 40 / 40 / 40 |
 
-Table 4 gives the per-class counts. The path recommended the generated target for 48, 48, and 50 of the 50 direct requests (96--100%) and never recommended a different study partner; the misses recommended only agents outside the study set. The 48/50 delivery carries a 95% Wilson interval of [86.5%, 98.9%], and the 39/40 delivery [87.1%, 99.6%]. For requests that fit two capabilities it recommended more than one agent in 39, 38, and 38 of 40 and never asked for clarification; whether the combination covers the request was not adjudicated. The gateway makes no abstention decision of its own: it presents what the discovery index returns and leaves acceptance to the user. For requests no study partner advertises, that design shows up as follows: no study partner was recommended in any of the three deliveries, while the index returned a candidate for 36 of the 40 requests and the replies named a public-registry agent in all 40. The structured instrument was weaker: read once, discovery ranked the target first for 40 of 50 and inside the top three for 48. The instruments agreed on 42 of 50: the reply found eight targets discovery did not rank first, and discovery never ranked the target first while the reply missed it. Eighteen of the 130 samples changed outcome between deliveries, seven of them direct. The results are consistent with H1 at the level of recommendation.
+Table 4 gives the per-class counts. The path recommended the generated target for 48, 48, and 50 of the 50 direct requests (96--100%) and never recommended a different study partner; the misses recommended only agents outside the study set. The 48/50 delivery carries a 95% Wilson interval of [86.5%, 98.9%], and the 39/40 delivery [87.1%, 99.6%]. For requests that fit two capabilities it recommended more than one agent in 39, 38, and 38 of 40 and never asked for clarification; whether the combination covers the request was not adjudicated. The gateway makes no abstention decision of its own: it presents what the discovery index returns and leaves acceptance to the user. For requests no study partner advertises, that design shows up as follows: no study partner was recommended in any of the three deliveries, while the index returned a candidate for 36 of the 40 requests and the replies named a public-registry agent in all 40. The structured instrument was weaker: read once, discovery ranked the target first for 40 of 50 and inside the top three for 48. The instruments agreed on 42 of 50, and the disagreement is one-sided: discovery never ranked the target first in a case where the reply missed it. Of the eight reply-only selections in the first delivery, six sit at ranks two or three and two outside its top three: where the instruments differ, the reply re-orders or extends the same pool rather than substituting another. Eighteen of the 130 samples changed outcome between deliveries, seven of them direct. The results are consistent with H1 at the level of recommendation.
 
 ### 9.2 Invariant ablations
 
-**Table 5.** Ablation arms against same-code controls. Ports list the ablation instance, its same-code control, and, where the arm was also probed on the deployment, the live instance.
+**Table 5.** Ablation arms against same-code controls. Ports are read as ablation / same-code control / live instance, where the live instance appears only for arms that were also probed on the deployment.
 
-| Arm | Port | Control | Ablation | Interpretation |
+| Arm | Ports (abl./ctrl./live) | Control | Ablation | Interpretation |
 | --- | --- | --- | --- | --- |
 | no-identity | 9551 / 9550 / 9540 | 0/30 mismatches accepted | 30/30 accepted | the assertion admits every mismatch |
 | no-dedup | 9421 / 9420 | 30 executions for 30 pairs | 60 executions | the event store halves processing |
@@ -252,11 +252,11 @@ Twenty conversations drove the live ingress with three events each: the opening 
 
 ### 9.6 Limitations and scope
 
-Every result here comes from one deployment with one registry and one capability set; selection is read from the reply as described in §6 and cross-checked against the discovery ranking. The ablation arms are staging copies of the deployed code with one environment-gated change each, paired with a control built from the same copy, while the consent, effect, and advisory-judgment experiments run on the deployed adapter. The judgment layer is measured on one hosted model. The injection stress set is built from templates, so its phrasing is more regular than real traffic; all inputs are synthetic or model-generated, identifiers are pseudonymized, no outbound message is delivered, and no real user message body is used as a benchmark input or example.
+Every result here comes from one deployment with one registry and one capability set; selection is read from the reply as described in §6 and cross-checked against the discovery ranking. The ablation arms are staging copies of the deployed code with one environment-gated change each, paired with a control built from the same copy, while the consent, effect, and advisory-judgment experiments run on the deployed adapter. The judgment layer is measured on one hosted model. The injection stress set is built from templates; all inputs are synthetic or model-generated, identifiers are pseudonymized, and no outbound message is delivered.
 
 ## 10. Conclusion
 
-This paper separates typed judgment from deterministic enforcement in a seven-module message-to-agent gateway and tests the boundary on a deployed iMessage/ACPs path. The deployed path recommends the generated target, composes a plan when a request fits two capabilities, and never recommends a study partner when none advertises the request. Paired ablations show that the sender-to-peer assertion, the caller--conversation partition, and the event-level idempotency store each carry their invariant. On the deployed adapter the consent gate admits exactly one partner action per accepted event and admits none before the user agrees. The judgment layer is more accurate and better calibrated in its typed form, while its injection score over-triggers on quoted text, which is why it only parameterizes policy. The measurements cover one deployment and one capability set.
+This paper separates typed judgment from deterministic enforcement in a seven-module message-to-agent gateway and tests the boundary on a deployed iMessage/ACPs path. The deployed path recommends the generated target, composes a plan when a request fits two capabilities, and never recommends a study partner when none advertises the request. Paired ablations show that the sender-to-peer assertion, the caller--conversation partition, and the event-level idempotency store each carry their invariant. On the deployed adapter the consent gate admits exactly one partner action per accepted event and admits none before the user agrees. The judgment layer is more accurate and better calibrated in its typed form, while its injection score over-triggers on quoted text, which is why it only parameterizes policy.
 
 ## References
 1. AIP-PUB, *ACPs-community: Agent Collaboration Protocols*, spec `ACPs-spec-v02.02`, SDK `v2.2.0`, commit `896e4bc`, 2026. `https://github.com/AIP-PUB/ACPs-community`; English homepage `readme_en.md`.
