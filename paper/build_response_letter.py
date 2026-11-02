@@ -7,6 +7,7 @@ bold runs, block quotes and pipe tables, nothing else.
 from __future__ import annotations
 
 import re
+import sys
 from pathlib import Path
 
 
@@ -40,7 +41,8 @@ def fmt(text: str) -> str:
         if chunk.startswith("**") and chunk.endswith("**") and len(chunk) > 4:
             parts.append(r"\textbf{" + escape(chunk[2:-2]) + "}")
         elif chunk.startswith("`") and chunk.endswith("`") and len(chunk) > 2:
-            parts.append(r"\texttt{" + escape(chunk[1:-1]) + "}")
+            inner = escape(chunk[1:-1]).replace(r"\_", r"\_\allowbreak{}")
+            parts.append(r"\texttt{" + inner + "}")
         elif chunk.startswith("*") and chunk.endswith("*") and len(chunk) > 2:
             parts.append(r"\emph{" + escape(chunk[1:-1]) + "}")
         else:
@@ -50,11 +52,22 @@ def fmt(text: str) -> str:
 
 
 def main() -> None:
+    zh = "--zh" in sys.argv[1:]
+    source = ROOT / ("response_to_reviewers_zh.md" if zh else "response_to_reviewers.md")
+    output = ROOT / ("response_to_reviewers_zh.tex" if zh else "response_to_reviewers.tex")
     lines = SOURCE.read_text(encoding="utf-8").splitlines()
-    out = [
-        r"\documentclass[11pt,a4paper]{article}",
-        r"\usepackage[T1]{fontenc}",
-        r"\usepackage{newtxtext}",
+    lines = source.read_text(encoding="utf-8").splitlines()
+    preamble = [r"\documentclass[11pt,a4paper]{article}"]
+    if zh:
+        preamble += [
+            r"\usepackage{fontspec}",
+            r"\setmainfont{Noto Serif CJK SC}",
+            r'\XeTeXlinebreaklocale "zh"',
+            r"\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt",
+        ]
+    else:
+        preamble += [r"\usepackage[T1]{fontenc}", r"\usepackage{newtxtext}"]
+    out = preamble + [
         r"\usepackage{geometry}",
         r"\geometry{left=2.3cm,right=2.3cm,top=2.2cm,bottom=2.2cm}",
         r"\usepackage{tabularx}",
@@ -63,7 +76,7 @@ def main() -> None:
         r"\setlength{\parindent}{0pt}",
         r"\setlength{\parskip}{0.55em}",
         r"\begin{document}",
-        r"\begin{center}{\Large\bfseries Response to Reviewers}\end{center}",
+        r"\begin{center}{\Large\bfseries " + fmt(lines[0].lstrip("# ").strip()) + r"}\end{center}",
         r"\vspace{0.2em}",
     ]
 
@@ -132,8 +145,8 @@ def main() -> None:
 
     flush_table(); flush_quote(); flush_paragraph()
     out.extend([r"\end{document}"])
-    OUTPUT.write_text("\n".join(out) + "\n", encoding="utf-8")
-    print(OUTPUT)
+    output.write_text("\n".join(out) + "\n", encoding="utf-8")
+    print(output)
 
 
 if __name__ == "__main__":
