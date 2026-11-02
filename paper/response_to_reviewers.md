@@ -1,14 +1,37 @@
 # Response to Reviewers
 
+**Manuscript:** Typed Judgment, Deterministic Enforcement: A Consent-Gated Gateway Architecture for Inter-Agent Collaboration over Messaging Channels
+
+**Track:** Special Session XII, Agent Interconnection and Collaboration Intelligence, JCRAI 2026
+
+**Authors:** Yizhang Cai, Jun Liu, Di Ma, Ke Yu, Ke Li
+
+**Date:** 2 November 2026
+
 We thank the reviewer for a careful reading. The revision is a minor revision:
 the text, the figure captions and the table layout are revised, and no new runs
 were made. Changes are marked below with the section they touch.
+
+## Summary of the revision
+
+| Change | Location |
+| --- | --- |
+| Per-sample analysis of the reply-versus-discovery disagreement | Section 9.1 |
+| Message flow and branch behaviour added to both figure captions | Figs. 1 and 2 |
+| Port triple defined in the caption and the column header | Table 5 |
+| Judgement-plane design stated as 20 conversations x 3 event types = 60 events | Section 9.5 |
+| Duplicated sentences removed to keep the manuscript at 15 pages | Sections 9.6 and 10 |
+| Spacing claim in the review checked against the current PDF | whole document |
 
 ## Major issues
 
 **M1. The recommendation outcome is parsed from reply text rather than an
 instrumented API, and the 42/50 agreement with the discovery ranking deserves
 deeper analysis.**
+
+> Section 9.1: the "recommendation" outcome is parsed from reply text rather
+> than an instrumented API, admitted by the authors; the discrepancy with
+> discovery ranking (42/50 agreement) deserves deeper analysis.
 
 We agree that the reply parse is the weaker of the two instruments, and the
 revision analyses the disagreement at the per-sample level using the stored
@@ -29,6 +52,9 @@ that the structured ranking was read once per request and what it produced.
 **M2. Only one hosted model is evaluated, so the typed-versus-free-text claim
 needs a second model.**
 
+> Section 9.3: only one hosted model (deepseek-flash) is evaluated;
+> generalization of the typed-vs-free-text claim needs at least one more model.
+
 This is correct and unchanged. Section 9.3 opens by naming the single hosted
 model, its temperature, its reasoning effort and the absence of an output-token
 cap, so the measurement is presented as a property of the two answer shapes at
@@ -38,6 +64,9 @@ conclusion.
 
 **M3. The injection stress set is template-generated, so robustness to real
 attacks is untested.**
+
+> Section 9.6: the injection stress set is template-generated, so real-attack
+> robustness is untested.
 
 Correct. The set is a designed grid: eight steering families times five
 carriers times five authority frames give 200 injected items, and eight
@@ -79,6 +108,34 @@ combination is counted as more than one recommended agent and that whether the
 plan semantically covers the request was not adjudicated. We have left that
 statement as it is, because the revision does not add a semantic adjudication
 of the 40 ambiguous requests.
+
+## Suggestions
+
+**Add a second judgment model.** Acknowledged, and it is the item we would
+prioritise next. The harness, the suite and the cached prompts are in the
+artifact, so the same comparison can be repeated on another endpoint without
+changing the measurement code.
+
+**Instrument recommendation extraction.** Acknowledged. The revision adds the
+rank-level analysis that the structured instrument already supports; replacing
+the reply parse with a protocol-level record would require a change to the
+adapter and a re-delivery of the 130 requests, which this revision does not
+include.
+
+**Report the latency-accuracy trade-off of the judgment plane.** The paper
+reports the advisory call latency in Section 9.5 and the gateway-side handling
+cost in Section 9.4, but not a latency-accuracy curve across thresholds. Such a
+curve would require a run at each threshold, which the recorded data do not
+contain.
+
+**Expand Fig. 2 with the consent branch.** Done. The caption now describes the
+pending-decision branch and the re-entry at authentication when the user
+answers.
+
+**Clarify whether ambiguous-request composition was manually checked.**
+Section 9.1 states that a combination is counted as more than one recommended
+agent and that whether the plan semantically covers the request was not
+adjudicated.
 
 ## Effect on the manuscript
 

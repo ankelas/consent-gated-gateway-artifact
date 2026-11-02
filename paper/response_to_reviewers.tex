@@ -1,0 +1,82 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext}
+\usepackage{geometry}
+\geometry{left=2.3cm,right=2.3cm,top=2.2cm,bottom=2.2cm}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\begin{document}
+\begin{center}{\Large\bfseries Response to Reviewers}\end{center}
+\vspace{0.2em}
+\textbf{Manuscript:} Typed Judgment, Deterministic Enforcement: A Consent-Gated Gateway Architecture for Inter-Agent Collaboration over Messaging Channels
+
+\textbf{Track:} Special Session XII, Agent Interconnection and Collaboration Intelligence, JCRAI 2026
+
+\textbf{Authors:} Yizhang Cai, Jun Liu, Di Ma, Ke Yu, Ke Li
+
+\textbf{Date:} 2 November 2026
+
+We thank the reviewer for a careful reading. The revision is a minor revision: the text, the figure captions and the table layout are revised, and no new runs were made. Changes are marked below with the section they touch.
+
+\section*{Summary of the revision}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\textbf{Change} & \textbf{Location} \\
+\midrule
+Per-sample analysis of the reply-versus-discovery disagreement & Section 9.1 \\
+Message flow and branch behaviour added to both figure captions & Figs. 1 and 2 \\
+Port triple defined in the caption and the column header & Table 5 \\
+Judgement-plane design stated as 20 conversations $\times$ 3 event types = 60 events & Section 9.5 \\
+Duplicated sentences removed to keep the manuscript at 15 pages & Sections 9.6 and 10 \\
+Spacing claim in the review checked against the current PDF & whole document \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\section*{Major issues}
+\par\vspace{0.5em}\noindent \textbf{M1. The recommendation outcome is parsed from reply text rather than an instrumented API, and the 42/50 agreement with the discovery ranking deserves deeper analysis.}
+
+\begin{quote}\small Section 9.1: the "recommendation" outcome is parsed from reply text rather than an instrumented API, admitted by the authors; the discrepancy with discovery ranking (42/50 agreement) deserves deeper analysis.\end{quote}
+We agree that the reply parse is the weaker of the two instruments, and the revision analyses the disagreement at the per-sample level using the stored records. Section 9.1 now reports three facts that the earlier one-sentence version did not: the disagreement is one-sided, because discovery never ranked the target first in a case where the reply missed it; of the eight reply-only selections in the first delivery, six sit at ranks two or three in the structured list and two fall outside its top three; and therefore, where the two instruments differ, the reply re-orders or extends the same candidate pool rather than substituting a different one. The per-sample records behind these numbers are the \texttt{live\_discovery\_check\_v2.jsonl} and \texttt{live\_runs\_v2\_r*.jsonl} files in the artifact, so a reader can recheck every case.
+
+We have not replaced the reply parse with an instrumented API in this revision. Section 6 states how selection is read from the reply, and Section 9.1 states that the structured ranking was read once per request and what it produced.
+
+\par\vspace{0.5em}\noindent \textbf{M2. Only one hosted model is evaluated, so the typed-versus-free-text claim needs a second model.}
+
+\begin{quote}\small Section 9.3: only one hosted model (deepseek-flash) is evaluated; generalization of the typed-vs-free-text claim needs at least one more model.\end{quote}
+This is correct and unchanged. Section 9.3 opens by naming the single hosted model, its temperature, its reasoning effort and the absence of an output-token cap, so the measurement is presented as a property of the two answer shapes at this endpoint. We have not added a second model in this revision; the paper does not claim cross-model generalisation anywhere in the abstract, results or conclusion.
+
+\par\vspace{0.5em}\noindent \textbf{M3. The injection stress set is template-generated, so robustness to real attacks is untested.}
+
+\begin{quote}\small Section 9.6: the injection stress set is template-generated, so real-attack robustness is untested.\end{quote}
+Correct. The set is a designed grid: eight steering families times five carriers times five authority frames give 200 injected items, and eight families times four carriers times eight report forms give 256 benign near-misses. Section 9.3 describes the grid and the blind re-read that changed 51 of the built labels, and Section 9.6 states that the set is built from templates. What the stress set measures is the false-alarm behaviour of the two answer shapes on quoted and reported text; it is not presented as a measure of robustness to attacks collected in the wild.
+
+\section*{Minor issues}
+\textbf{Fig. 1 and Fig. 2 captions.} Both captions now describe the message flow. Fig. 1 names the path from ingress (M1) through partition (M2), discovery (M3), consent (M4), execution (M5), state (M6) and delivery (M7), and says which judgment points feed which module. Fig. 2 names the branches: cached-event return, policy cancellation, the pending decision that re-enters at authentication when the user answers, endpoint validation and the retry classifier.
+
+\textbf{Table 5 port notation.} The caption now states that ports are read as ablation / same-code control / live instance, and the column header carries the same abbreviation, so the triple no longer has to be inferred from the caption.
+
+\textbf{Section 9.5 sample size.} The text states the design directly: twenty conversations, three event types each, 60 events judged, with 20/20 replay recall, 0/40 false positives at the 0.9 threshold, Wilson bounds on both, and a median advisory latency of 1.07 s. We have kept the numbers and made the design explicit rather than adding events.
+
+\textbf{Hyphenation and spacing.} We checked the current build. Page 1 reads "plane in advisory mode" with the space intact, and a scan of the PDF text for long alphabetic strings returns no joined words; the two apparent hits are line-break artefacts of \texttt{pdftotext}, not text in the PDF. If the reviewer's copy still shows a joined word, it is worth checking the extraction tool.
+
+\textbf{Ambiguous-request composition.} Section 9.1 already states that the combination is counted as more than one recommended agent and that whether the plan semantically covers the request was not adjudicated. We have left that statement as it is, because the revision does not add a semantic adjudication of the 40 ambiguous requests.
+
+\section*{Suggestions}
+\textbf{Add a second judgment model.} Acknowledged, and it is the item we would prioritise next. The harness, the suite and the cached prompts are in the artifact, so the same comparison can be repeated on another endpoint without changing the measurement code.
+
+\textbf{Instrument recommendation extraction.} Acknowledged. The revision adds the rank-level analysis that the structured instrument already supports; replacing the reply parse with a protocol-level record would require a change to the adapter and a re-delivery of the 130 requests, which this revision does not include.
+
+\textbf{Report the latency-accuracy trade-off of the judgment plane.} The paper reports the advisory call latency in Section 9.5 and the gateway-side handling cost in Section 9.4, but not a latency-accuracy curve across thresholds. Such a curve would require a run at each threshold, which the recorded data do not contain.
+
+\textbf{Expand Fig. 2 with the consent branch.} Done. The caption now describes the pending-decision branch and the re-entry at authentication when the user answers.
+
+\textbf{Clarify whether ambiguous-request composition was manually checked.} Section 9.1 states that a combination is counted as more than one recommended agent and that whether the plan semantically covers the request was not adjudicated.
+
+\section*{Effect on the manuscript}
+The revised manuscript is 15 pages in the LNCS layout, with no overfull boxes and no undefined references. The changes above are confined to Section 9.1, the captions of Figs. 1 and 2, and the caption and header of Table 5; Section 9.6 and the conclusion were shortened by the sentences those additions duplicated.
+
+\end{document}
