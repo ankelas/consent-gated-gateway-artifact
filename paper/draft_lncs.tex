@@ -16,6 +16,10 @@
 
 \usepackage{hyperref}
 
+\setlength{\emergencystretch}{2em}
+
+\sloppy
+
 \setcounter{topnumber}{4}
 
 \setcounter{bottomnumber}{3}
@@ -330,9 +334,9 @@ The consent experiment delivers each request, reads the candidate the assistant 
 
 \section{Implementation and Reproducibility}
 
-A routing run stores the request-text hash, reply, recommended names and identity codes, duration, and error; an ablation run stores one row per trial plus an execution log; a judgment run stores the cached reply, per-item prediction, and a run manifest. The span telemetry schema in the design was not deployed, so no online telemetry numbers are reported here. Message bodies, phone numbers, credentials, and private keys are never recorded.
+A routing run stores the request-text hash, reply, recommended names and identity codes, duration, and error; an ablation run stores one row per trial plus an execution log; a judgment run stores the cached reply, per-item prediction, and a run manifest. Message bodies, phone numbers, credentials, and private keys are never recorded.
 
-The artifact contains the request suites, per-sample routing and consent outcomes, the advisory judgment log, the ablation builds with their controls, and the judgment suites with cached predictions; the package is at \texttt{https:/\allowbreak{}/\allowbreak{}github.com/\allowbreak{}ankelas/\allowbreak{}consent-\allowbreak{}gated-ga\allowbreak{}teway-ar\allowbreak{}tifact}.
+The artifact contains the request suites, per-sample outcomes, the advisory judgment log, the ablation builds with their controls, and the cached judgment predictions; the package is at \texttt{https:/\allowbreak{}/\allowbreak{}github.com/\allowbreak{}ankelas/\allowbreak{}consent-\allowbreak{}gated-ga\allowbreak{}teway-ar\allowbreak{}tifact}.
 
 \section{Results}
 
@@ -474,7 +478,7 @@ Table 7 gives the stress-set rates. All three conditions found essentially every
 
 Across the 30 consent trials and 10 redelivery trials, a study partner was the first candidate in 36; no trial reached a partner before the user consented (0/40), and each of those 36 consents produced exactly one invocation and exactly one partner action. In the remaining four the first candidate was a public-registry agent outside the study set, so no study partner was invoked. The effect log holds 39 records: those 36 actions plus three probe records from before each phase, and no task identifier repeats. Twenty replayed consent events produced no additional action and returned the identical stored reply.
 
-Figure 3 gives the gateway's own cost, with the observed range and n for each operation: every gateway-side operation is milliseconds, while a first delivery is dominated by generation. The numbers cover the study host and exclude wide-area transport.
+Figure 3 gives the gateway's own cost, with the observed range and n for each operation: every gateway-side operation is milliseconds, while a first delivery is dominated by generation.
 
 \begin{figure}[tb]
 
@@ -490,15 +494,19 @@ Figure 3 gives the gateway's own cost, with the observed range and n for each op
 
 The judgment layer is a plane that modules may consult, and the deployment now carries it in that form: the adapter asks J5 -- is this event a semantic replay of an already handled request? -- before the pipeline branches, under \texttt{JUDGMENT\_\allowbreak{}MODE=advise}, where the verdict is logged and no execution decision reads it. It runs after the key-based store has answered, so an exact replay never reaches it.
 
-Twenty conversations drove the live ingress with three events each: the opening request, a paraphrase of it under a new message id (which the event store cannot answer), and a different request in the same domain. All 60 events were judged. At the declared threshold of 0.9, 20/20 paraphrases were called replays (95\% Wilson interval [83.9\%, 100\%], median 0.98, range 0.95--1.00) and 0/40 non-replays crossed it (bounding that rate at 7.5\%; the largest non-replay score was 0.12). Exactly those 20 events would have been handed to the keyed-result branch, the step the deterministic layer cannot take on its own. The advisory call cost a median of 1.07 s (range 0.53--1.74 s). The paraphrases were written by the same pinned model.
+Twenty conversations drove the live ingress with three events each: the opening request, a paraphrase of it under a new message id (which the event store cannot answer), and a different request in the same domain. All 60 events were judged. At the declared threshold of 0.9, 20/20 paraphrases were called replays (95\% Wilson interval [83.9\%, 100\%], median 0.98, range 0.95--1.00) and 0/40 non-replays crossed it (bounding that rate at 7.5\%; the largest non-replay score was 0.12). Exactly those 20 events would have been handed to the keyed-result branch, the step the deterministic layer cannot take on its own. The advisory call cost a median of 1.07 s (range 0.53--1.74 s).
 
 \subsection{Limitations and scope}
 
-Every result here comes from one deployment with one registry and one capability set; selection is read from the reply as described in §6 and cross-checked against the discovery ranking. The ablation arms are staging copies of the deployed code with one environment-gated change each, paired with a control built from the same copy, while the consent, effect, and advisory-judgment experiments run on the deployed adapter. The judgment layer is measured on one hosted model. The injection stress set is built from templates; all inputs are synthetic or model-generated, identifiers are pseudonymized, and no outbound message is delivered.
+Every result here comes from one deployment with one registry and one capability set; selection is read from the reply as described in §6 and cross-checked against the discovery ranking. The ablation arms are staging copies with one environment-gated change each, paired with a control built from the same copy; the consent, effect, and advisory-judgment experiments run on the deployed adapter. The judgment layer is measured on one hosted model. The injection stress set is built from templates; all inputs are synthetic or model-generated and pseudonymized.
 
 \section{Conclusion}
 
 This paper separates typed judgment from deterministic enforcement in a seven-module message-to-agent gateway and tests the boundary on a deployed iMessage/ACPs path. The deployed path recommends the generated target, composes a plan when a request fits two capabilities, and never recommends a study partner when none advertises the request. Paired ablations show that the sender-to-peer assertion, the caller--conversation partition, and the event-level idempotency store each carry their invariant. On the deployed adapter the consent gate admits exactly one partner action per accepted event and admits none before the user agrees. The judgment layer is more accurate and better calibrated in its typed form, while its injection score over-triggers on quoted text, which is why it only parameterizes policy.
+
+\section*{Acknowledgements}
+
+This work was supported by S\&T Program of Xiongan New Area (No. XA2026111001K).
 
 \begin{thebibliography}{25}
 

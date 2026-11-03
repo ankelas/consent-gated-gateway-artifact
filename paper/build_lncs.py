@@ -19,7 +19,7 @@ OUTPUT = ROOT / "draft_lncs.tex"
 ANON_OUTPUT = ROOT / "draft_lncs_anon.tex"
 
 # Sections that carry statements rather than numbered content.
-UNNUMBERED_SECTIONS = {"Acknowledgements"}
+UNNUMBERED_SECTIONS = {"Acknowledgements", "致谢"}
 
 # The artifact URL identifies the authors under double-blind review; the
 # anonymized build withholds it and points at the title page instead.
@@ -255,6 +255,8 @@ def convert(anon: bool = False, source: Path | None = None,
         r"\usepackage{hyperref}",
         # Float parameters: allow a page to carry its figures and text without
         # leaving large gaps when a tall figure is deferred.
+        r"\setlength{\emergencystretch}{2em}",
+        r"\sloppy",
         r"\setcounter{topnumber}{4}",
         r"\setcounter{bottomnumber}{3}",
         r"\setcounter{totalnumber}{6}",
