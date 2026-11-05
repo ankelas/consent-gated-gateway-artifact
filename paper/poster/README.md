@@ -47,3 +47,10 @@ Rebuild:
 xetex -fmt=xelatex jcrai_poster_RI080.tex
 xetex -fmt=xelatex jcrai_poster_RI080.tex
 ```
+
+## Layout notes
+
+Body text is 20pt (`extarticle`), the largest supported size that keeps the
+seven sections on one A1 page. Figures are sized to fill the columns so the two
+columns end together near the footer; the right column carries the gateway-cost
+figure at full column width.
