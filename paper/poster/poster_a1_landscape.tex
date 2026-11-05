@@ -1,0 +1,103 @@
+
+\documentclass[25pt, a1paper, landscape]{tikzposter}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\definecolor{navy}{HTML}{0F2A44}
+\definecolor{teal}{HTML}{1F7A8C}
+\colorlet{colorOne}{navy}
+\colorlet{colorTwo}{teal}
+\usetheme{Default}
+\title{\parbox{0.92\linewidth}{\centering\LARGE Typed Judgment, Deterministic Enforcement: A Consent-Gated Gateway Architecture for Inter-Agent Collaboration over Messaging Channels}}
+\author{Yizhang Cai, Jun Liu, Di Ma, Ke Yu, Ke Li}
+\institute{School of Artificial Intelligence, Beijing University of Posts and Telecommunications \\ Beijing Guoshu Zhilian Technology Co., Ltd. \\ 2025111259@bupt.cn}
+\begin{document}
+\maketitle[width=0.96\linewidth]
+
+\begin{columns}
+\column{0.31}
+\block{The boundary we study}{
+Messaging events are unstructured and may be duplicated, delayed, or replayed;
+agent protocols expect authenticated endpoints, structured requests, and task
+state.
+
+\vspace{0.4em}
+\begin{itemize}
+  \item Free-text delegation lets model output become an invocation.
+  \item Static rules cannot resolve natural-language ambiguity.
+\end{itemize}
+
+\textbf{Design rule.} The model answers closed questions; policy code owns
+thresholds and effects.
+}
+\block{Seven modules, four invariants}{
+\small
+\begin{tabular}{@{}l@{\hspace{0.7em}}l@{}}
+\textbf{M1} & ingress authentication \\
+\textbf{M2} & caller / conversation isolation \\
+\textbf{M3} & discovery and routing \\
+\textbf{M4} & consent and policy \\
+\textbf{M5} & identity-bound execution \\
+\textbf{M6} & state, idempotency, recovery \\
+\textbf{M7} & delivery and telemetry \\
+\end{tabular}
+
+\vspace{0.5em}
+\begin{tikzpicture}
+\node[fill=teal!15, draw=teal, rounded corners=3pt, inner sep=0.5em,
+      text width=0.88\linewidth, align=center]
+{\small \textbf{In code:} authorization \textbullet{} identity \textbullet{}
+ isolation \textbullet{} idempotency};
+\end{tikzpicture}
+}
+
+\column{0.36}
+\block{Architecture}{
+\centering
+\includegraphics[width=0.94\linewidth]{/data/caiyizhang/thesis/paper/figures/fig1_architecture.png}
+
+\vspace{0.3em}
+\small M1 ingress, M2 partition by caller and conversation, M3 discovery,
+M4 consent, M5 identity-bound execution, M6 state, M7 delivery.
+}
+
+\column{0.31}
+\block{Results: routing (130 requests, 3 deliveries)}{
+\small
+\begin{tabular}{@{}l@{\hspace{0.8em}}r@{}}
+\textbf{Direct} & 48/48/50 of 50 \\
+\textbf{Ambiguous} & 39/38/38 of 40 \\
+\textbf{Out of scope} & 0 of 40 \\
+\end{tabular}
+
+\vspace{0.3em}
+}
+\block{Results: invariants (paired ablations)}{
+\centering
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Arm} & \textbf{Control} & \textbf{Removed} \\
+\midrule
+Identity binding & 0/30 & 30/30 \\
+Caller isolation & 0/30 & 30/30 \\
+Idempotency & 30 exec. & 60 exec. \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.3em}
+\small Same-code controls; each arm changes exactly one check.
+}
+\block{Takeaway}{
+\textbf{Model advises; code controls identity, state, and every side effect.}
+
+\small Consent \textbf{0/40} before, \textbf{36/36} after.\quad Judgment
+\textbf{94.1\%} vs \textbf{83.9\%}; Brier \textbf{0.095} vs \textbf{0.266}.
+
+\scriptsize Artifact: \texttt{github.com/ankelas/consent-gated-gateway-artifact}
+\quad S\&T Program of Xiongan New Area (No. XA2026111001K).
+}
+\end{columns}
+
+\end{document}
