@@ -29,8 +29,8 @@ state.
   \item Static rules cannot resolve natural-language ambiguity.
 \end{itemize}
 
-\textbf{Design rule.} The model answers closed questions; policy code owns
-thresholds and effects.
+\textbf{Design rule.} The model answers seven closed questions (J1--J7); policy
+code owns thresholds and effects.
 }
 \block{Seven modules, four invariants}{
 \small
@@ -44,26 +44,32 @@ thresholds and effects.
 \textbf{M7} & delivery and telemetry \\
 \end{tabular}
 
-\vspace{0.5em}
+\vspace{0.6em}
 \begin{tikzpicture}
-\node[fill=teal!15, draw=teal, rounded corners=3pt, inner sep=0.5em,
+\node[fill=teal!15, draw=teal, rounded corners=3pt, inner sep=0.55em,
       text width=0.88\linewidth, align=center]
 {\small \textbf{In code:} authorization \textbullet{} identity \textbullet{}
  isolation \textbullet{} idempotency};
 \end{tikzpicture}
 }
 
-\column{0.36}
+\column{0.35}
 \block{Architecture}{
 \centering
-\includegraphics[width=0.94\linewidth]{/data/caiyizhang/thesis/paper/figures/fig1_architecture.png}
+\includegraphics[width=0.96\linewidth]{/data/caiyizhang/thesis/paper/figures/fig1_architecture.png}
 
 \vspace{0.3em}
 \small M1 ingress, M2 partition by caller and conversation, M3 discovery,
 M4 consent, M5 identity-bound execution, M6 state, M7 delivery.
 }
+\block{Consent gate}{
+\small
+Before consent: \textbf{0 / 40} partner actions.\\
+Consents producing exactly one action: \textbf{36 / 36}.\\
+Replayed consents: no extra action, identical stored reply.
+}
 
-\column{0.31}
+\column{0.34}
 \block{Results: routing (130 requests, 3 deliveries)}{
 \small
 \begin{tabular}{@{}l@{\hspace{0.8em}}r@{}}
@@ -73,9 +79,12 @@ M4 consent, M5 identity-bound execution, M6 state, M7 delivery.
 \end{tabular}
 
 \vspace{0.3em}
+\scriptsize Generated target recommended; more than one agent when two
+capabilities fit; no partner when none advertises the request.
 }
 \block{Results: invariants (paired ablations)}{
 \centering
+\small
 \begin{tabular}{@{}lcc@{}}
 \toprule
 \textbf{Arm} & \textbf{Control} & \textbf{Removed} \\
@@ -87,16 +96,42 @@ Idempotency & 30 exec. & 60 exec. \\
 \end{tabular}
 
 \vspace{0.3em}
-\small Same-code controls; each arm changes exactly one check.
+\scriptsize Same-code controls; each arm changes exactly one check.
 }
+\block{Results: judgment layer}{
+\centering
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+ & \textbf{Typed} & \textbf{Free text} \\
+\midrule
+Accuracy & 94.1\% & 83.9\% \\
+Brier & 0.095 & 0.266 \\
+ECE & 0.026 & 0.144 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.3em}
+\scriptsize 280 items, 3 runs, human-verified labels.
+}
+\end{columns}
+
+\vspace{0.7em}
+\begin{columns}
+\column{0.56}
 \block{Takeaway}{
 \textbf{Model advises; code controls identity, state, and every side effect.}
 
-\small Consent \textbf{0/40} before, \textbf{36/36} after.\quad Judgment
-\textbf{94.1\%} vs \textbf{83.9\%}; Brier \textbf{0.095} vs \textbf{0.266}.
+\vspace{0.4em}
+\small Artifact: \texttt{github.com/ankelas/consent-gated-gateway-artifact}
 
-\scriptsize Artifact: \texttt{github.com/ankelas/consent-gated-gateway-artifact}
-\quad S\&T Program of Xiongan New Area (No. XA2026111001K).
+\vspace{0.2em}
+\scriptsize Supported by S\&T Program of Xiongan New Area (No. XA2026111001K).
+}
+\column{0.44}
+\block{Gateway cost}{
+\centering
+\includegraphics[width=0.98\linewidth]{/data/caiyizhang/thesis/paper/figures/fig3_overhead.png}
 }
 \end{columns}
 
