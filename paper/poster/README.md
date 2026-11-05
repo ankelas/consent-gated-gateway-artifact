@@ -1,13 +1,13 @@
-# JCRAI 2026 poster (paper 80)
+# JCRAI 2026 poster (paper RI080)
 
-`jcrai_poster_80.pdf` is the poster, laid out in the format of the reference
+`jcrai_poster_RI080.pdf` is the poster, laid out in the format of the reference
 poster `JCRAI2026_RI048_Poster.pdf`: A1 portrait (594 x 841 mm), paper-ID box in
 the top-left corner, centred title, authors, dashed affiliation strip, two
 columns with orange section bars, and a footer naming the conference, the
 special session and the paper.
 
-`preview_jcrai80.png` is a low-resolution render for checking on screen;
-`jcrai_poster_80.tex` is the source (LaTeX, `extarticle` + `tcolorbox`).
+`preview_RI080.png` is a low-resolution render for checking on screen;
+`jcrai_poster_RI080.tex` is the source (LaTeX, `extarticle` + `tcolorbox`).
 
 ## Columns
 
@@ -32,8 +32,8 @@ judgment layer 94.1% versus 83.9% with Brier 0.095 versus 0.266.
 Rebuild with:
 
 ```bash
-pdflatex jcrai_poster_80.tex
-pdflatex jcrai_poster_80.tex
+pdflatex jcrai_poster_RI080.tex
+pdflatex jcrai_poster_RI080.tex
 ```
 
 ## Font
@@ -43,6 +43,6 @@ installed on this host, so the poster is typeset in Liberation Sans, the
 Arial-metric substitute (Verdana-metric? no: Liberation Sans is metric-compatible
 with Arial). Text widths therefore match the template's font, and the two are
 visually almost identical. If literal Arial is required, open the PDF's source
-`jcrai_poster_80.tex` and change the `\setmainfont{LiberationSans}` block to
+`jcrai_poster_RI080.tex` and change the `\setmainfont{LiberationSans}` block to
 `\setmainfont{Arial}` on a machine that has Arial installed, then rebuild with
 XeLaTeX.
