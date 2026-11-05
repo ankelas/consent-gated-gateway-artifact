@@ -25,7 +25,10 @@ it cannot stay template-faithful; confirm with the organisers before printing.
 
 Introduction, Objectives, Materials and Methods, Results, Conclusion,
 References, and Acknowledgements/Contact, plus title, authors, affiliation and
-session. The numbers match the manuscript: routing 48/48/50, ablations 0/30
+session. Three figures are embedded as pictures inside the template frames:
+the architecture in Materials and Methods, the processing flow in Conclusion,
+and the gateway-cost chart in Results. Each picture keeps the figure's own
+aspect ratio. The numbers match the manuscript: routing 48/48/50, ablations 0/30
 versus 30/30, consent 0/40 and 36/36, judgment layer 94.1% versus 83.9% with
 Brier 0.095 versus 0.266.
 

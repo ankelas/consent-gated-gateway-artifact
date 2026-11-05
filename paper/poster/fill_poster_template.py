@@ -107,6 +107,12 @@ BODY = {
 SIZE_OVERRIDE = {"Poster title": 5000,
                  "Affiliated programs, organizations,institutions,schools etc": 2400}
 
+IMAGES = {
+    "rId101": ("fig1_architecture.png", 1_700_000, 32_000_000, 8_515_000, 6_500_000),
+    "rId102": ("fig2_state_machine.png", 16_300_000, 20_000_000, 5_016_000, 4_400_000),
+    "rId103": ("fig3_overhead.png", 16_800_000, 11_000_000, 4_000_000, 2_400_000),
+}
+
 BODY_ORDER = ["intro", "objectives", "methods", "results", "conclusion",
               "references", "ack"]
 
@@ -178,6 +184,16 @@ def fill_slide(xml: str, scale: float) -> str:
     return xml
 
 
+def picture_xml(rel_id: str, x: int, y: int, cx: int, cy: int, index: int) -> str:
+    return (
+        f'<p:pic><p:nvPicPr><p:cNvPr id="{200 + index}" name="Picture {index}"/>'
+        '<p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr>'
+        f'<p:blipFill><a:blip r:embed="{rel_id}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>'
+        f'<p:spPr><a:xfrm><a:off x="{x}" y="{y}"/><a:ext cx="{cx}" cy="{cy}"/></a:xfrm>'
+        '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic>'
+    )
+
+
 def build(name: str, scale: float, width: int, height: int) -> Path:
     out = ROOT / name
     with zipfile.ZipFile(TEMPLATE) as src, zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as dst:
@@ -185,6 +201,11 @@ def build(name: str, scale: float, width: int, height: int) -> Path:
             data = src.read(item.filename)
             if item.filename == "ppt/slides/slide1.xml":
                 xml = data.decode("utf-8")
+                pics = "".join(
+                    picture_xml(rid, *coords[1:], index)
+                    for index, (rid, coords) in enumerate(IMAGES.items(), start=1)
+                )
+                xml = xml.replace("</p:spTree>", pics + "</p:spTree>")
                 # Mark each body placeholder in document order.
                 parts = xml.split('>Type your text here<')
                 if len(parts) == len(BODY_ORDER) + 1:
@@ -199,6 +220,24 @@ def build(name: str, scale: float, width: int, height: int) -> Path:
                     xml,
                 )
                 data = xml.encode("utf-8")
+            elif item.filename == "ppt/slides/_rels/slide1.xml.rels":
+                xml = data.decode("utf-8")
+                for rid, (fname, *_rest) in IMAGES.items():
+                    xml = xml.replace(
+                        "</Relationships>",
+                        f'<Relationship Id="{rid}" Type="http://schemas.openxmlformats.org/'
+                        f'officeDocument/2006/relationships/image" Target="../media/{fname}"/>'
+                        "</Relationships>",
+                    )
+                data = xml.encode("utf-8")
+            elif item.filename == "[Content_Types].xml":
+                xml = data.decode("utf-8")
+                if 'Extension="png"' not in xml:
+                    xml = xml.replace(
+                        "</Types>",
+                        '<Default Extension="png" ContentType="image/png"/></Types>',
+                    )
+                data = xml.encode("utf-8")
             elif item.filename == "ppt/presentation.xml":
                 xml = data.decode("utf-8")
                 xml = re.sub(
@@ -208,6 +247,9 @@ def build(name: str, scale: float, width: int, height: int) -> Path:
                 )
                 data = xml.encode("utf-8")
             dst.writestr(item, data)
+        for rid, (fname, *_rest) in IMAGES.items():
+            src_path = ROOT.parent / "figures" / fname
+            dst.writestr(f"ppt/media/{fname}", src_path.read_bytes())
     print(out)
     return out
 
