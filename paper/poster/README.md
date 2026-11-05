@@ -1,48 +1,49 @@
 # JCRAI 2026 poster (paper RI080)
 
-`jcrai_poster_RI080.pdf` is the poster, laid out in the format of the reference
-poster `JCRAI2026_RI048_Poster.pdf`: A1 portrait (594 x 841 mm), paper-ID box in
-the top-left corner, centred title, authors, dashed affiliation strip, two
-columns with orange section bars, and a footer naming the conference, the
-special session and the paper.
+`jcrai_poster_RI080.pdf` is the poster: A1 portrait (594 x 841 mm), laid out in
+the format of the reference poster `JCRAI2026_RI048_Poster.pdf` - paper-ID box,
+centred title, authors, dashed affiliation strip, two columns with orange
+section bars, and a footer naming the conference, the session and the paper.
 
-`preview_RI080.png` is a low-resolution render for checking on screen;
-`jcrai_poster_RI080.tex` is the source (LaTeX, `extarticle` + `tcolorbox`).
+`preview_RI080.png` is a low-resolution render; `jcrai_poster_RI080.tex` is the
+source (LaTeX, `extarticle` + `tcolorbox`, compiled with XeLaTeX).
 
-## Columns
+## Sections
 
-Left: Introduction, Objectives, Judgment plane, Materials and Methods
-(architecture figure), Contributions.
+Only the template's seven sections are used, in the template's order:
 
-Right: Results (routing, paired ablations, consent, judgment layer, gateway
-cost figure), Processing flow (flow figure), Conclusion, References, Contact.
+- Left column: Introduction, Objectives, Materials and Methods (two figures).
+- Right column: Results (three result tables and the cost figure), Conclusion,
+  References, Contact.
 
-Numbers match the manuscript: routing 48/48/50 of 50, ambiguous 39/38/38 of 40,
-out-of-scope 0/40; ablations 0/30 versus 30/30; consent 0/40 and 36/36;
-judgment layer 94.1% versus 83.9% with Brier 0.095 versus 0.266.
+Content that earlier sat in extra blocks is folded in: the seven judgment
+questions are introduced in the Introduction, the module list and evaluation
+sizes in Materials and Methods, and the headline numbers in the Conclusion.
 
-## Other files
-
-- `JCRAI2026_RI048_Poster.pdf` - the reference poster supplied by the authors.
-- `jcrai_poster_template.pptx` - the blank template from the conference site.
-- `poster_template_a1.pptx` / `poster_template_a0.pptx` - an earlier attempt that
-  filled the blank template's own boxes; kept for reference.
-- `latex_alternative/` - an earlier non-template layout.
-
-Rebuild with:
-
-```bash
-pdflatex jcrai_poster_RI080.tex
-pdflatex jcrai_poster_RI080.tex
-```
+The columns flow rather than snap to fixed rows: with this paper's content the
+Results section is much taller than Objectives, so forcing row alignment would
+leave a large blank under Objectives. The reference poster's rows line up
+because its two columns happen to carry similar amounts of material.
 
 ## Font
 
-`Poster Template-A1.pptx` uses Arial for both theme fonts. Arial is not
-installed on this host, so the poster is typeset in Liberation Sans, the
-Arial-metric substitute (Verdana-metric? no: Liberation Sans is metric-compatible
-with Arial). Text widths therefore match the template's font, and the two are
-visually almost identical. If literal Arial is required, open the PDF's source
-`jcrai_poster_RI080.tex` and change the `\setmainfont{LiberationSans}` block to
-`\setmainfont{Arial}` on a machine that has Arial installed, then rebuild with
-XeLaTeX.
+`Poster Template-A1.pptx` uses Arial. Arial is not installed on this host, so
+the poster is set in Liberation Sans, which is metric-compatible with Arial
+(identical advance widths). To use literal Arial, change
+`\setmainfont{LiberationSans}` to `\setmainfont{Arial}` and rebuild with XeLaTeX.
+
+## Other files
+
+- `JCRAI2026_RI048_Poster.pdf` - the reference poster.
+- `Poster Template-A1.pptx` - the A1 template with Arial theme fonts.
+- `jcrai_poster_template.pptx` - the older A0 template from the conference site.
+- `poster_template_a1.pptx` / `poster_template_a0.pptx` - earlier attempts that
+  filled the blank PPTX template's own boxes.
+- `latex_alternative/` - an earlier non-template layout.
+
+Rebuild:
+
+```bash
+xetex -fmt=xelatex jcrai_poster_RI080.tex
+xetex -fmt=xelatex jcrai_poster_RI080.tex
+```
