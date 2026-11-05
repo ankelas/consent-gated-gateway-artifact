@@ -35,3 +35,14 @@ Rebuild with:
 pdflatex jcrai_poster_80.tex
 pdflatex jcrai_poster_80.tex
 ```
+
+## Font
+
+`Poster Template-A1.pptx` uses Arial for both theme fonts. Arial is not
+installed on this host, so the poster is typeset in Liberation Sans, the
+Arial-metric substitute (Verdana-metric? no: Liberation Sans is metric-compatible
+with Arial). Text widths therefore match the template's font, and the two are
+visually almost identical. If literal Arial is required, open the PDF's source
+`jcrai_poster_80.tex` and change the `\setmainfont{LiberationSans}` block to
+`\setmainfont{Arial}` on a machine that has Arial installed, then rebuild with
+XeLaTeX.

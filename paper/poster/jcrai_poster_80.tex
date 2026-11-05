@@ -1,7 +1,13 @@
 \documentclass[19pt]{extarticle}
-\usepackage[T1]{fontenc}
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
+\usepackage{fontspec}
+\setmainfont{LiberationSans}[
+  Path=fonts/,
+  Extension=.ttf,
+  UprightFont=*-Regular,
+  BoldFont=*-Bold,
+  ItalicFont=*-Italic,
+  BoldItalicFont=*-BoldItalic
+]
 \usepackage[paperwidth=594mm,paperheight=841mm,margin=10mm]{geometry}
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
@@ -28,7 +34,7 @@
 \newtcolorbox{block}[1]{%
   enhanced, colback=white, colframe=rule, boxrule=0.5pt,
   arc=1mm, left=2.5mm, right=2.5mm, top=1.5mm, bottom=2mm,
-  before skip=5.5mm, after skip=0pt,
+  before skip=6.5mm, after skip=0pt,
   fonttitle=\bfseries,
   title={}, coltitle=ink,
 }
@@ -146,6 +152,46 @@ judgment plane.
   \item A live evaluation of routing, consent and advisory judgment, with a
         released artifact.
 \end{itemize}
+\end{block}
+
+\begin{block}{}
+\sectionbar{Evaluation setup}
+\vspace{2mm}
+\small
+\begin{tabular}{@{}l@{\hspace{6mm}}l@{}}
+Requests & 130 generated, 3 deliveries each \\
+Consent & 30 trials + 10 redeliveries \\
+Judgment suite & 280 items, 3 runs \\
+Injection stress & 200 injected, 256 benign \\
+\end{tabular}
+\end{block}
+
+\begin{block}{}
+\sectionbar{At a glance}
+\vspace{2mm}
+\centering
+\begin{minipage}{0.46\linewidth}
+\centering
+{\fontsize{26}{30}\selectfont\bfseries\color{teal}48/48/50}\\[0.5mm]
+{\small target recommended (of 50)}
+\end{minipage}\hfill
+\begin{minipage}{0.46\linewidth}
+\centering
+{\fontsize{26}{30}\selectfont\bfseries\color{teal}0/30 $\rightarrow$ 30/30}\\[0.5mm]
+{\small identity ablation}
+\end{minipage}
+
+\vspace{3mm}
+\begin{minipage}{0.46\linewidth}
+\centering
+{\fontsize{26}{30}\selectfont\bfseries\color{teal}36/36}\\[0.5mm]
+{\small one action per consent}
+\end{minipage}\hfill
+\begin{minipage}{0.46\linewidth}
+\centering
+{\fontsize{26}{30}\selectfont\bfseries\color{teal}94.1\% vs 83.9\%}\\[0.5mm]
+{\small typed vs free text}
+\end{minipage}
 \end{block}
 
 \end{minipage}\hfill
